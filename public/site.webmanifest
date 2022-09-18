@@ -1,0 +1,29 @@
+{
+  "short_name":       "FlyWeight",
+  "name":             "FlyWeight",
+  "icons":            [
+    {
+      "src":   "apple-touch-icon-ipad-pro.png",
+      "type":  "image/png",
+      "sizes": "167x167"
+    },
+    {
+      "src":   "apple-touch-icon-ipad-retina.png",
+      "type":  "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src":   "apple-touch-icon-iphone-6p.png",
+      "type":  "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src":   "apple-touch-icon-iphone-retina.png",
+      "type":  "image/png",
+      "sizes": "120x120"
+    }
+  ],
+  "start_url":        "/",
+  "background_color": "#ffffff",
+  "theme_color":      "#14248a"
+}

@@ -1,0 +1,158 @@
+@use 'colors';
+@use 'fields';
+@use 'vars';
+
+$animation-speed: 3s;
+
+@keyframes shimmer {
+    0% {
+        background-position: -200px 0;
+    }
+
+    100% {
+        background-position: 200px 0;
+    }
+}
+
+fieldset {
+    border: 0;
+    margin: 20px 0;
+    padding: 0;
+}
+
+form:not(.inline) label {
+    display: block;
+    font-size: 12pt;
+    font-stretch: condensed;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+label.checkbox-label {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+
+input[type=text],
+input[type=email],
+input[type=password],
+input[type=number],
+textarea {
+    @include fields.field;
+}
+
+button,
+input[type=submit],
+input[type=button] {
+    @include vars.slant;
+
+    appearance: none;
+    background: vars.$gradient-1, colors.$resolution-blue;
+    background-size: 200px 50px; //TODO doesn't quite line up with length of gradient
+    border: 0;
+    color: white;
+
+    padding: 10px;
+
+    &:active:not(:disabled):not(.processing) {
+        transform: translate(5px, 5px);
+    }
+
+    &.processing {
+        animation: shimmer $animation-speed linear infinite;
+    }
+
+    &:not(:disabled):not(.processing) {
+        cursor: pointer;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+    }
+}
+
+input[type=checkbox] {
+    appearance: none;
+    background-image: url('../images/checkmark.svg');
+
+    cursor: pointer;
+    display: inline-block;
+    height: 20px;
+    margin-right: 0.5em;
+    padding: 10px;
+    width: 20px;
+
+    &:checked {
+        background-image: url('../images/checkmark-checked.svg');
+    }
+}
+
+fieldset.actions {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: baseline;
+
+    > * {
+        margin: 0 10px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+
+    > a {
+        font-size: 11pt;
+    }
+}
+
+ul.error {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.error,
+.error p,
+.error li {
+    font-size: 12pt;
+
+    h2 {
+        color: colors.$fandango;
+        font-size: 12pt;
+        font-weight: bold;
+    }
+}
+
+.error, .error * {
+    color: colors.$fandango;
+}
+
+.field_with_errors label {
+    color: colors.$fandango;
+}
+
+form.inline {
+    align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+
+    fieldset {
+        margin: 5px 0;
+
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+
+    label:not(.checkbox-label) {
+        font-size: 50%;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 12pt;
+        max-width: 200px;
+    }
+}

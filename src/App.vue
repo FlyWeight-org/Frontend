@@ -1,30 +1,19 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <router-view />
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script setup lang="ts">
+import { useAccountStore } from "@/stores/modules/account";
+import { useAuthStore } from "@/stores/modules/auth";
+import { onMounted } from "vue";
 
-nav {
-  padding: 30px;
+const accountStore = useAccountStore();
+const authStore = useAuthStore();
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+onMounted(() => {
+  authStore.initializeFromLocalStorage();
+  authStore.$subscribe(() => authStore.saveToLocalStorage());
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+  accountStore.loadAccount();
+});
+</script>

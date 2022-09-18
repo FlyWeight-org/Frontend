@@ -1,34 +1,56 @@
-# flyweight
+# FlyWeight: Passenger weights, in the cloud
 
-## Project setup
+FlyWeight is a website where pilots can list flights they intend to take, and
+where passengers can discreetly add their weights to those flights. Weights are
+only shared with the pilot, not with other passengers, and are no longer
+accessible some time after the flight is complete.
+
+This website allows pilots to perform an accurate weight and balance while
+giving passengers a basic assurance of privacy.
+
+## Development
+
+### Installation and Running
+
+FlyWeight requires Node 16 and Yarn. Run `yarn install` to install all\
+dependencies. Bundling is handled by Vite. Run `yarn dev` to run a development
+server.
+
+The website requires the back-end to be running as well. See
+https://github.com/FlyWeight-org/Backend for an example `Procfile`.
+
+#### Testing
+
+End-to-end testing is available with Cypress. To run end-to-end tests, create a
+`Procfile` similar to:
+
 ```
-yarn install
+backend: cd Backend && rvm 3.1.3@flyweight exec rails server -e cypress -b localhost
+frontend: cd Frontend && yarn build && yarn run test:e2e
+jobs: cd Backend && redis-cli flushall && rvm 3.1.3@flyweight exec bundle exec sidekiq -C config/sidekiq.yml -e cypress
+cable: cd Backend && rvm 3.1.3@flyweight exec ./bin/cable -e cypress
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+Install the `foreman` gem to run the Procfile.
 
-### Compiles and minifies for production
-```
-yarn build
-```
+#### Deployment
 
-### Run your unit tests
-```
-yarn test:unit
-```
+The front-end is built to a static HTML site using `yarn build`. The built
+artifacts are uploaded to the web server using `rsync`.
 
-### Run your end-to-end tests
-```
-yarn test:e2e
-```
+## Architecture
 
-### Lints and fixes files
-```
-yarn lint
-```
+FlyWeight is a Ruby on Rails application with an independent Vue 3 front-end.
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Only basic assurances of privacy are provided. Flights are only ever referenced
+by a generated UUID, to prevent URL-crafting attacks. Pilots can only access
+flights whose planned dates are at most one week old.
+
+### Authorization
+
+Some routes will operate differently depending on whether a pilot is logged in
+or not. For example the `/flights/:id` route will display a summary of the
+passengers and their weights for authenticated sessions, but will display only a
+create-passenger form for unauthenticated sessions. Therefore, the URL that the
+pilot uses to view their flight, and the URL they provide to their passengers,
+are the same.

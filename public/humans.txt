@@ -1,0 +1,11 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Tim Morgan -- creator -- @riscfuture
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5, Vue.js, Normalize.css
+    Ruby on Rails, Heroku

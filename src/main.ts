@@ -1,6 +1,25 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
-import store from './store';
+import { createApp } from "vue";
+import Datepicker from "@vuepic/vue-datepicker";
+import { createPinia } from "pinia";
+import { isUndefined } from "lodash-es";
 
-createApp(App).use(store).use(router).mount('#app');
+import App from "./App.vue";
+import router from "./router";
+import i18n from "@/i18n";
+
+import { bugsnagPlugin } from "@/config/bugsnag";
+
+import "normalize.css";
+import "./styles/archivo.scss";
+import "./styles/base.scss";
+import "./styles/datepicker.scss";
+import "./styles/forms.scss";
+import "./styles/layout.scss";
+import "./styles/nav.scss";
+import "./styles/tabs.scss";
+
+const app = createApp(App).use(createPinia()).use(router).use(i18n);
+
+if (!isUndefined(bugsnagPlugin)) app.use(bugsnagPlugin);
+
+app.component("Datepicker", Datepicker).mount("#app");
