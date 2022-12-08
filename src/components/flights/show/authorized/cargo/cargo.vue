@@ -1,5 +1,10 @@
 <template>
   <div class="cargo-list-item" data-cy="cargo-list-item">
+    <input type="checkbox"
+           :checked="!cargo.disabled"
+           @change="toggleEnabled($event)"
+           data-cy="cargo-enabled" />
+
     <div class="name" data-cy="cargo-name">{{ cargo.name }}</div>
     <div class="weight" data-cy="cargo-weight">
       <img :src="cargoImageURL" alt="Cargo" />
@@ -42,6 +47,10 @@ async function deleteClicked() {
     notifyBugsnag(err);
     deleteError.value = errorToString(err);
   }
+}
+
+async function toggleEnabled(event: Event) {
+  await flightStore.toggleEnabled(props.cargo.slug, (<HTMLInputElement>event.target).checked);
 }
 </script>
 

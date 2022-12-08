@@ -2,7 +2,15 @@
 
 import type { Errors, FlightState } from "@/stores/types";
 import { defineStore } from "pinia";
-import { clone, concat, isNil, isNull, isUndefined, some } from "lodash-es";
+import {
+  clone,
+  cloneDeep,
+  concat,
+  isNil,
+  isNull,
+  isUndefined,
+  some,
+} from "lodash-es";
 import { request, requestJSON } from "@/stores/modules/root";
 import {
   flightFromJSON,
@@ -238,6 +246,20 @@ export const useFlightStore = defineStore("flight", {
         flightError: null,
       });
       return flight;
+    },
+
+    toggleEnabled(slug: string, enabled: boolean): void {
+      if (isNull(this.flight)) return;
+
+      const flight = cloneDeep(this.flight);
+      if (isUndefined(flight.loads)) return;
+
+      const load = flight.loads.find((load) => load.slug === slug);
+      if (isUndefined(load)) return;
+
+      load.disabled = !enabled;
+
+      this.$patch({ flight });
     },
 
     async createLoadsSubscription(

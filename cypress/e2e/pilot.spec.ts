@@ -137,6 +137,12 @@ describe("as a pilot", () => {
         );
       });
 
+      it("disables a load", () => {
+        cy.dataCy("passenger-enabled").uncheck();
+        cy.dataCy("total-weight").should("contain", "25 lb");
+        cy.dataCy("total-weight-breakdown").should("not.exist");
+      });
+
       it("removes a load", () => {
         cy.dataCy("passenger-delete").click({ force: true });
         cy.dataCy("no-passengers").should("exist");
@@ -210,6 +216,16 @@ describe("as a pilot", () => {
         cy.dataCy("total-weight-breakdown").should(
           "contain",
           "(150 lb avg. passenger, 60 lb total cargo)"
+        );
+      });
+
+      it("disables a load", () => {
+        cy.dataCy("cargo-enabled").uncheck();
+
+        cy.dataCy("total-weight").should("contain", "160 lb");
+        cy.dataCy("total-weight-breakdown").should(
+          "contain",
+          "(150 lb avg. passenger, 10 lb total cargo)"
         );
       });
 

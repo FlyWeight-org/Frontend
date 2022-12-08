@@ -25,7 +25,9 @@ const props = defineProps<{
   flight: Flight;
 }>();
 
-const loads = computed(() => props.flight.loads ?? []);
+const loads = computed(() =>
+  props.flight.loads ? props.flight.loads.filter((load) => !load.disabled) : []
+);
 const paxCount = computed(() =>
   loads.value.reduce((count, cur) => count + (isPassenger(cur) ? 1 : 0), 0)
 );

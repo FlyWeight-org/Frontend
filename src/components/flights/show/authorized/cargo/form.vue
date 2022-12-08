@@ -68,6 +68,7 @@ const load = reactive<EditableLoad>({
   weight: 0,
   bagsWeight: 0,
   covid19Vaccination: false,
+  disabled: false,
 });
 const { submitHandler, errors, error, isProcessing } =
   useFormErrorHandling<Flight>(

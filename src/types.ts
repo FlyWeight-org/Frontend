@@ -12,6 +12,8 @@ export interface Load {
   weight: number;
   bagsWeight: number;
   covid19Vaccination: boolean;
+
+  disabled: boolean;
 }
 
 export type EditableLoad = Omit<Load, "slug">;
