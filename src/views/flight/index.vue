@@ -16,5 +16,5 @@ function flightUUID(): string {
   else return route.params.flightID;
 }
 
-onMounted(() => flightStore.loadFlight(flightUUID()));
+onMounted(() => flightStore.loadFlight(flightUUID(), true));
 </script>
