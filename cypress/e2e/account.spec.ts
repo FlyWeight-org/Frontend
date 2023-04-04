@@ -6,7 +6,8 @@ describe("Account page", () => {
 
   context("editing account", () => {
     it("displays errors", () => {
-      cy.dataCy("account-name").clear().type(" ");
+      cy.dataCy("account-name").clear()
+      cy.dataCy("account-name").type(" ");
       cy.dataCy("account-password").type("supersecret");
       cy.dataCy("account-submit").click();
 
@@ -17,7 +18,8 @@ describe("Account page", () => {
     });
 
     it("requires the user's password", () => {
-      cy.dataCy("account-name").clear().type(" ");
+      cy.dataCy("account-name").clear()
+      cy.dataCy("account-name").type(" ");
       cy.dataCy("account-password").type("wrongpassword");
       cy.dataCy("account-submit").click();
 
@@ -28,7 +30,8 @@ describe("Account page", () => {
     });
 
     it("updates the user's account", () => {
-      cy.dataCy("account-name").clear().type("New Name");
+      cy.dataCy("account-name").clear()
+      cy.dataCy("account-name").type("New Name");
       cy.dataCy("account-password").type("supersecret");
       cy.dataCy("account-submit").click();
 

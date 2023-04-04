@@ -66,7 +66,8 @@ async function deleteClicked() {
 }
 
 async function toggleEnabled(event: Event) {
-  await flightStore.toggleEnabled(props.passenger.slug, (<HTMLInputElement>event.target).checked);
+  const target = event.target as HTMLInputElement
+  await flightStore.toggleEnabled(props.passenger.slug, target.checked);
 }
 </script>
 

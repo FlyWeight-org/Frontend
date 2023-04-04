@@ -1,5 +1,8 @@
 /// <reference types="cypress" />
 
+import "@testing-library/cypress/add-commands";
+
+import 'setimmediate'
 import { simpleParser } from "mailparser";
 
 Cypress.Commands.add("login", () => {

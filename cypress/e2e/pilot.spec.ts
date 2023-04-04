@@ -50,7 +50,8 @@ describe("as a pilot", () => {
     });
 
     it("edits a flight", () => {
-      cy.dataCy("flight-description").clear().type("new description");
+      cy.dataCy("flight-description").clear()
+      cy.dataCy("flight-description").type("new description");
       cy.dataCy("flight-submit").click();
       cy.reload();
 

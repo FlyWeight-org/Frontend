@@ -38,7 +38,10 @@ describe("logging in", () => {
     cy.dataCy("login-password").type("wrongpassword");
     cy.dataCy("login-submit").click();
 
-    cy.dataCy("login-error").should("contain", "Incorrect email or password");
+    cy.dataCy("login-error").should(
+      "contain",
+      "Incorrect email or password"
+    );
   });
 
   it("authenticates a valid login", () => {

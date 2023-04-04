@@ -1,0 +1,16 @@
+{
+  "compilerOptions" : {
+    "composite" : true,
+    "types" : [
+      "node"
+    ],
+    "esModuleInterop": true
+  },
+  "extends" : "@vue/tsconfig/tsconfig.node.json",
+  "include" : [
+    "vite.config.*",
+    "vitest.config.*",
+    "cypress.config.*",
+    "playwright.config.*"
+  ]
+}
