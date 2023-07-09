@@ -1,11 +1,11 @@
-import type { NumberFormat } from "@intlify/core-base";
+import type { NumberFormat } from '@intlify/core-base'
 
 const en: NumberFormat = {
   pounds: {
     maximumFractionDigits: 0,
-    style: "unit",
-    unit: "pound",
-    unitDisplay: "short",
-  },
-};
-export default en;
+    style: 'unit',
+    unit: 'pound',
+    unitDisplay: 'short'
+  }
+}
+export default en

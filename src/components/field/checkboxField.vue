@@ -15,34 +15,34 @@
 </template>
 
 <script setup lang="ts">
-import type { Errors } from "@/stores/types";
-import { defineErrorRefs, defineIDRefs } from "@/components/field/common";
+import type { Errors } from '@/stores/types'
+import { defineErrorRefs, defineIDRefs } from '@/components/field/common'
 
 interface Props {
-  object: string;
-  field: string;
-  modelValue: boolean;
+  object: string
+  field: string
+  modelValue: boolean
 
-  label: string;
+  label: string
 
-  errors?: Errors;
+  errors?: Errors
 }
 
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 defineEmits<{
-  (event: "update:modelValue", value: boolean): void;
-}>();
+  (event: 'update:modelValue', value: boolean): void
+}>()
 
-const { id, name } = defineIDRefs(props);
-const { hasError } = defineErrorRefs(props);
+const { id, name } = defineIDRefs(props)
+const { hasError } = defineErrorRefs(props)
 
 function targetValue(event: Event): boolean {
-  return (event.target as HTMLInputElement).checked;
+  return (event.target as HTMLInputElement).checked
 }
 </script>
 
 <script lang="ts">
 export default {
-  inheritAttrs: false,
-};
+  inheritAttrs: false
+}
 </script>

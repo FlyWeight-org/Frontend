@@ -1,13 +1,12 @@
 @use 'vars';
 
 @mixin field {
-    @include vars.border-gradient(3px);
+  @include vars.border-gradient(3px);
 
-    appearance: none;
-    border-image-source: vars.$gradient-1;
-    display: block;
-    outline: none;
-
-    padding: 5px 10px;
-    transform: skewX(-10deg); //TODO unskew text
+  display: block;
+  padding: 5px 10px;
+  appearance: none;
+  border-image-source: vars.$gradient-1;
+  outline: none;
+  transform: skewX(-10deg); // TODO unskew text
 }

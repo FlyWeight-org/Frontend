@@ -1,13 +1,13 @@
 <template>
   <main>
     <h1>
-      <span>{{ t("title") }}</span>
+      <span>{{ t('title') }}</span>
     </h1>
-    <h2>{{ t("home.welcome.subtitle") }}</h2>
+    <h2>{{ t('home.welcome.subtitle') }}</h2>
 
     <i18n-t tag="p" keypath="home.welcome.description">
       <template v-slot:title>
-        <strong>{{ t("title") }}</strong>
+        <strong>{{ t('title') }}</strong>
       </template>
     </i18n-t>
 
@@ -17,14 +17,14 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import Navbar from "./nav.vue";
+import { useI18n } from 'vue-i18n'
+import Navbar from './nav.vue'
 
-const { t } = useI18n();
+const { t } = useI18n()
 </script>
 
 <style scoped lang="scss">
-@use "@/styles/vars";
+@use '@/styles/vars';
 
 h1 {
   font-stretch: semi-expanded;
@@ -34,9 +34,8 @@ h1 {
     @include vars.text-gradient(vars.$gradient-1);
 
     display: inline-block;
-    margin-left: auto;
     margin-right: auto;
-
+    margin-left: auto;
     font-size: 32pt;
     font-style: italic;
     font-weight: bold;

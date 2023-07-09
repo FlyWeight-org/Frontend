@@ -5,154 +5,153 @@
 $animation-speed: 3s;
 
 @keyframes shimmer {
-    0% {
-        background-position: -200px 0;
-    }
+  0% {
+    background-position: -200px 0;
+  }
 
-    100% {
-        background-position: 200px 0;
-    }
+  100% {
+    background-position: 200px 0;
+  }
 }
 
 fieldset {
-    border: 0;
-    margin: 20px 0;
-    padding: 0;
-}
-
-form:not(.inline) label {
-    display: block;
-    font-size: 12pt;
-    font-stretch: condensed;
-    font-weight: bold;
-    margin-bottom: 5px;
+  padding: 0;
+  margin: 20px 0;
+  border: 0;
 }
 
 label.checkbox-label {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }
 
-input[type=text],
-input[type=email],
-input[type=password],
-input[type=number],
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
 textarea {
-    @include fields.field;
+  @include fields.field;
 }
 
 button,
-input[type=submit],
-input[type=button] {
-    @include vars.slant;
+input[type='submit'],
+input[type='button'] {
+  @include vars.slant;
 
-    appearance: none;
-    background: vars.$gradient-1, colors.$resolution-blue;
-    background-size: 200px 50px; //TODO doesn't quite line up with length of gradient
-    border: 0;
-    color: white;
+  padding: 10px;
+  color: white;
+  appearance: none;
+  background: vars.$gradient-1, colors.$resolution-blue;
+  background-size: 200px 50px; // TODO doesn't quite line up with length of gradient
+  border: 0;
 
-    padding: 10px;
+  &:disabled {
+    opacity: 0.5;
+  }
 
-    &:active:not(:disabled):not(.processing) {
-        transform: translate(5px, 5px);
-    }
-
-    &.processing {
-        animation: shimmer $animation-speed linear infinite;
-    }
-
-    &:not(:disabled):not(.processing) {
-        cursor: pointer;
-    }
-
-    &:disabled {
-        opacity: 0.5;
-    }
-}
-
-input[type=checkbox] {
-    appearance: none;
-    background-image: url('../images/checkmark.svg');
-
+  &:not(:disabled, .processing) {
     cursor: pointer;
-    display: inline-block;
-    height: 20px;
-    margin-right: 0.5em;
-    padding: 10px;
-    width: 20px;
+  }
 
-    &:checked {
-        background-image: url('../images/checkmark-checked.svg');
-    }
+  &:active:not(:disabled, .processing) {
+    transform: translate(5px, 5px);
+  }
+
+  &.processing {
+    animation: shimmer $animation-speed linear infinite;
+  }
 }
 
-fieldset.actions {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: baseline;
+input[type='checkbox'] {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+  margin-right: 0.5em;
+  appearance: none;
+  cursor: pointer;
+  background-image: url('../images/checkmark.svg');
 
-    > * {
-        margin: 0 10px;
-
-        &:first-child {
-            margin-left: 0;
-        }
-    }
-
-    > a {
-        font-size: 11pt;
-    }
+  &:checked {
+    background-image: url('../images/checkmark-checked.svg');
+  }
 }
 
 ul.error {
-    list-style-type: none;
-    padding-left: 0;
-    margin: 0;
+  padding-left: 0;
+  margin: 0;
+  list-style-type: none;
 }
 
 .error,
 .error p,
 .error li {
-    font-size: 12pt;
+  font-size: 12pt;
 
-    h2 {
-        color: colors.$fandango;
-        font-size: 12pt;
-        font-weight: bold;
-    }
+  h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    color: colors.$fandango;
+  }
 }
 
-.error, .error * {
-    color: colors.$fandango;
+.error,
+.error * {
+  color: colors.$fandango;
 }
 
 .field_with_errors label {
-    color: colors.$fandango;
+  color: colors.$fandango;
+}
+
+fieldset.actions {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+
+  > * {
+    margin: 0 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  > a {
+    font-size: 11pt;
+  }
+}
+
+form:not(.inline) label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12pt;
+  font-weight: bold;
+  font-stretch: condensed;
 }
 
 form.inline {
-    align-items: center;
-    display: flex;
-    flex-flow: row wrap;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
 
-    fieldset {
-        margin: 5px 0;
+  fieldset {
+    margin: 5px 0;
 
-        &:not(:last-child) {
-            margin-right: 10px;
-        }
+    &:not(:last-child) {
+      margin-right: 10px;
     }
+  }
 
-    label:not(.checkbox-label) {
-        font-size: 50%;
-    }
+  label:not(.checkbox-label) {
+    font-size: 50%;
+  }
 
-    input,
-    select,
-    textarea {
-        font-size: 12pt;
-        max-width: 200px;
-    }
+  input,
+  select,
+  textarea {
+    max-width: 200px;
+    font-size: 12pt;
+  }
 }

@@ -1,39 +1,38 @@
 @use 'sass:color';
 @use 'colors';
 @use 'fields';
+@import '@vuepic/vue-datepicker/dist/main.css';
 
-@import '@vuepic/vue-datepicker/src/VueDatePicker/style/main.scss';
-
-$dp__font_family: Archivo, sans-serif;
+$dp__font_family: archivo, sans-serif;
 $dp__font_size: 100%;
 
 .dp__theme_light {
-    --dp-background-color: #ffffff;
-    --dp-text-color: #212121;
-    --dp-hover-color: #f3f3f3;
-    --dp-hover-text-color: #212121;
-    --dp-hover-icon-color: #959595;
-    --dp-primary-color: #{colors.$resolution-blue};
-    --dp-primary-text-color: #f8f5f5;
-    --dp-secondary-color: #c0c4cc;
-    --dp-border-color: #ddd;
-    --dp-menu-border-color: #ddd;
-    --dp-border-color-hover: #aaaeb7;
-    --dp-disabled-color: #f6f6f6;
-    --dp-scroll-bar-background: #f3f3f3;
-    --dp-scroll-bar-color: #959595;
-    --dp-success-color: #{colors.$fandango};
-    --dp-success-color-disabled: #{color.adjust(colors.$fandango, $lightness: 50%)};
-    --dp-icon-color: #959595;
-    --dp-danger-color: #ff6f60;
+  --dp-background-color: #fff;
+  --dp-text-color: #212121;
+  --dp-hover-color: #f3f3f3;
+  --dp-hover-text-color: #212121;
+  --dp-hover-icon-color: #959595;
+  --dp-primary-color: #{colors.$resolution-blue};
+  --dp-primary-text-color: #f8f5f5;
+  --dp-secondary-color: #c0c4cc;
+  --dp-border-color: #ddd;
+  --dp-menu-border-color: #ddd;
+  --dp-border-color-hover: #aaaeb7;
+  --dp-disabled-color: #f6f6f6;
+  --dp-scroll-bar-background: #f3f3f3;
+  --dp-scroll-bar-color: #959595;
+  --dp-success-color: #{colors.$fandango};
+  --dp-success-color-disabled: #{color.adjust(colors.$fandango, $lightness: 50%)};
+  --dp-icon-color: #959595;
+  --dp-danger-color: #ff6f60;
 }
 
 input.dp__input {
-    @include fields.field;
+  @include fields.field;
 
-    padding-left: 35px;
-    width: unset;
-    font-family: Archivo, sans-serif;
-    font-size: 80%;
-    line-height: 1.15;
+  width: unset;
+  padding-left: 35px;
+  font-family: Archivo, sans-serif;
+  font-size: 80%;
+  line-height: 1.15;
 }

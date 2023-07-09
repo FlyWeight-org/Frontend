@@ -3,18 +3,17 @@
 
 html,
 body {
-  background-color: vars.$background-color;
   height: 100vh;
+  background-color: vars.$background-color;
 }
 
 #app {
   display: grid;
-  grid-template-areas:
-    'header header header'
-    '. main .'
-    'footer footer footer';
-  grid-template-columns: auto minmax(320px, 640px) auto;
-  grid-template-rows: vars.$header-height 1fr vars.$footer-height;
+  grid-template:
+    'header header header' vars.$header-height
+    '. main .' 1fr
+    'footer footer footer' vars.$footer-height /
+    auto minmax(320px, 640px) auto;
 
   > nav {
     grid-area: header;
@@ -27,22 +26,22 @@ body {
   }
 
   > footer {
-    align-items: center;
-    background-color: colors.$middle-blue;
     grid-area: footer;
+    align-items: center;
     text-align: center;
+    background-color: colors.$middle-blue;
 
     p {
-      color: white;
-      line-height: vars.$footer-height;
-      margin: 0;
       padding: 0;
+      margin: 0;
+      line-height: vars.$footer-height;
+      color: white;
     }
 
     a {
-      border: 0;
-      color: white;
       font-weight: bold;
+      color: white;
+      border: 0;
     }
   }
 }

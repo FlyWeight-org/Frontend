@@ -2,10 +2,10 @@
 @use 'colors';
 
 * {
-  color: vars.$body-color;
   font-family: Archivo, sans-serif;
   font-size: 16pt;
   font-weight: 400;
+  color: vars.$body-color;
 }
 
 h1 {
@@ -14,6 +14,7 @@ h1 {
 
   > span {
     @include vars.text-gradient(vars.$gradient-1);
+
     font-size: 32pt;
     font-style: italic;
     font-weight: bold;
@@ -21,17 +22,17 @@ h1 {
 }
 
 h2 {
+  margin-bottom: 10px;
   font-size: 16pt;
-  font-stretch: condensed;
   font-style: italic;
   font-weight: bolder;
-  margin-bottom: 10px;
+  font-stretch: condensed;
 }
 
 a {
-  border-bottom: 1px solid vars.$link-color;
   color: vars.$link-color;
   text-decoration: none;
+  border-bottom: 1px solid vars.$link-color;
 
   &.danger {
     color: colors.$fandango;
@@ -44,30 +45,33 @@ a {
   }
 }
 
-small, small a {
+small,
+small a {
   font-size: 12pt;
 }
 
 button.link,
-input[type=submit].link {
+input[type='submit'].link {
+  padding: 0;
+  margin: 0;
+  color: vars.$link-color;
   background: none;
   border: 0;
   border-radius: 0;
-  color: vars.$link-color;
-  margin: 0;
-  padding: 0;
 }
 
 .empty {
-  color: colors.$middle-blue;
   font-weight: 200;
+  color: colors.$middle-blue;
 }
 
 div.empty {
-  font-size: 36pt;
-  line-height: calc(100vh - #{vars.$header-height} - #{vars.$footer-height} - #{vars.$body-padding*2});
-  margin: 0;
   padding: 0;
+  margin: 0;
+  font-size: 36pt;
+  line-height: calc(
+    100vh - #{vars.$header-height} - #{vars.$footer-height} - #{vars.$body-padding * 2}
+  );
   text-align: center;
 }
 

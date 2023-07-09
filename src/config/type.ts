@@ -1,5 +1,5 @@
 export interface Config {
-  bugsnagAPIKey: string;
-  APIURL: string;
-  actionCableURL: string;
+  bugsnagAPIKey: string
+  APIURL: string
+  actionCableURL: string
 }

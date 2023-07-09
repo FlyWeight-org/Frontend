@@ -63,35 +63,35 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { isNull } from "lodash-es";
-import config from "@/config";
-import type { PilotJSONUp } from "@/stores/coding";
-import Field from "@/components/field.vue";
-import useFormErrorHandling from "@/composables/useFormErrorHandling";
-import { useAccountStore } from "@/stores/modules/account";
+import { computed, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { isNull } from 'lodash-es'
+import config from '@/config'
+import type { PilotJSONUp } from '@/stores/coding'
+import Field from '@/components/field.vue'
+import useFormErrorHandling from '@/composables/useFormErrorHandling'
+import { useAccountStore } from '@/stores/modules/account'
 
-const { t } = useI18n();
-const router = useRouter();
-const accountStore = useAccountStore();
+const { t } = useI18n()
+const router = useRouter()
+const accountStore = useAccountStore()
 
 const pilot = reactive<PilotJSONUp>({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
-});
-const URL = `${config.APIURL}/signup.json`;
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: ''
+})
+const URL = `${config.APIURL}/signup.json`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
   () => accountStore.signUp(pilot),
   async () => {
-    await router.push({ name: "flightsList" });
+    await router.push({ name: 'flightsList' })
   }
-);
+)
 
 const errorMessage = computed<string | null>(() =>
-  isNull(error) ? null : t("home.signUp.error", { error: error.value })
-);
+  isNull(error) ? null : t('home.signUp.error', { error: error.value })
+)
 </script>

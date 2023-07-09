@@ -1,13 +1,13 @@
 <template>
   <main>
     <div class="empty" v-if="flightsStore.flightsLoading">
-      {{ t("messages.loading") }}
+      {{ t('messages.loading') }}
     </div>
     <div class="error empty" v-else-if="flightsStore.flightsError">
       {{ flightsStore.flightsError }}
     </div>
     <div class="empty" v-else-if="flightsStore.noFlights" data-cy="no-flights">
-      {{ t("flights.list.empty") }}
+      {{ t('flights.list.empty') }}
     </div>
     <div
       class="flight-list"
@@ -23,15 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import FlightView from "@/components/flights/list/flight.vue";
-import requireAuth from "@/composables/requireAuth";
-import { useFlightsStore } from "@/stores/modules/flights";
+import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import FlightView from '@/components/flights/list/flight.vue'
+import requireAuth from '@/composables/requireAuth'
+import { useFlightsStore } from '@/stores/modules/flights'
 
-const { t } = useI18n();
-const flightsStore = useFlightsStore();
+const { t } = useI18n()
+const flightsStore = useFlightsStore()
 
-requireAuth();
-onMounted(() => flightsStore.loadFlights());
+requireAuth()
+onMounted(() => flightsStore.loadFlights())
 </script>
