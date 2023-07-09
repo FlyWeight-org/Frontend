@@ -1,18 +1,15 @@
-import Bugsnag from "@bugsnag/js";
-import type { Plugin } from "@bugsnag/js";
-import BugsnagPluginVue from "@bugsnag/plugin-vue";
-import type { BugsnagPluginVueResult } from "@bugsnag/plugin-vue";
-import config from "@/config/index";
+import Bugsnag from '@bugsnag/js'
+import BugsnagPluginVue from '@bugsnag/plugin-vue'
+import config from '@/config/index'
+import BugsnagPerformance from '@bugsnag/browser-performance'
 
-let bugsnagPlugin: BugsnagPluginVueResult | undefined = undefined;
+Bugsnag.start({
+  apiKey: config.bugsnagAPIKey,
+  plugins: [new BugsnagPluginVue()],
+  releaseStage: import.meta.env.MODE,
+  enabledReleaseStages: ['production']
+})
+BugsnagPerformance.start(config.bugsnagAPIKey)
 
-if (config.bugsnagAPIKey) {
-  Bugsnag.start({
-    apiKey: config.bugsnagAPIKey,
-    plugins: [<Plugin>new BugsnagPluginVue()],
-  });
-
-  bugsnagPlugin = Bugsnag.getPlugin("vue");
-}
-
-export { bugsnagPlugin };
+const bugsnagVue = Bugsnag.getPlugin('vue')
+export default bugsnagVue

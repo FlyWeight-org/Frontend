@@ -26,8 +26,8 @@ describe("as a pilot", () => {
 
     it("creates a flight", () => {
       cy.dataCy("flight-date").click();
-      cy.get(".dp__calendar_item[aria-disabled=false]").first().click();
-      cy.get(".dp__select").click();
+      cy.get(".dp__calendar_item:not([aria-disabled])").first().click();
+      cy.get(".dp__action_select").click();
       cy.dataCy("flight-description").type("example flight description");
       cy.dataCy("flight-submit").click();
 

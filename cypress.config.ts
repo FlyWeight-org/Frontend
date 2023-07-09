@@ -1,5 +1,4 @@
-import { defineConfig } from "cypress";
-import vitePreprocessor from "cypress-vite";
+import { defineConfig } from 'cypress'
 
 export default defineConfig({
   projectId: "wdyht2",
@@ -7,11 +6,8 @@ export default defineConfig({
     apiHost: "http://127.0.0.1:5000"
   },
   e2e: {
-    specPattern: "cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}",
+    specPattern: 'cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     baseUrl: "http://127.0.0.1:4173",
     supportFile: "cypress/support/e2e.ts",
-    setupNodeEvents(on) {
-      on("file:preprocessor", vitePreprocessor());
-    },
-  },
-});
+  }
+})

@@ -1,6 +1,6 @@
 <template>
-  <h2>{{ t("home.forgotPassword.title") }}</h2>
-  <p>{{ t("home.forgotPassword.description") }}</p>
+  <h2>{{ t('home.forgotPassword.title') }}</h2>
+  <p>{{ t('home.forgotPassword.description') }}</p>
   <form method="post" :action="URL" @submit.prevent="submitHandler">
     <field
       type="email"
@@ -23,52 +23,50 @@
       />
 
       <p>
-        <router-link to="/login"
-          >{{ t("home.forgotPassword.cancelButton") }}
-        </router-link>
+        <router-link to="/login">{{ t('home.forgotPassword.cancelButton') }} </router-link>
       </p>
     </fieldset>
 
     <p class="success" v-if="success" data-cy="forgot-password-success">
-      {{ t("home.forgotPassword.success", { email: form.email }) }}
+      {{ t('home.forgotPassword.success', { email: form.email }) }}
     </p>
     <p class="error" v-if="error">{{ error }}</p>
   </form>
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-import { reactive, ref } from "vue";
-import config from "@/config";
-import Field from "@/components/field.vue";
-import { errorToString } from "@/utils/errors";
-import { useAccountStore } from "@/stores/modules/account";
+import { useI18n } from 'vue-i18n'
+import { reactive, ref } from 'vue'
+import config from '@/config'
+import Field from '@/components/field.vue'
+import { errorToString } from '@/utils/errors'
+import { useAccountStore } from '@/stores/modules/account'
 
-const { t } = useI18n();
-const accountStore = useAccountStore();
+const { t } = useI18n()
+const accountStore = useAccountStore()
 
 interface ForgotPasswordForm {
-  email: string;
+  email: string
 }
 
 const form = reactive<ForgotPasswordForm>({
-  email: "",
-});
-const URL = `${config.APIURL}/password_resets.json`;
-const success = ref<boolean>(false);
-const error = ref<string | null>(null);
-const isProcessing = ref<boolean>(false);
+  email: ''
+})
+const URL = `${config.APIURL}/password_resets.json`
+const success = ref<boolean>(false)
+const error = ref<string | null>(null)
+const isProcessing = ref<boolean>(false)
 
 async function submitHandler() {
-  isProcessing.value = true;
-  success.value = false;
+  isProcessing.value = true
+  success.value = false
 
   try {
-    await accountStore.forgotPassword(form.email);
-    success.value = true;
+    await accountStore.forgotPassword(form.email)
+    success.value = true
   } catch (err) {
-    error.value = errorToString(err);
+    error.value = errorToString(err)
   }
-  isProcessing.value = false;
+  isProcessing.value = false
 }
 </script>

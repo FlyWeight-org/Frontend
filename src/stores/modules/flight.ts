@@ -1,52 +1,37 @@
 /* eslint-disable no-shadow,no-param-reassign */
 
-import type { Errors, FlightState } from "@/stores/types";
-import { defineStore } from "pinia";
-import {
-  clone,
-  cloneDeep,
-  concat,
-  isNil,
-  isNull,
-  isUndefined,
-  some,
-} from "lodash-es";
-import { request, requestJSON } from "@/stores/modules/root";
-import {
-  flightFromJSON,
-  editableFlightToJSON,
-  loadToJSON,
-  loadFromJSON,
-} from "@/stores/coding";
-import type { FlightJSONDown, LoadJSONDown } from "@/stores/coding";
+import type { Errors, FlightState } from '@/stores/types'
+import { defineStore } from 'pinia'
+import { clone, cloneDeep, concat, isNil, isNull, isUndefined, some } from 'lodash-es'
+import { request, requestJSON } from '@/stores/modules/root'
+import { flightFromJSON, editableFlightToJSON, loadToJSON, loadFromJSON } from '@/stores/coding'
+import type { FlightJSONDown, LoadJSONDown } from '@/stores/coding'
 import {
   anythingToError,
   ignoreResponseBody,
   loadAPIResponseBodyOrReturnErrors,
-  loadAPIResponseBodyOrThrowErrors,
-} from "@/stores/utils";
-import { notifyBugsnag } from "@/utils/errors";
-import type { EditableFlight, EditableLoad, Flight, Load } from "@/types";
-import { Err, Ok, Result } from "ts-results";
-import { useFlightsStore } from "@/stores/modules/flights";
-import { useAuthStore } from "@/stores/modules/auth";
+  loadAPIResponseBodyOrThrowErrors
+} from '@/stores/utils'
+import { notifyBugsnag } from '@/utils/errors'
+import type { EditableFlight, EditableLoad, Flight, Load } from '@/types'
+import { Err, Ok, Result } from 'ts-results'
+import { useFlightsStore } from '@/stores/modules/flights'
+import { useAuthStore } from '@/stores/modules/auth'
 
 const initialState: FlightState = {
   flight: null,
   flightLoading: false,
   flightError: null,
-  loadsSubscription: null,
-};
+  loadsSubscription: null
+}
 
-export const useFlightStore = defineStore("flight", {
+export const useFlightStore = defineStore('flight', {
   state: () => clone(initialState),
 
   getters: {
     /** @return Whether the list of Flight has been loaded. */
     flightLoaded: (state) =>
-      !isNull(state.flight) &&
-      !state.flightLoading &&
-      isNull(state.flightError),
+      !isNull(state.flight) && !state.flightLoading && isNull(state.flightError)
   },
 
   actions: {
@@ -65,36 +50,36 @@ export const useFlightStore = defineStore("flight", {
      */
 
     async loadFlight(UUID?: string, force = false): Promise<void> {
-      if (this.flightLoading) return;
-      if (isNull(this.flight) && isUndefined(UUID)) return;
+      if (this.flightLoading) return
+      if (isNull(this.flight) && isUndefined(UUID)) return
       if (!isNull(this.flight)) {
         if (isUndefined(UUID)) {
-          UUID = this.flight.UUID;
-        } else if (UUID === this.flight.UUID && !force) return;
+          UUID = this.flight.UUID
+        } else if (UUID === this.flight.UUID && !force) return
       }
 
       this.$patch({
         flight: null,
         flightError: null,
-        flightLoading: true,
-      });
+        flightLoading: true
+      })
       try {
         const result = await requestJSON<FlightJSONDown>({
-          path: `/flights/${UUID}.json`,
-        });
-        const flight = flightFromJSON(loadAPIResponseBodyOrThrowErrors(result));
+          path: `/flights/${UUID}.json`
+        })
+        const flight = flightFromJSON(loadAPIResponseBodyOrThrowErrors(result))
         this.$patch({
           flight,
           flightLoading: false,
-          loadsSubscription: await this.createLoadsSubscription(flight.UUID),
-        });
+          loadsSubscription: await this.createLoadsSubscription(flight.UUID)
+        })
       } catch (error) {
         this.$patch({
           flightError: anythingToError(error),
           flightLoading: false,
-          flight: null,
-        });
-        notifyBugsnag(error);
+          flight: null
+        })
+        notifyBugsnag(error)
       }
     },
 
@@ -107,30 +92,28 @@ export const useFlightStore = defineStore("flight", {
      * @throws If an HTTP error occurs, or if there is no active flight.
      */
 
-    async updateFlight(
-      flight: EditableFlight
-    ): Promise<Result<Flight, Errors>> {
-      const flights = useFlightsStore();
+    async updateFlight(flight: EditableFlight): Promise<Result<Flight, Errors>> {
+      const flights = useFlightsStore()
 
-      if (isNull(this.flight)) throw new Error("No active flight");
+      if (isNull(this.flight)) throw new Error('No active flight')
       const response = await requestJSON<FlightJSONDown>({
-        method: "put",
+        method: 'put',
         path: `/pilot/flights/${this.flight.UUID}.json`,
-        body: { flight: editableFlightToJSON(flight) },
-      });
+        body: { flight: editableFlightToJSON(flight) }
+      })
 
-      const result = loadAPIResponseBodyOrReturnErrors(response);
+      const result = loadAPIResponseBodyOrReturnErrors(response)
       if (result.ok) {
-        await flights.loadFlights();
-        const flight = flightFromJSON(result.val);
+        await flights.loadFlights()
+        const flight = flightFromJSON(result.val)
         this.$patch({
           flight,
           flightLoading: false,
-          flightError: null,
-        });
-        return new Ok(flight);
+          flightError: null
+        })
+        return new Ok(flight)
       }
-      return result;
+      return result
     },
 
     /**
@@ -141,17 +124,17 @@ export const useFlightStore = defineStore("flight", {
      */
 
     async deleteFlight(flight: Flight): Promise<void> {
-      const flights = useFlightsStore();
+      const flights = useFlightsStore()
 
       const response = await request({
-        method: "delete",
-        path: `/pilot/flights/${flight.UUID}.json`,
-      });
+        method: 'delete',
+        path: `/pilot/flights/${flight.UUID}.json`
+      })
 
-      if (this.loadsSubscription) await this.loadsSubscription.unsubscribe();
-      this.loadsSubscription = null;
-      await flights.loadFlights();
-      ignoreResponseBody(response);
+      if (this.loadsSubscription) await this.loadsSubscription.unsubscribe()
+      this.loadsSubscription = null
+      await flights.loadFlights()
+      ignoreResponseBody(response)
     },
 
     /**
@@ -164,31 +147,29 @@ export const useFlightStore = defineStore("flight", {
      * @throws If an HTTP error occurs, or if there is no current flight.
      */
 
-    async addAuthorizedLoad(
-      load: EditableLoad
-    ): Promise<Result<Flight, Errors>> {
-      const flights = useFlightsStore();
+    async addAuthorizedLoad(load: EditableLoad): Promise<Result<Flight, Errors>> {
+      const flights = useFlightsStore()
 
-      if (isNull(this.flight)) throw new Error("No flight");
+      if (isNull(this.flight)) throw new Error('No flight')
 
       const response = await requestJSON<FlightJSONDown>({
-        method: "post",
+        method: 'post',
         path: `/pilot/flights/${this.flight.UUID}/loads.json`,
-        body: { load: loadToJSON(load) },
-      });
+        body: { load: loadToJSON(load) }
+      })
 
-      const result = loadAPIResponseBodyOrReturnErrors(response);
+      const result = loadAPIResponseBodyOrReturnErrors(response)
       if (result.ok) {
-        await flights.loadFlights();
-        const flight = flightFromJSON(result.val);
+        await flights.loadFlights()
+        const flight = flightFromJSON(result.val)
         this.$patch({
           flight,
           flightLoading: false,
-          flightError: null,
-        });
-        return new Ok(flight);
+          flightError: null
+        })
+        return new Ok(flight)
       }
-      return new Err(result.val);
+      return new Err(result.val)
     },
 
     /**
@@ -200,23 +181,21 @@ export const useFlightStore = defineStore("flight", {
      * @throws If an HTTP error occurs, or if there is no current flight.
      */
 
-    async addUnauthorizedLoad(
-      load: EditableLoad
-    ): Promise<Result<Load, Errors>> {
-      if (isNull(this.flight)) throw new Error("No flight");
+    async addUnauthorizedLoad(load: EditableLoad): Promise<Result<Load, Errors>> {
+      if (isNull(this.flight)) throw new Error('No flight')
 
       const response = await requestJSON<LoadJSONDown>({
-        method: "post",
+        method: 'post',
         path: `/flights/${this.flight.UUID}/loads.json`,
-        body: { load: loadToJSON(load) },
-      });
+        body: { load: loadToJSON(load) }
+      })
 
-      const result = loadAPIResponseBodyOrReturnErrors(response);
+      const result = loadAPIResponseBodyOrReturnErrors(response)
       if (result.ok) {
-        const load = loadFromJSON(result.val);
-        return new Ok(load);
+        const load = loadFromJSON(result.val)
+        return new Ok(load)
       }
-      return new Err(result.val);
+      return new Err(result.val)
     },
 
     /**
@@ -228,77 +207,73 @@ export const useFlightStore = defineStore("flight", {
      */
 
     async removeLoad(slug: string): Promise<Flight> {
-      const flights = useFlightsStore();
+      const flights = useFlightsStore()
 
-      if (isNull(this.flight)) throw new Error("No flight");
+      if (isNull(this.flight)) throw new Error('No flight')
 
       const response = await requestJSON<FlightJSONDown>({
-        method: "delete",
-        path: `/pilot/flights/${this.flight.UUID}/loads/${slug}.json`,
-      });
+        method: 'delete',
+        path: `/pilot/flights/${this.flight.UUID}/loads/${slug}.json`
+      })
 
-      const flightJSON = loadAPIResponseBodyOrThrowErrors(response);
-      await flights.loadFlights();
-      const flight = flightFromJSON(flightJSON);
+      const flightJSON = loadAPIResponseBodyOrThrowErrors(response)
+      await flights.loadFlights()
+      const flight = flightFromJSON(flightJSON)
       this.$patch({
         flight,
         flightLoading: false,
-        flightError: null,
-      });
-      return flight;
+        flightError: null
+      })
+      return flight
     },
 
     toggleEnabled(slug: string, enabled: boolean): void {
-      if (isNull(this.flight)) return;
+      if (isNull(this.flight)) return
 
-      const flight = cloneDeep(this.flight);
-      if (isUndefined(flight.loads)) return;
+      const flight = cloneDeep(this.flight)
+      if (isUndefined(flight.loads)) return
 
-      const load = flight.loads.find((load) => load.slug === slug);
-      if (isUndefined(load)) return;
+      const load = flight.loads.find((load) => load.slug === slug)
+      if (isUndefined(load)) return
 
-      load.disabled = !enabled;
+      load.disabled = !enabled
 
-      this.$patch({ flight });
+      this.$patch({ flight })
     },
 
-    async createLoadsSubscription(
-      UUID: string
-    ): Promise<ActionCable.Channel | null> {
-      const auth = useAuthStore();
+    async createLoadsSubscription(UUID: string): Promise<ActionCable.Channel | null> {
+      const auth = useAuthStore()
 
-      if (this.loadsSubscription) await this.loadsSubscription.unsubscribe();
+      if (this.loadsSubscription) await this.loadsSubscription.unsubscribe()
       return (
         auth.actionCableConsumer?.subscriptions?.create(
           {
-            channel: "LoadsChannel",
-            id: UUID,
+            channel: 'LoadsChannel',
+            id: UUID
           },
           {
             received: (loadJSON: string) =>
-              this.loadsSubscriptionMessage(UUID, JSON.parse(loadJSON)),
+              this.loadsSubscriptionMessage(UUID, JSON.parse(loadJSON))
           }
         ) || null
-      );
+      )
     },
 
     loadsSubscriptionMessage(flightID: string, loadJSON: LoadJSONDown) {
-      if (isNull(this.flight)) return;
-      if (this.flight.UUID !== flightID) return;
-      if (isNil(this.flight.loads)) return;
+      if (isNull(this.flight)) return
+      if (this.flight.UUID !== flightID) return
+      if (isNil(this.flight.loads)) return
 
-      if (loadJSON["destroyed?"]) {
-        this.flight.loads = this.flight.loads.filter(
-          (p) => p.slug !== loadJSON.slug
-        );
+      if (loadJSON['destroyed?']) {
+        this.flight.loads = this.flight.loads.filter((p) => p.slug !== loadJSON.slug)
       } else if (some(this.flight.loads, (p) => p.slug === loadJSON.slug)) {
         this.flight.loads = [
           ...this.flight.loads.filter((p) => p.slug !== loadJSON.slug),
-          loadFromJSON(loadJSON),
-        ];
+          loadFromJSON(loadJSON)
+        ]
       } else {
-        this.flight.loads = concat(this.flight.loads, loadFromJSON(loadJSON));
+        this.flight.loads = concat(this.flight.loads, loadFromJSON(loadJSON))
       }
-    },
-  },
-});
+    }
+  }
+})

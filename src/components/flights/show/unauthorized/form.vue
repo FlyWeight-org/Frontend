@@ -7,11 +7,7 @@
     @submit.prevent="submitHandler"
     data-cy="passenger-unauth-form"
   >
-    <fieldset
-      v-for="(fragment, i) in fragments"
-      :key="i"
-      :class="fieldsetClass(fragment)"
-    >
+    <fieldset v-for="(fragment, i) in fragments" :key="i" :class="fieldsetClass(fragment)">
       <field
         v-if="fragment === '[name]'"
         type="text"
@@ -77,57 +73,56 @@
 </template>
 
 <script setup lang="ts">
-import type { Flight, Load } from "@/types";
-import config from "@/config";
-import { computed, reactive } from "vue";
-import { useI18n } from "vue-i18n";
-import { useFlightStore } from "@/stores/modules/flight";
-import Field from "@/components/field.vue";
-import type { EditableLoad } from "@/types";
-import useFormErrorHandling from "@/composables/useFormErrorHandling";
-import { isEmpty } from "lodash-es";
-import { useRouter } from "vue-router";
+import type { Flight, Load } from '@/types'
+import config from '@/config'
+import { computed, reactive } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useFlightStore } from '@/stores/modules/flight'
+import Field from '@/components/field.vue'
+import type { EditableLoad } from '@/types'
+import useFormErrorHandling from '@/composables/useFormErrorHandling'
+import { isEmpty } from 'lodash-es'
+import { useRouter } from 'vue-router'
 
-const { t } = useI18n();
-const flightStore = useFlightStore();
-const router = useRouter();
+const { t } = useI18n()
+const flightStore = useFlightStore()
+const router = useRouter()
 
 const props = defineProps<{
-  flight: Flight;
-}>();
+  flight: Flight
+}>()
 
-const URL = `${config.APIURL}/flights/${props.flight.UUID}/loads.json`;
+const URL = `${config.APIURL}/flights/${props.flight.UUID}/loads.json`
 const load = reactive<EditableLoad>({
-  name: "",
+  name: '',
   weight: 0,
   bagsWeight: 0,
   covid19Vaccination: false,
-  disabled: false,
-});
-const { submitHandler, errors, error, isProcessing } =
-  useFormErrorHandling<Load>(
-    () => flightStore.addUnauthorizedLoad(load),
-    async (load) => {
-      await router.push({
-        name: "flightsFinished",
-        params: {
-          flightID: props.flight.UUID,
-          loadName: load.name,
-        },
-      });
-    }
-  );
+  disabled: false
+})
+const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Load>(
+  () => flightStore.addUnauthorizedLoad(load),
+  async (load) => {
+    await router.push({
+      name: 'flightsFinished',
+      params: {
+        flightID: props.flight.UUID,
+        loadName: load.name
+      }
+    })
+  }
+)
 
 const fragments = computed(() =>
-  t("flights.show.unauthorized.form")
-    .split("#")
+  t('flights.show.unauthorized.form')
+    .split('#')
     .map((s) => s.trim())
-);
+)
 
 function fieldsetClass(fragment: string): string {
-  if (fragment === "[submit]") return "actions";
-  if (isEmpty(fragment)) return "flex-break-h";
-  return "";
+  if (fragment === '[submit]') return 'actions'
+  if (isEmpty(fragment)) return 'flex-break-h'
+  return ''
 }
 </script>
 

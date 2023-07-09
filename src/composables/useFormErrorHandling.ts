@@ -1,19 +1,19 @@
-import type { Result } from "ts-results";
-import { isObject, isUndefined, toString } from "lodash-es";
-import type { Ref } from "vue";
-import type { Errors } from "@/stores/types";
-import { errorToString, notifyBugsnag } from "@/utils/errors";
-import { ref } from "vue";
+import type { Result } from 'ts-results'
+import { isObject, isUndefined, toString } from 'lodash-es'
+import type { Ref } from 'vue'
+import type { Errors } from '@/stores/types'
+import { errorToString, notifyBugsnag } from '@/utils/errors'
+import { ref } from 'vue'
 
-type SubmitHandler<SuccessType> = () => Promise<Result<SuccessType, Errors>>;
-type SuccessHandler<SuccessType> = (result: SuccessType) => Promise<void>;
-type ErrorHandler = (errors: Errors | string) => Promise<void>;
+type SubmitHandler<SuccessType> = () => Promise<Result<SuccessType, Errors>>
+type SuccessHandler<SuccessType> = (result: SuccessType) => Promise<void>
+type ErrorHandler = (errors: Errors | string) => Promise<void>
 
 interface ReturnType {
-  submitHandler: () => Promise<void>;
-  errors: Ref<Errors>;
-  error: Ref<string | null>;
-  isProcessing: Ref<boolean>;
+  submitHandler: () => Promise<void>
+  errors: Ref<Errors>
+  error: Ref<string | null>
+  isProcessing: Ref<boolean>
 }
 
 export default function useFormErrorHandling<SuccessType>(
@@ -21,40 +21,40 @@ export default function useFormErrorHandling<SuccessType>(
   onSuccess: SuccessHandler<SuccessType>,
   onError?: ErrorHandler
 ): ReturnType {
-  const errors = ref<Errors>({});
-  const error = ref<string | null>(null);
-  const isProcessing = ref<boolean>(false);
+  const errors = ref<Errors>({})
+  const error = ref<string | null>(null)
+  const isProcessing = ref<boolean>(false)
 
   const submitHandler = async () => {
-    isProcessing.value = true;
-    errors.value = {};
-    error.value = null;
+    isProcessing.value = true
+    errors.value = {}
+    error.value = null
 
     try {
-      const result = await onSubmit();
+      const result = await onSubmit()
       if (result.ok) {
-        await onSuccess(result.val);
+        await onSuccess(result.val)
       } else {
         if (isObject(result.val)) {
-          errors.value = result.val;
+          errors.value = result.val
         } else {
-          error.value = toString(result.val);
+          error.value = toString(result.val)
         }
-        if (!isUndefined(onError)) await onError(result.val);
+        if (!isUndefined(onError)) await onError(result.val)
       }
     } catch (err) {
-      notifyBugsnag(err);
-      error.value = errorToString(err);
-      if (!isUndefined(onError)) await onError(error.value);
+      notifyBugsnag(err)
+      error.value = errorToString(err)
+      if (!isUndefined(onError)) await onError(error.value)
     }
 
-    isProcessing.value = false;
-  };
+    isProcessing.value = false
+  }
 
   return {
     submitHandler,
     errors,
     error,
-    isProcessing,
-  };
+    isProcessing
+  }
 }

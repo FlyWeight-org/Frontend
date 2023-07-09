@@ -1,46 +1,44 @@
-import { computed } from "vue";
-import type { ComputedRef } from "vue";
-import { isEmpty, isUndefined } from "lodash-es";
-import type { Errors } from "@/stores/types";
+import { computed } from 'vue'
+import type { ComputedRef } from 'vue'
+import { isEmpty, isUndefined } from 'lodash-es'
+import type { Errors } from '@/stores/types'
 
 interface ErrorProps {
-  field: string;
-  errors?: Errors;
+  field: string
+  errors?: Errors
 }
 
 interface IDProps {
-  object: string;
-  field: string;
+  object: string
+  field: string
 }
 
 interface ErrorRefs {
-  fieldErrors: ComputedRef<string[]>;
-  hasError: ComputedRef<boolean>;
+  fieldErrors: ComputedRef<string[]>
+  hasError: ComputedRef<boolean>
 }
 
 interface IDRefs {
-  id: ComputedRef<string>;
-  name: ComputedRef<string>;
+  id: ComputedRef<string>
+  name: ComputedRef<string>
 }
 
 export function defineErrorRefs(props: ErrorProps): ErrorRefs {
-  const fieldErrors = computed(() =>
-    isUndefined(props.errors) ? [] : props.errors[props.field]
-  );
-  const hasError = computed(() => !isEmpty(fieldErrors));
+  const fieldErrors = computed(() => (isUndefined(props.errors) ? [] : props.errors[props.field]))
+  const hasError = computed(() => !isEmpty(fieldErrors))
 
   return {
     fieldErrors,
-    hasError,
-  };
+    hasError
+  }
 }
 
 export function defineIDRefs(props: IDProps): IDRefs {
-  const id = computed(() => `${props.object}-${props.field}`);
-  const name = computed(() => `${props.object}[${props.field}]`);
+  const id = computed(() => `${props.object}-${props.field}`)
+  const name = computed(() => `${props.object}[${props.field}]`)
 
   return {
     id,
-    name,
-  };
+    name
+  }
 }

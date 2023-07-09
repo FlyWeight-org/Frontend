@@ -1,21 +1,21 @@
-import type { DateTimeFormat } from "@intlify/core-base";
+import type { DateTimeFormat } from '@intlify/core-base'
 
 const en: DateTimeFormat = {
   short: {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
   },
   medium: {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   },
   long: {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    weekday: "long",
-  },
-};
-export default en;
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  }
+}
+export default en
