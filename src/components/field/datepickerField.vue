@@ -4,8 +4,8 @@
     <vue-date-picker
       v-bind="$attrs"
       :id="id"
-      :name="name"
       v-model="internalDate"
+      :name="name"
       :format="formatDate"
       :preview-format="formatDatePreview"
       :placeholder="datePlaceholder"
@@ -14,8 +14,7 @@
       :clearable="false"
       :class="{ invalid: hasError }"
       :aria-invalid="hasError"
-    >
-    </vue-date-picker>
+    />
   </label>
 </template>
 

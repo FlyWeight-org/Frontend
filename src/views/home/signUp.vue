@@ -1,8 +1,8 @@
 <template>
   <form method="post" :action="URL" @submit.prevent="submitHandler">
     <field
-      type="text"
       v-model="pilot.name"
+      type="text"
       object="pilot"
       field="name"
       :errors="errors"
@@ -13,8 +13,8 @@
     />
 
     <field
-      type="email"
       v-model="pilot.email"
+      type="email"
       object="pilot"
       field="email"
       :errors="errors"
@@ -25,8 +25,8 @@
     />
 
     <field
-      type="password"
       v-model="pilot.password"
+      type="password"
       object="pilot"
       field="password"
       :errors="errors"
@@ -37,8 +37,8 @@
     />
 
     <field
-      type="password"
       v-model="pilot.password_confirmation"
+      type="password"
       object="pilot"
       field="password_confirmation"
       :errors="errors"
@@ -59,7 +59,9 @@
     </fieldset>
   </form>
 
-  <p class="error" v-if="error">{{ errorMessage }}</p>
+  <p v-if="error" class="error">
+    {{ errorMessage }}
+  </p>
 </template>
 
 <script setup lang="ts">

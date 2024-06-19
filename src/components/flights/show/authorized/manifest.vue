@@ -4,7 +4,7 @@
       <load-header
         :title="t('flights.show.authorized.header.passengers')"
         :adding="addingPassenger"
-        @addClicked="addingPassenger = true"
+        @add-clicked="addingPassenger = true"
       >
         <passenger-form :flight="flight" @reset="addingPassenger = false" />
       </load-header>
@@ -15,7 +15,7 @@
       <load-header
         :title="t('flights.show.authorized.header.cargo')"
         :adding="addingCargo"
-        @addClicked="addingCargo = true"
+        @add-clicked="addingCargo = true"
       >
         <cargo-form :flight="flight" @reset="addingCargo = false" />
       </load-header>

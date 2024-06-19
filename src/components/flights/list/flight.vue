@@ -6,7 +6,7 @@
         {{ t('flights.list.flight.passengers', { count: paxCount }) }}
       </div>
     </div>
-    <p class="description" v-if="flight.description">
+    <p v-if="flight.description" class="description">
       {{ flight.description }}
     </p>
   </a>

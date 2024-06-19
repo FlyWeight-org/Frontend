@@ -1,10 +1,12 @@
 <template>
-  <p class="error">{{ t('home.logIn.newAccounts') }}</p>
+  <p class="error">
+    {{ t('home.logIn.newAccounts') }}
+  </p>
 
   <form method="post" :action="URL" @submit.prevent="submitHandler">
     <field
-      type="email"
       v-model="session.email"
+      type="email"
       object="session"
       field="email"
       :label="t('pilot.email')"
@@ -15,8 +17,8 @@
     />
 
     <field
-      type="password"
       v-model="session.password"
+      type="password"
       object="session"
       field="password"
       :label="t('session.password')"
@@ -27,8 +29,8 @@
     />
 
     <field
-      type="checkbox"
       v-model="session.remember_me"
+      type="checkbox"
       object="session"
       field="remember_me"
       :errors="errors"
@@ -45,12 +47,16 @@
       />
 
       <p data-cy="forgot-password-link">
-        <router-link to="/forgot-password">{{ t('home.logIn.forgotPassword') }} </router-link>
+        <router-link to="/forgot-password">
+          {{ t('home.logIn.forgotPassword') }}
+        </router-link>
       </p>
     </fieldset>
   </form>
 
-  <p class="error" v-if="error" data-cy="login-error">{{ errorMessage }}</p>
+  <p v-if="error" class="error" data-cy="login-error">
+    {{ errorMessage }}
+  </p>
 </template>
 
 <script setup lang="ts">

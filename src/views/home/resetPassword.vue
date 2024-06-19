@@ -2,8 +2,8 @@
   <h2>{{ t('home.resetPassword.title') }}</h2>
   <form method="patch" :action="URL" @submit.prevent="submitHandler">
     <field
-      type="password"
       v-model="form.password"
+      type="password"
       object="pilot"
       field="password"
       :label="t('pilot.password')"
@@ -14,8 +14,8 @@
     />
 
     <field
-      type="password"
       v-model="form.confirmation"
+      type="password"
       object="pilot"
       field="password_confirmation"
       :label="t('pilot.password_confirmation')"
@@ -36,14 +36,16 @@
     </fieldset>
   </form>
 
-  <p class="error" v-if="error">{{ error }}</p>
-  <ul class="error" v-if="errors.reset_password_token?.length" data-cy="reset-password-errors">
-    <li v-for="error in errors.reset_password_token" :key="error">
+  <p v-if="error" class="error">
+    {{ error }}
+  </p>
+  <ul v-if="errors.reset_password_token?.length" class="error" data-cy="reset-password-errors">
+    <li v-for="err in errors.reset_password_token" :key="err">
       {{ t('home.resetPassword.tokenError', { error }) }}
     </li>
   </ul>
 
-  <p class="success" v-if="success" data-cy="reset-password-success">
+  <p v-if="success" class="success" data-cy="reset-password-success">
     {{ t('home.resetPassword.success') }}
   </p>
 </template>

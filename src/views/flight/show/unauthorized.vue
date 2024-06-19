@@ -9,7 +9,9 @@
   </h2>
 
   <div id="passenger-welcome">
-    <blockquote v-if="flight.description">{{ flight.description }}</blockquote>
+    <blockquote v-if="flight.description">
+      {{ flight.description }}
+    </blockquote>
     <p>{{ t('flights.show.unauthorized.explanation') }}</p>
     <p>{{ t('flights.show.unauthorized.explanation2') }}</p>
   </div>

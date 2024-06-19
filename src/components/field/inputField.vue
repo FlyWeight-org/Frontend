@@ -2,14 +2,14 @@
   <label :for="id">
     <span>{{ label }}</span>
     <input
-      :type="type"
       v-bind="$attrs"
       :id="id"
+      :type="type"
       :name="name"
       :value="modelValue"
-      @input="$emit('update:modelValue', targetValue($event))"
       :class="{ invalid: hasError }"
       :aria-invalid="hasError"
+      @input="$emit('update:modelValue', targetValue($event))"
     />
   </label>
 </template>

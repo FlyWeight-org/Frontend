@@ -6,10 +6,10 @@
       :id="id"
       :name="name"
       :value="modelValue"
-      @input="$emit('update:modelValue', targetValue($event))"
       :class="{ invalid: hasError }"
       rows="3"
       :aria-invalid="hasError"
+      @input="$emit('update:modelValue', targetValue($event))"
     />
   </label>
 </template>

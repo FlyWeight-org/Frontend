@@ -3,8 +3,8 @@
   <p>{{ t('home.forgotPassword.description') }}</p>
   <form method="post" :action="URL" @submit.prevent="submitHandler">
     <field
-      type="email"
       v-model="form.email"
+      type="email"
       object="form"
       field="email"
       :label="t('pilot.email')"
@@ -23,14 +23,18 @@
       />
 
       <p>
-        <router-link to="/login">{{ t('home.forgotPassword.cancelButton') }} </router-link>
+        <router-link to="/login">
+          {{ t('home.forgotPassword.cancelButton') }}
+        </router-link>
       </p>
     </fieldset>
 
-    <p class="success" v-if="success" data-cy="forgot-password-success">
+    <p v-if="success" class="success" data-cy="forgot-password-success">
       {{ t('home.forgotPassword.success', { email: form.email }) }}
     </p>
-    <p class="error" v-if="error">{{ error }}</p>
+    <p v-if="error" class="error">
+      {{ error }}
+    </p>
   </form>
 </template>
 

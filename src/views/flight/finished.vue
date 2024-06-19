@@ -1,9 +1,9 @@
 <template>
   <main data-cy="flight-finished">
-    <div class="empty error" v-if="!flightStore.flight">
+    <div v-if="!flightStore.flight" class="empty error">
       {{ t('error.notFound') }}
     </div>
-    <div class="empty" v-else-if="flightStore.flightLoading">
+    <div v-else-if="flightStore.flightLoading" class="empty">
       {{ t('messages.loading') }}
     </div>
     <div v-else>

@@ -1,10 +1,10 @@
 <template>
   <form method="patch" :action="URL" @submit.prevent="submitHandler">
     <field
-      type="date"
       v-model="flight.date"
+      type="date"
       object="flight"
-      :minDate="new Date()"
+      :min-date="new Date()"
       field="date"
       :errors="errors"
       :label="t('flight.date')"
@@ -13,8 +13,8 @@
     />
 
     <field
-      type="textarea"
       v-model="flight.description"
+      type="textarea"
       object="flight"
       field="description"
       :errors="errors"
@@ -34,7 +34,9 @@
     </fieldset>
   </form>
 
-  <p class="error" v-if="error">{{ error }}</p>
+  <p v-if="error" class="error">
+    {{ error }}
+  </p>
 </template>
 
 <script setup lang="ts">

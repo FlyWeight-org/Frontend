@@ -1,20 +1,20 @@
 <template>
   <main>
-    <div class="empty" v-if="flightsStore.flightsLoading">
+    <div v-if="flightsStore.flightsLoading" class="empty">
       {{ t('messages.loading') }}
     </div>
-    <div class="error empty" v-else-if="flightsStore.flightsError">
+    <div v-else-if="flightsStore.flightsError" class="error empty">
       {{ flightsStore.flightsError }}
     </div>
-    <div class="empty" v-else-if="flightsStore.noFlights" data-cy="no-flights">
+    <div v-else-if="flightsStore.noFlights" class="empty" data-cy="no-flights">
       {{ t('flights.list.empty') }}
     </div>
     <div
-      class="flight-list"
-      v-else
       v-for="flight in flightsStore.sortedFlights"
-      :flight="flight"
+      v-else
       :key="flight.UUID"
+      class="flight-list"
+      :flight="flight"
       data-cy="flight-list"
     >
       <flight-view :flight="flight" />

@@ -1,8 +1,8 @@
 <template>
   <div v-if="passengers.length">
-    <passenger v-for="passenger in passengers" :passenger="passenger" :key="passenger.slug" />
+    <passenger v-for="passenger in passengers" :key="passenger.slug" :passenger="passenger" />
   </div>
-  <p class="empty" data-cy="no-passengers" v-else>
+  <p v-else class="empty" data-cy="no-passengers">
     {{ t('flights.show.authorized.loads.noPassengers') }}
   </p>
 </template>

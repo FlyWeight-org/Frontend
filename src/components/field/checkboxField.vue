@@ -1,14 +1,14 @@
 <template>
   <label :for="id" class="checkbox-label">
     <input
-      type="checkbox"
       v-bind="$attrs"
       :id="id"
+      type="checkbox"
       :name="name"
       :value="modelValue"
-      @input="$emit('update:modelValue', targetValue($event))"
       :class="{ invalid: hasError }"
       :aria-invalid="hasError"
+      @input="$emit('update:modelValue', targetValue($event))"
     />
     <span>{{ label }}</span>
   </label>

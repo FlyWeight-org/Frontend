@@ -1,11 +1,11 @@
 <template>
   <form method="post" :action="URL" @submit.prevent="submitHandler">
     <field
-      type="date"
       v-model="flight.date"
+      type="date"
       object="flight"
       field="date"
-      :minDate="new Date()"
+      :min-date="new Date()"
       :errors="errors"
       :label="t('flight.date')"
       required
@@ -13,8 +13,8 @@
     />
 
     <field
-      type="textarea"
       v-model="flight.description"
+      type="textarea"
       object="flight"
       field="description"
       :errors="errors"
@@ -33,7 +33,9 @@
     </fieldset>
   </form>
 
-  <p class="error" v-if="error" data-cy="flight-error">{{ error }}</p>
+  <p v-if="error" class="error" data-cy="flight-error">
+    {{ error }}
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -60,7 +62,7 @@ const flight = reactive<EditableFlight>({
 const URL = `${config.APIURL}/account/flights.json`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Flight>(
   async () => flightsStore.createFlight(flight),
-  // eslint-disable-next-line no-shadow
+
   async (flight) => {
     await router.push({
       name: 'flightsShow',

@@ -1,6 +1,8 @@
 <template>
   <div id="total-weight">
-    <div class="name">{{ t('flights.show.authorized.loads.totalWeight') }}</div>
+    <div class="name">
+      {{ t('flights.show.authorized.loads.totalWeight') }}
+    </div>
     <div class="weight" data-cy="total-weight">
       {{ n(totalWeight, 'pounds') }}
       <small v-if="paxCount > 0" data-cy="total-weight-breakdown">{{

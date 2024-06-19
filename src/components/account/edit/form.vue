@@ -1,12 +1,12 @@
 <template>
-  <p class="empty" v-if="!accountStore.currentPilot">
+  <p v-if="!accountStore.currentPilot" class="empty">
     {{ t('messages.loading') }}
   </p>
 
-  <form method="patch" :action="URL" @submit.prevent="submitHandler" data-cy="account-form" v-else>
+  <form v-else method="patch" :action="URL" data-cy="account-form" @submit.prevent="submitHandler">
     <field
-      type="text"
       v-model="pilot.name"
+      type="text"
       object="pilot"
       field="name"
       requried
@@ -17,8 +17,8 @@
     />
 
     <field
-      type="email"
       v-model="pilot.email"
+      type="email"
       object="pilot"
       field="email"
       requried
@@ -29,8 +29,8 @@
     />
 
     <field
-      type="password"
       v-model="pilot.current_password"
+      type="password"
       object="pilot"
       field="current_password"
       requried
@@ -43,8 +43,8 @@
     <h2>Change Password</h2>
 
     <field
-      type="password"
       v-model="pilot.password"
+      type="password"
       object="pilot"
       field="password"
       requried
@@ -55,8 +55,8 @@
     />
 
     <field
-      type="password"
       v-model="pilot.password_confirmation"
+      type="password"
       object="pilot"
       field="password_confirmation"
       requried
@@ -78,8 +78,10 @@
     </fieldset>
   </form>
 
-  <p class="error" data-cy="account-errors" v-if="error">{{ error }}</p>
-  <p class="success" data-cy="account-success" v-if="success">
+  <p v-if="error" class="error" data-cy="account-errors">
+    {{ error }}
+  </p>
+  <p v-if="success" class="success" data-cy="account-success">
     {{ t('account.edit.success') }}
   </p>
 </template>

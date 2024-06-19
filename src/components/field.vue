@@ -9,8 +9,10 @@
       v-bind="$attrs"
     />
 
-    <ul class="error" v-if="hasError" data-cy="field-errors">
-      <li v-for="error in fieldErrors" :key="error">{{ error }}</li>
+    <ul v-if="hasError" class="error" data-cy="field-errors">
+      <li v-for="error in fieldErrors" :key="error">
+        {{ error }}
+      </li>
     </ul>
   </fieldset>
 
@@ -24,8 +26,10 @@
       v-bind="$attrs"
     />
 
-    <ul class="error" v-if="hasError">
-      <li v-for="error in fieldErrors" :key="error">{{ error }}</li>
+    <ul v-if="hasError" class="error">
+      <li v-for="error in fieldErrors" :key="error">
+        {{ error }}
+      </li>
     </ul>
   </fieldset>
 
@@ -38,8 +42,10 @@
       :errors="errors"
       v-bind="$attrs"
     />
-    <ul class="error" v-if="hasError" data-cy="field-errors">
-      <li v-for="error in fieldErrors" :key="error">{{ error }}</li>
+    <ul v-if="hasError" class="error" data-cy="field-errors">
+      <li v-for="error in fieldErrors" :key="error">
+        {{ error }}
+      </li>
     </ul>
   </fieldset>
 
@@ -54,8 +60,10 @@
       v-bind="$attrs"
     />
 
-    <ul class="error" v-if="hasError" data-cy="field-errors">
-      <li v-for="error in fieldErrors" :key="error">{{ error }}</li>
+    <ul v-if="hasError" class="error" data-cy="field-errors">
+      <li v-for="error in fieldErrors" :key="error">
+        {{ error }}
+      </li>
     </ul>
   </fieldset>
 </template>
@@ -84,7 +92,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  type: 'text'
+  type: 'text',
+  errors: undefined
 })
 
 const valueAsDateTime = computed<DateTime | undefined>(() =>

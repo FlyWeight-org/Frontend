@@ -3,25 +3,27 @@
     <input
       type="checkbox"
       :checked="!passenger.disabled"
-      @change="toggleEnabled($event)"
       data-cy="passenger-enabled"
+      @change="toggleEnabled($event)"
     />
 
-    <div class="name" data-cy="passenger-name">{{ passenger.name }}</div>
+    <div class="name" data-cy="passenger-name">
+      {{ passenger.name }}
+    </div>
     <div class="weight" data-cy="passenger-weight">
       <img :src="personImageURL" alt="Person" />
       {{ n(passenger.weight, 'pounds') }}
     </div>
-    <div class="weight" v-if="passenger.bagsWeight" data-cy="passenger-bags-weight">
+    <div v-if="passenger.bagsWeight" class="weight" data-cy="passenger-bags-weight">
       <img :src="luggageImageURL" alt="Bags" />
       {{ n(passenger.bagsWeight, 'pounds') }}
     </div>
-    <div class="icon" data-cy="passenger-covid19-vaccination" v-if="passenger.covid19Vaccination">
+    <div v-if="passenger.covid19Vaccination" class="icon" data-cy="passenger-covid19-vaccination">
       <img :src="vaccineImageURL" alt="Vaccinated" />
     </div>
 
     <div class="delete">
-      <a href="#" @click.prevent="deleteClicked" data-cy="passenger-delete">&times;</a>
+      <a href="#" data-cy="passenger-delete" @click.prevent="deleteClicked">&times;</a>
     </div>
   </div>
   <p v-if="deleteError" class="error" data-cy="passenger-delete-error">

@@ -9,7 +9,7 @@
     <div class="header">
       <h3>{{ title }}</h3>
       <div>
-        <a href="#" @click="emit('addClicked')" data-cy="add-load">+</a>
+        <a href="#" data-cy="add-load" @click="emit('addClicked')">+</a>
       </div>
     </div>
   </div>

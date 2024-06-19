@@ -3,14 +3,14 @@
     class="inline"
     method="post"
     :action="URL"
-    @submit.prevent="submitHandler"
     data-cy="cargo-form"
+    @submit.prevent="submitHandler"
   >
     <field
+      v-model="load.name"
       type="text"
       object="load"
       field="name"
-      v-model="load.name"
       :label="t('cargo.name')"
       :errors="errors"
       required
@@ -18,10 +18,10 @@
     />
 
     <field
+      v-model="load.bagsWeight"
       type="number"
       object="load"
       field="bags_weight"
-      v-model="load.bagsWeight"
       :label="t('cargo.bagsWeight')"
       :errors="errors"
       min="0"
@@ -38,7 +38,9 @@
       />
     </fieldset>
 
-    <p class="error" v-if="error">{{ error }}</p>
+    <p v-if="error" class="error">
+      {{ error }}
+    </p>
   </form>
 </template>
 

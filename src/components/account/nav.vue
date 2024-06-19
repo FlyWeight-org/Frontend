@@ -7,17 +7,23 @@
         </h1>
       </li>
       <li role="menuitem">
-        <router-link to="/flights">{{ t('flights.nav.myFlights') }} </router-link>
+        <router-link to="/flights">
+          {{ t('flights.nav.myFlights') }}
+        </router-link>
       </li>
       <li role="menuitem">
-        <router-link to="/flights/new">{{ t('flights.nav.addFlight') }} </router-link>
+        <router-link to="/flights/new">
+          {{ t('flights.nav.addFlight') }}
+        </router-link>
       </li>
       <li role="none" class="spacer">&nbsp;</li>
       <li role="menuitem" class="active">
-        <router-link to="/account">{{ t('account.nav.myAccount') }} </router-link>
+        <router-link to="/account">
+          {{ t('account.nav.myAccount') }}
+        </router-link>
       </li>
       <li>
-        <a href="/logout.json" @click.prevent="logoutClicked" data-cy="nav-logout">{{
+        <a href="/logout.json" data-cy="nav-logout" @click.prevent="logoutClicked">{{
           t('flights.nav.logout')
         }}</a>
       </li>

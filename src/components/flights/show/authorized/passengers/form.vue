@@ -3,14 +3,14 @@
     class="inline"
     method="post"
     :action="URL"
-    @submit.prevent="submitHandler"
     data-cy="passenger-form"
+    @submit.prevent="submitHandler"
   >
     <field
+      v-model="load.name"
       type="text"
       object="load"
       field="name"
-      v-model="load.name"
       :label="t('passenger.name')"
       :errors="errors"
       required
@@ -18,10 +18,10 @@
     />
 
     <field
+      v-model="load.weight"
       type="number"
       object="load"
       field="weight"
-      v-model="load.weight"
       :label="t('passenger.weight')"
       :errors="errors"
       required
@@ -30,10 +30,10 @@
     />
 
     <field
+      v-model="load.bagsWeight"
       type="number"
       object="load"
       field="bags_weight"
-      v-model="load.bagsWeight"
       :label="t('passenger.bagsWeight')"
       :errors="errors"
       min="0"
@@ -41,10 +41,10 @@
     />
 
     <field
+      v-model="load.covid19Vaccination"
       type="checkbox"
       object="load"
       field="covid19_vaccination"
-      v-model="load.covid19Vaccination"
       :label="t('passenger.covid19Vaccination')"
       :errors="errors"
       data-cy="passenger-covid19-vaccination"
@@ -61,7 +61,9 @@
     </fieldset>
   </form>
 
-  <p class="error" v-if="error" data-cy="passenger-error">{{ error }}</p>
+  <p v-if="error" class="error" data-cy="passenger-error">
+    {{ error }}
+  </p>
 </template>
 
 <script setup lang="ts">

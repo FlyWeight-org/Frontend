@@ -10,15 +10,15 @@
   <edit-form :flight="flight" />
 
   <p
+    v-if="deleteError"
+    id="delete-error"
     class="error"
     :class="{ disabled: isDeleting }"
-    id="delete-error"
-    v-if="deleteError"
     :aria-disabled="isDeleting"
   >
     {{ deleteError }}
   </p>
-  <a class="danger" href="#" @click.prevent="onDelete" data-cy="delete-flight" v-else>{{
+  <a v-else class="danger" href="#" data-cy="delete-flight" @click.prevent="onDelete">{{
     t('flights.show.authorized.delete')
   }}</a>
 </template>

@@ -3,11 +3,13 @@
     <input
       type="checkbox"
       :checked="!cargo.disabled"
-      @change="toggleEnabled($event)"
       data-cy="cargo-enabled"
+      @change="toggleEnabled($event)"
     />
 
-    <div class="name" data-cy="cargo-name">{{ cargo.name }}</div>
+    <div class="name" data-cy="cargo-name">
+      {{ cargo.name }}
+    </div>
     <div class="weight" data-cy="cargo-weight">
       <img :src="cargoImageURL" alt="Cargo" />
 
@@ -15,7 +17,7 @@
     </div>
 
     <div class="delete">
-      <a href="#" @click.prevent="deleteClicked" data-cy="cargo-delete">&times;</a>
+      <a href="#" data-cy="cargo-delete" @click.prevent="deleteClicked">&times;</a>
     </div>
   </div>
   <p v-if="deleteError" class="error" data-cy="cargo-delete-error">

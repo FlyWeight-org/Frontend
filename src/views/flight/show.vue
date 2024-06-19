@@ -1,16 +1,16 @@
 <template>
   <main>
-    <div class="empty" v-if="flightStore.flightLoading">
+    <div v-if="flightStore.flightLoading" class="empty">
       {{ t('messages.loading') }}
     </div>
-    <div class="error empty" v-else-if="flightStore.flightError">
+    <div v-else-if="flightStore.flightError" class="error empty">
       {{ flightStore.flightError }}
     </div>
-    <div class="empty" v-else-if="!flightStore.flight">
+    <div v-else-if="!flightStore.flight" class="empty">
       {{ t('flights.show.authorized.none') }}
     </div>
 
-    <div data-cy="authorized-flight" v-else>
+    <div v-else data-cy="authorized-flight">
       <authorized-flight v-if="flightStore.flight.canEdit" :flight="flightStore.flight" />
       <unauthorized-flight v-else :flight="flightStore.flight" />
     </div>

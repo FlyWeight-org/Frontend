@@ -12,7 +12,7 @@
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://127.0.0.1:4173 'cypress open --e2e'",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint .",
     "format": "prettier --write src/",
     "stylelint": "stylelint \"src/**/*.{vue,css,scss,sass}\""
   },

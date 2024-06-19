@@ -42,7 +42,8 @@ export function request({
     fetch(config.APIURL + path, {
       method: method || 'get',
       body: serializedBody,
-      headers
+      headers,
+      credentials: 'include'
     })
       .then((response) => {
         if (response.status === 401 && !skipResetAuth) {

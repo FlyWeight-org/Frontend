@@ -6,7 +6,7 @@
     <h2>{{ t('home.welcome.subtitle') }}</h2>
 
     <i18n-t tag="p" keypath="home.welcome.description">
-      <template v-slot:title>
+      <template #title>
         <strong>{{ t('title') }}</strong>
       </template>
     </i18n-t>
