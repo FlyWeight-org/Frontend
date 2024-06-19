@@ -35,8 +35,8 @@ Install the `foreman` gem to run the Procfile.
 
 #### Deployment
 
-The front-end is built to a static HTML site using `yarn build`. The built
-artifacts are uploaded to the web server using `rsync`.
+This application is deployed using Fly.io. The `deploy.yml` GitHub Actions
+workflow runs automatically after CI completes.
 
 ## Architecture
 
