@@ -77,10 +77,10 @@ describe("forgot password", () => {
     it("shows an error if the password doesn't match the confirmation", () => {
       cy.dataCy("forgot-password-success").should("exist");
       cy.lastEmail()
-        .its("text")
+        .its("html")
         .then((email: string) => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const url = email.match(/\[http:\/\/127\.0\.0\.1:4173(.+?)]/)![1];
+          const url = email.match(/"http:\/\/127\.0\.0\.1:4173(.+?)"/)![1];
           cy.visit(url);
 
           cy.dataCy("reset-password-password").type("newpassword");
@@ -96,10 +96,10 @@ describe("forgot password", () => {
     it("resets the password", () => {
       cy.dataCy("forgot-password-success").should("exist");
       cy.lastEmail()
-        .its("text")
+        .its("html")
         .then((email: string) => {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          const url = email.match(/\[http:\/\/127\.0\.0\.1:4173(.+?)]/)![1];
+          const url = email.match(/"http:\/\/127\.0\.0\.1:4173(.+?)"/)![1];
           cy.visit(url);
 
           cy.dataCy("reset-password-password").type("newpassword");

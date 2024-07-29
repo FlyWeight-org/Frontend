@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { ParsedMail } from "mailparser";
+import { Email } from 'postal-mime'
 
 declare global {
   namespace Cypress {
@@ -21,7 +21,7 @@ declare global {
       /**
        * @return The contents of the last email sent by the back-end.
        */
-      lastEmail(): Chainable<ParsedMail | null>;
+      lastEmail(): Chainable<Promise<Email>>;
     }
   }
 }

@@ -10,7 +10,7 @@
 // ***********************************************
 
 import 'setimmediate'
-import { simpleParser } from "mailparser";
+import PostalMime from 'postal-mime'
 
 Cypress.Commands.add("login", () => {
   cy.visit("/");
@@ -33,7 +33,7 @@ Cypress.Commands.add("lastEmail", () => {
     })
     .then((response) => {
       if (response.status !== 200) return Promise.resolve(null);
-      return simpleParser(response.body);
+      return PostalMime.parse(response.body);
     });
 });
 
