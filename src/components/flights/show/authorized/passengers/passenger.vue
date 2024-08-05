@@ -1,32 +1,36 @@
 <template>
-  <div class="passenger-list-item" data-cy="passenger-list-item">
+  <div class="passenger-list-item" data-testid="passenger-list-item">
     <input
       type="checkbox"
       :checked="!passenger.disabled"
-      data-cy="passenger-enabled"
+      data-testid="passenger-enabled"
       @change="toggleEnabled($event)"
     />
 
-    <div class="name" data-cy="passenger-name">
+    <div class="name" data-testid="passenger-name">
       {{ passenger.name }}
     </div>
-    <div class="weight" data-cy="passenger-weight">
+    <div class="weight" data-testid="passenger-weight">
       <img :src="personImageURL" alt="Person" />
       {{ n(passenger.weight, 'pounds') }}
     </div>
-    <div v-if="passenger.bagsWeight" class="weight" data-cy="passenger-bags-weight">
+    <div v-if="passenger.bagsWeight" class="weight" data-testid="passenger-bags-weight">
       <img :src="luggageImageURL" alt="Bags" />
       {{ n(passenger.bagsWeight, 'pounds') }}
     </div>
-    <div v-if="passenger.covid19Vaccination" class="icon" data-cy="passenger-covid19-vaccination">
+    <div
+      v-if="passenger.covid19Vaccination"
+      class="icon"
+      data-testid="passenger-covid19-vaccination"
+    >
       <img :src="vaccineImageURL" alt="Vaccinated" />
     </div>
 
     <div class="delete">
-      <a href="#" data-cy="passenger-delete" @click.prevent="deleteClicked">&times;</a>
+      <a href="#" data-testid="passenger-delete" @click.prevent="deleteClicked">&times;</a>
     </div>
   </div>
-  <p v-if="deleteError" class="error" data-cy="passenger-delete-error">
+  <p v-if="deleteError" class="error" data-testid="passenger-delete-error">
     <small>{{ deleteError }}</small>
   </p>
 </template>

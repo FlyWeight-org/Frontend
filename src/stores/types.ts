@@ -2,6 +2,7 @@
 
 import type { Result } from 'ts-results'
 import type { Flight, FlightListItem, Pilot } from '@/types'
+import { Subscription } from '@rails/actioncable'
 
 /**
  * The shape of validation errors received from the back-end. A dictionary mapping field names to a
@@ -26,14 +27,14 @@ export interface FlightsState {
   flights: FlightListItem[] | null
   flightsLoading: boolean
   flightsError: Error | null
-  flightsSubscription: ActionCable.Channel | null
+  flightsSubscription: Subscription | null
 }
 
 export interface FlightState {
   flight: Flight | null
   flightLoading: boolean
   flightError: Error | null
-  loadsSubscription: ActionCable.Channel | null
+  loadsSubscription: Subscription | null
 }
 
 export type AnyModuleState = FlightsState | FlightState | AuthState

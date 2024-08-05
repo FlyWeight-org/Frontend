@@ -3,7 +3,7 @@
     class="inline"
     method="post"
     :action="URL"
-    data-cy="cargo-form"
+    data-testid="cargo-form"
     @submit.prevent="submitHandler"
   >
     <field
@@ -14,7 +14,7 @@
       :label="t('cargo.name')"
       :errors="errors"
       required
-      data-cy="cargo-name"
+      data-testid="cargo-name"
     />
 
     <field
@@ -25,7 +25,7 @@
       :label="t('cargo.bagsWeight')"
       :errors="errors"
       min="0"
-      data-cy="cargo-weight"
+      data-testid="cargo-weight"
     />
 
     <fieldset class="actions">
@@ -34,7 +34,7 @@
         name="commit"
         :value="t('flights.show.authorized.loads.createButton')"
         :class="{ processing: isProcessing }"
-        data-cy="cargo-submit"
+        data-testid="cargo-submit"
       />
     </fieldset>
 

@@ -3,9 +3,9 @@
     <div class="name">
       {{ t('flights.show.authorized.loads.totalWeight') }}
     </div>
-    <div class="weight" data-cy="total-weight">
+    <div class="weight" data-testid="total-weight">
       {{ n(totalWeight, 'pounds') }}
-      <small v-if="paxCount > 0" data-cy="total-weight-breakdown">{{
+      <small v-if="paxCount > 0" data-testid="total-weight-breakdown">{{
         t('flights.show.authorized.loads.averageWeight', {
           pax: n(averagePaxWeight, 'pounds'),
           cargo: n(totalCargoWeight, 'pounds')

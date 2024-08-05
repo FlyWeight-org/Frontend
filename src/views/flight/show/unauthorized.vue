@@ -1,5 +1,5 @@
 <template>
-  <h2 data-cy="flight-unauth-title">
+  <h2 data-testid="flight-unauth-title">
     {{
       t('flights.show.unauthorized.title', {
         name: flight.pilot.name,

@@ -1,5 +1,5 @@
 <template>
-  <a class="flight-list-item" :href="flightURL" data-cy="flight-list-item">
+  <a class="flight-list-item" :href="flightURL" data-testid="flight-list-item">
     <div class="header">
       <div class="date">{{ date }}</div>
       <div class="passengers">

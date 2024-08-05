@@ -1,6 +1,5 @@
 /* eslint-disable no-shadow */
 
-import * as ActionCable from 'actioncable'
 import { defineStore } from 'pinia'
 import { clone, isEmpty, isNull, isNumber, isString } from 'lodash-es'
 import type { APIResponse, AuthState, Errors } from '@/stores/types'
@@ -12,6 +11,7 @@ import { request, requestJSON } from '@/stores/modules/root'
 import { ignoreResponseBody, loadAPIResponseBodyOrReturnErrors } from '@/stores/utils'
 import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
+import { Consumer, createConsumer } from '@rails/actioncable'
 
 interface JWTPayload {
   iss: string
@@ -58,11 +58,11 @@ export const useAuthStore = defineStore('auth', {
       return payload.u
     },
 
-    actionCableConsumer(state): ActionCable.Cable | null {
+    actionCableConsumer(state): Consumer | null {
       if (isNull(state.JWT)) return null
       const queryString = new URLSearchParams({ jwt: state.JWT })
       const URL = `${config.actionCableURL}?${queryString.toString()}`
-      return ActionCable.createConsumer(URL)
+      return createConsumer(URL)
     },
 
     authHeader: (state) => (state.JWT ? `Bearer ${state.JWT}` : null)

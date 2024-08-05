@@ -9,7 +9,7 @@
       :errors="errors"
       :label="t('flight.date')"
       required
-      data-cy="flight-date"
+      data-testid="flight-date"
     />
 
     <field
@@ -19,7 +19,7 @@
       field="description"
       :errors="errors"
       :label="t('flight.description')"
-      data-cy="flight-description"
+      data-testid="flight-description"
     />
 
     <fieldset class="actions">
@@ -28,12 +28,12 @@
         name="commit"
         :value="t('flights.new.button')"
         :class="{ processing: isProcessing }"
-        data-cy="flight-submit"
+        data-testid="flight-submit"
       />
     </fieldset>
   </form>
 
-  <p v-if="error" class="error" data-cy="flight-error">
+  <p v-if="error" class="error" data-testid="flight-error">
     {{ error }}
   </p>
 </template>

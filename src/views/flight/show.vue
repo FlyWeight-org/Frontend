@@ -10,7 +10,7 @@
       {{ t('flights.show.authorized.none') }}
     </div>
 
-    <div v-else data-cy="authorized-flight">
+    <div v-else data-testid="authorized-flight">
       <authorized-flight v-if="flightStore.flight.canEdit" :flight="flightStore.flight" />
       <unauthorized-flight v-else :flight="flightStore.flight" />
     </div>

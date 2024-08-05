@@ -3,7 +3,13 @@
     {{ t('messages.loading') }}
   </p>
 
-  <form v-else method="patch" :action="URL" data-cy="account-form" @submit.prevent="submitHandler">
+  <form
+    v-else
+    method="patch"
+    :action="URL"
+    data-testid="account-form"
+    @submit.prevent="submitHandler"
+  >
     <field
       v-model="pilot.name"
       type="text"
@@ -13,7 +19,7 @@
       :errors="errors"
       :label="t('pilot.name')"
       autocomplete="name"
-      data-cy="account-name"
+      data-testid="account-name"
     />
 
     <field
@@ -25,7 +31,7 @@
       :errors="errors"
       :label="t('pilot.email')"
       autocomplete="email"
-      data-cy="account-email"
+      data-testid="account-email"
     />
 
     <field
@@ -37,7 +43,7 @@
       :errors="errors"
       :label="t('pilot.current_password')"
       autocomplete="current-password"
-      data-cy="account-password"
+      data-testid="account-password"
     />
 
     <h2>Change Password</h2>
@@ -51,7 +57,7 @@
       :errors="errors"
       :label="t('pilot.password')"
       autocomplete="new-password"
-      data-cy="account-new-password"
+      data-testid="account-new-password"
     />
 
     <field
@@ -63,7 +69,7 @@
       :errors="errors"
       :label="t('pilot.password_confirmation')"
       autocomplete="new-password"
-      data-cy="account-new-password-confirmation"
+      data-testid="account-new-password-confirmation"
     />
 
     <fieldset class="actions">
@@ -73,15 +79,15 @@
         :value="t('account.edit.button')"
         :disabled="!dirty"
         :class="{ processing: isProcessing }"
-        data-cy="account-submit"
+        data-testid="account-submit"
       />
     </fieldset>
   </form>
 
-  <p v-if="error" class="error" data-cy="account-errors">
+  <p v-if="error" class="error" data-testid="account-errors">
     {{ error }}
   </p>
-  <p v-if="success" class="success" data-cy="account-success">
+  <p v-if="success" class="success" data-testid="account-success">
     {{ t('account.edit.success') }}
   </p>
 </template>

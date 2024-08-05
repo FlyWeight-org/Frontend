@@ -10,7 +10,7 @@
       :label="t('pilot.email')"
       required
       autocomplete="email"
-      data-cy="forgot-password-email"
+      data-testid="forgot-password-email"
     />
 
     <fieldset class="actions">
@@ -19,7 +19,7 @@
         name="commit"
         :value="t('home.forgotPassword.button')"
         :class="{ processing: isProcessing }"
-        data-cy="forgot-password-submit"
+        data-testid="forgot-password-submit"
       />
 
       <p>
@@ -29,7 +29,7 @@
       </p>
     </fieldset>
 
-    <p v-if="success" class="success" data-cy="forgot-password-success">
+    <p v-if="success" class="success" data-testid="forgot-password-success">
       {{ t('home.forgotPassword.success', { email: form.email }) }}
     </p>
     <p v-if="error" class="error">

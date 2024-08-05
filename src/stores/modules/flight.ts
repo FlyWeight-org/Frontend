@@ -4,8 +4,8 @@ import type { Errors, FlightState } from '@/stores/types'
 import { defineStore } from 'pinia'
 import { clone, cloneDeep, concat, isNil, isNull, isUndefined, some } from 'lodash-es'
 import { request, requestJSON } from '@/stores/modules/root'
-import { flightFromJSON, editableFlightToJSON, loadToJSON, loadFromJSON } from '@/stores/coding'
 import type { FlightJSONDown, LoadJSONDown } from '@/stores/coding'
+import { editableFlightToJSON, flightFromJSON, loadFromJSON, loadToJSON } from '@/stores/coding'
 import {
   anythingToError,
   ignoreResponseBody,
@@ -241,7 +241,7 @@ export const useFlightStore = defineStore('flight', {
       this.$patch({ flight })
     },
 
-    async createLoadsSubscription(UUID: string): Promise<ActionCable.Channel | null> {
+    async createLoadsSubscription(UUID: string) {
       const auth = useAuthStore()
 
       if (this.loadsSubscription) await this.loadsSubscription.unsubscribe()

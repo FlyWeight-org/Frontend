@@ -4,7 +4,7 @@
     method="post"
     :action="URL"
     class="inline"
-    data-cy="passenger-unauth-form"
+    data-testid="passenger-unauth-form"
     @submit.prevent="submitHandler"
   >
     <fieldset v-for="(fragment, i) in fragments" :key="i" :class="fieldsetClass(fragment)">
@@ -17,7 +17,7 @@
         :label="t('passenger.name')"
         :errors="errors"
         required
-        data-cy="passenger-name"
+        data-testid="passenger-name"
       />
 
       <field
@@ -30,7 +30,7 @@
         :errors="errors"
         required
         min="0"
-        data-cy="passenger-weight"
+        data-testid="passenger-weight"
       />
 
       <field
@@ -42,7 +42,7 @@
         :label="t('passenger.bagsWeight')"
         :errors="errors"
         min="0"
-        data-cy="passenger-bags-weight"
+        data-testid="passenger-bags-weight"
       />
 
       <field
@@ -53,7 +53,7 @@
         field="covid19_vaccination"
         :label="t('passenger.covid19Vaccination')"
         :errors="errors"
-        data-cy="passenger-covid19-vaccination"
+        data-testid="passenger-covid19-vaccination"
       />
 
       <input
@@ -62,14 +62,14 @@
         name="commit"
         :value="t('flights.show.unauthorized.loads.createButton')"
         :class="{ processing: isProcessing }"
-        data-cy="passenger-submit"
+        data-testid="passenger-submit"
       />
 
       <span v-else>{{ fragment }}</span>
     </fieldset>
   </form>
 
-  <p v-if="error" class="error" data-cy="passenger-errors">
+  <p v-if="error" class="error" data-testid="passenger-errors">
     {{ error }}
   </p>
 </template>

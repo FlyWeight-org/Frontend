@@ -9,7 +9,7 @@
       v-bind="$attrs"
     />
 
-    <ul v-if="hasError" class="error" data-cy="field-errors">
+    <ul v-if="hasError" class="error" data-testid="field-errors" :data-name="field">
       <li v-for="error in fieldErrors" :key="error">
         {{ error }}
       </li>
@@ -42,7 +42,7 @@
       :errors="errors"
       v-bind="$attrs"
     />
-    <ul v-if="hasError" class="error" data-cy="field-errors">
+    <ul v-if="hasError" class="error" data-testid="field-errors" :data-name="field">
       <li v-for="error in fieldErrors" :key="error">
         {{ error }}
       </li>
@@ -60,7 +60,7 @@
       v-bind="$attrs"
     />
 
-    <ul v-if="hasError" class="error" data-cy="field-errors">
+    <ul v-if="hasError" class="error" data-testid="field-errors" :data-name="field">
       <li v-for="error in fieldErrors" :key="error">
         {{ error }}
       </li>

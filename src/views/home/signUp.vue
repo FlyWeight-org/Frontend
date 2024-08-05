@@ -9,7 +9,7 @@
       :label="t('pilot.name')"
       required
       autocomplete="name"
-      data-cy="signup-name"
+      data-testid="signup-name"
     />
 
     <field
@@ -21,7 +21,7 @@
       :label="t('pilot.email')"
       required
       autocomplete="email"
-      data-cy="signup-email"
+      data-testid="signup-email"
     />
 
     <field
@@ -33,7 +33,7 @@
       :label="t('pilot.password')"
       required
       autocomplete="new-password"
-      data-cy="signup-password"
+      data-testid="signup-password"
     />
 
     <field
@@ -45,7 +45,7 @@
       :label="t('pilot.password_confirmation')"
       required
       autocomplete="new-password"
-      data-cy="signup-password-confirmation"
+      data-testid="signup-password-confirmation"
     />
 
     <fieldset class="actions">
@@ -54,7 +54,7 @@
         name="commit"
         :value="t('home.signUp.button')"
         :class="{ processing: isProcessing }"
-        data-cy="signup-submit"
+        data-testid="signup-submit"
       />
     </fieldset>
   </form>

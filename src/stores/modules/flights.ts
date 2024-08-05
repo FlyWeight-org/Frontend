@@ -5,14 +5,14 @@ import { defineStore } from 'pinia'
 import { clone, concat, isEmpty, isNull, some } from 'lodash-es'
 import { requestJSON } from '@/stores/modules/root'
 import type { FlightJSONDown, FlightListItemJSONDown } from '@/stores/coding'
-import { flightFromJSON, flightListItemFromJSON, editableFlightToJSON } from '@/stores/coding'
+import { editableFlightToJSON, flightFromJSON, flightListItemFromJSON } from '@/stores/coding'
 import {
   anythingToError,
   loadAPIResponseBodyOrReturnErrors,
   loadAPIResponseBodyOrThrowErrors
 } from '@/stores/utils'
 import { notifyBugsnag } from '@/utils/errors'
-import type { Flight, EditableFlight } from '@/types'
+import type { EditableFlight, Flight } from '@/types'
 import { Ok, Result } from 'ts-results'
 import { useAuthStore } from '@/stores/modules/auth'
 
@@ -101,7 +101,7 @@ export const useFlightsStore = defineStore('flights', {
       return flightResult
     },
 
-    async createFlightsSubscription(): Promise<ActionCable.Channel | null> {
+    async createFlightsSubscription() {
       const auth = useAuthStore()
 
       if (this.flightsSubscription) await this.flightsSubscription.unsubscribe()

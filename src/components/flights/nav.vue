@@ -6,24 +6,24 @@
           <span>{{ t('title') }}</span>
         </h1>
       </li>
-      <li role="menuitem" :class="{ active: isMyFlights }" data-cy="nav-my-flights">
+      <li role="menuitem" :class="{ active: isMyFlights }" data-testid="nav-my-flights">
         <router-link to="/flights">
           {{ t('flights.nav.myFlights') }}
         </router-link>
       </li>
-      <li role="menuitem" :class="{ active: isAddFlight }" data-cy="nav-add-flight">
+      <li role="menuitem" :class="{ active: isAddFlight }" data-testid="nav-add-flight">
         <router-link to="/flights/new">
           {{ t('flights.nav.addFlight') }}
         </router-link>
       </li>
       <li role="none" class="spacer">&nbsp;</li>
-      <li role="menuitem" data-cy="nav-account">
+      <li role="menuitem" data-testid="nav-account">
         <router-link to="/account">
           {{ t('account.nav.myAccount') }}
         </router-link>
       </li>
       <li>
-        <a href="/logout.json" data-cy="nav-logout" @click.prevent="logoutClicked">{{
+        <a href="/logout.json" data-testid="nav-logout" @click.prevent="logoutClicked">{{
           t('flights.nav.logout')
         }}</a>
       </li>

@@ -9,7 +9,7 @@
       :errors="errors"
       :label="t('flight.date')"
       required
-      data-cy="flight-date"
+      data-testid="flight-date"
     />
 
     <field
@@ -19,7 +19,7 @@
       field="description"
       :errors="errors"
       :label="t('flight.description')"
-      data-cy="flight-description"
+      data-testid="flight-description"
     />
 
     <fieldset class="actions">
@@ -29,7 +29,7 @@
         :value="t('flights.show.authorized.edit.button')"
         :disabled="!dirty"
         :class="{ processing: isProcessing }"
-        data-cy="flight-submit"
+        data-testid="flight-submit"
       />
     </fieldset>
   </form>

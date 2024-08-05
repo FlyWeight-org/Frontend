@@ -3,7 +3,7 @@
     class="inline"
     method="post"
     :action="URL"
-    data-cy="passenger-form"
+    data-testid="passenger-form"
     @submit.prevent="submitHandler"
   >
     <field
@@ -14,7 +14,7 @@
       :label="t('passenger.name')"
       :errors="errors"
       required
-      data-cy="passenger-name"
+      data-testid="passenger-name"
     />
 
     <field
@@ -26,7 +26,7 @@
       :errors="errors"
       required
       min="0"
-      data-cy="passenger-weight"
+      data-testid="passenger-weight"
     />
 
     <field
@@ -37,7 +37,7 @@
       :label="t('passenger.bagsWeight')"
       :errors="errors"
       min="0"
-      data-cy="passenger-bags-weight"
+      data-testid="passenger-bags-weight"
     />
 
     <field
@@ -47,7 +47,7 @@
       field="covid19_vaccination"
       :label="t('passenger.covid19Vaccination')"
       :errors="errors"
-      data-cy="passenger-covid19-vaccination"
+      data-testid="passenger-covid19-vaccination"
     />
 
     <fieldset class="actions">
@@ -56,12 +56,12 @@
         name="commit"
         :value="t('flights.show.authorized.loads.createButton')"
         :class="{ processing: isProcessing }"
-        data-cy="passenger-submit"
+        data-testid="passenger-submit"
       />
     </fieldset>
   </form>
 
-  <p v-if="error" class="error" data-cy="passenger-error">
+  <p v-if="error" class="error" data-testid="passenger-error">
     {{ error }}
   </p>
 </template>
