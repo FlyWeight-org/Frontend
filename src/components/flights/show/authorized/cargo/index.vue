@@ -2,7 +2,7 @@
   <div v-if="allCargo.length">
     <cargo v-for="cargo in allCargo" :key="cargo.slug" :cargo="cargo" />
   </div>
-  <p v-else class="empty" data-cy="no-cargo">
+  <p v-else class="empty" data-testid="no-cargo">
     {{ t('flights.show.authorized.loads.noCargo') }}
   </p>
 </template>

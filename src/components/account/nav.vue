@@ -23,7 +23,7 @@
         </router-link>
       </li>
       <li>
-        <a href="/logout.json" data-cy="nav-logout" @click.prevent="logoutClicked">{{
+        <a href="/logout.json" data-testid="nav-logout" @click.prevent="logoutClicked">{{
           t('flights.nav.logout')
         }}</a>
       </li>

@@ -13,7 +13,7 @@
       :errors="errors"
       required
       autocomplete="email"
-      data-cy="login-email"
+      data-testid="login-email"
     />
 
     <field
@@ -25,7 +25,7 @@
       :errors="errors"
       required
       autocomplete="current-password"
-      data-cy="login-password"
+      data-testid="login-password"
     />
 
     <field
@@ -43,10 +43,10 @@
         name="commit"
         :value="t('home.logIn.button')"
         :class="{ processing: isProcessing }"
-        data-cy="login-submit"
+        data-testid="login-submit"
       />
 
-      <p data-cy="forgot-password-link">
+      <p data-testid="forgot-password-link">
         <router-link to="/forgot-password">
           {{ t('home.logIn.forgotPassword') }}
         </router-link>
@@ -54,7 +54,7 @@
     </fieldset>
   </form>
 
-  <p v-if="error" class="error" data-cy="login-error">
+  <p v-if="error" class="error" data-testid="login-error">
     {{ errorMessage }}
   </p>
 </template>

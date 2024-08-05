@@ -6,7 +6,7 @@
     <div v-else-if="flightsStore.flightsError" class="error empty">
       {{ flightsStore.flightsError }}
     </div>
-    <div v-else-if="flightsStore.noFlights" class="empty" data-cy="no-flights">
+    <div v-else-if="flightsStore.noFlights" class="empty" data-testid="no-flights">
       {{ t('flights.list.empty') }}
     </div>
     <div
@@ -15,7 +15,7 @@
       :key="flight.UUID"
       class="flight-list"
       :flight="flight"
-      data-cy="flight-list"
+      data-testid="flight-list"
     >
       <flight-view :flight="flight" />
     </div>

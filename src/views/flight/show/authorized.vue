@@ -18,7 +18,7 @@
   >
     {{ deleteError }}
   </p>
-  <a v-else class="danger" href="#" data-cy="delete-flight" @click.prevent="onDelete">{{
+  <a v-else class="danger" href="#" data-testid="delete-flight" @click.prevent="onDelete">{{
     t('flights.show.authorized.delete')
   }}</a>
 </template>

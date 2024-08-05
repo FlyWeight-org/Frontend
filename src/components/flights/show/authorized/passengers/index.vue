@@ -2,7 +2,7 @@
   <div v-if="passengers.length">
     <passenger v-for="passenger in passengers" :key="passenger.slug" :passenger="passenger" />
   </div>
-  <p v-else class="empty" data-cy="no-passengers">
+  <p v-else class="empty" data-testid="no-passengers">
     {{ t('flights.show.authorized.loads.noPassengers') }}
   </p>
 </template>

@@ -6,7 +6,7 @@
           {{ t('home.nav.logIn') }}
         </router-link>
       </li>
-      <li :class="{ active: isSignup }" role="tab" data-cy="signup-tab">
+      <li :class="{ active: isSignup }" role="tab" data-testid="signup-tab">
         <router-link to="/signup">
           {{ t('home.nav.signUp') }}
         </router-link>

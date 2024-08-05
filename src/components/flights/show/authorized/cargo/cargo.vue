@@ -1,26 +1,26 @@
 <template>
-  <div class="cargo-list-item" data-cy="cargo-list-item">
+  <div class="cargo-list-item" data-testid="cargo-list-item">
     <input
       type="checkbox"
       :checked="!cargo.disabled"
-      data-cy="cargo-enabled"
+      data-testid="cargo-enabled"
       @change="toggleEnabled($event)"
     />
 
-    <div class="name" data-cy="cargo-name">
+    <div class="name" data-testid="cargo-name">
       {{ cargo.name }}
     </div>
-    <div class="weight" data-cy="cargo-weight">
+    <div class="weight" data-testid="cargo-weight">
       <img :src="cargoImageURL" alt="Cargo" />
 
       {{ n(cargo.bagsWeight, 'pounds') }}
     </div>
 
     <div class="delete">
-      <a href="#" data-cy="cargo-delete" @click.prevent="deleteClicked">&times;</a>
+      <a href="#" data-testid="cargo-delete" @click.prevent="deleteClicked">&times;</a>
     </div>
   </div>
-  <p v-if="deleteError" class="error" data-cy="cargo-delete-error">
+  <p v-if="deleteError" class="error" data-testid="cargo-delete-error">
     <small>{{ deleteError }}</small>
   </p>
 </template>

@@ -1,6 +1,6 @@
 <template>
   <div class="manifest">
-    <div class="passenger-manifest" data-cy="passenger-manifest">
+    <div class="passenger-manifest" data-testid="passenger-manifest">
       <load-header
         :title="t('flights.show.authorized.header.passengers')"
         :adding="addingPassenger"
@@ -11,7 +11,7 @@
       <passengers :flight="flight" />
     </div>
 
-    <div class="cargo-manifest" data-cy="cargo-manifest">
+    <div class="cargo-manifest" data-testid="cargo-manifest">
       <load-header
         :title="t('flights.show.authorized.header.cargo')"
         :adding="addingCargo"

@@ -1,5 +1,5 @@
 <template>
-  <main data-cy="flight-finished">
+  <main data-testid="flight-finished">
     <div v-if="!flightStore.flight" class="empty error">
       {{ t('error.notFound') }}
     </div>

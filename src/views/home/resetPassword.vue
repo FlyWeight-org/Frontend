@@ -10,7 +10,7 @@
       :errors="errors"
       required
       autocomplete="new-password"
-      data-cy="reset-password-password"
+      data-testid="reset-password-password"
     />
 
     <field
@@ -22,7 +22,7 @@
       :errors="errors"
       required
       autocomplete="new-password"
-      data-cy="reset-password-password-confirmation"
+      data-testid="reset-password-password-confirmation"
     />
 
     <fieldset class="actions">
@@ -31,7 +31,7 @@
         name="commit"
         :value="t('home.resetPassword.button')"
         :class="{ processing: isProcessing }"
-        data-cy="reset-password-submit"
+        data-testid="reset-password-submit"
       />
     </fieldset>
   </form>
@@ -39,13 +39,13 @@
   <p v-if="error" class="error">
     {{ error }}
   </p>
-  <ul v-if="errors.reset_password_token?.length" class="error" data-cy="reset-password-errors">
+  <ul v-if="errors.reset_password_token?.length" class="error" data-testid="reset-password-errors">
     <li v-for="err in errors.reset_password_token" :key="err">
       {{ t('home.resetPassword.tokenError', { error }) }}
     </li>
   </ul>
 
-  <p v-if="success" class="success" data-cy="reset-password-success">
+  <p v-if="success" class="success" data-testid="reset-password-success">
     {{ t('home.resetPassword.success') }}
   </p>
 </template>
