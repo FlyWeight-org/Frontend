@@ -25,18 +25,25 @@ End-to-end testing is available with Cypress. To run end-to-end tests, create a
 `Procfile` similar to:
 
 ```
-backend: cd Backend && rvm 3.3.4@flyweight exec rails server -e cypress -b 127.0.0.1
-frontend: cd Frontend && yarn build && yarn run test:e2e
-jobs: cd Backend && redis-cli flushall && RAILS_ENV=cypress rvm 3.3.4@flyweight exec bundle exec good_job start
-cable: cd Backend && rvm 3.3.4@flyweight exec ./bin/cable -e cypress
+backend: cd Backend && rvm 3.3.5@flyweight exec rails server -e cypress -b 127.0.0.1
+e2e: cd Frontend && yarn run test:e2e:dev
+jobs: cd Backend && redis-cli flushall && RAILS_ENV=cypress rvm 3.3.5@flyweight exec bundle exec good_job start
+anycable: cd Backend && RAILS_ENV=cypress rvm 3.3.5@greenie exec anycable
+ws: cd Backend && rvm 3.3.5@greenie exec bin/anycable-go --port=8080
 ```
 
 Install the `foreman` gem to run the Procfile.
 
 #### Deployment
 
-This application is deployed using Fly.io. The `deploy.yml` GitHub Actions
-workflow runs automatically after CI completes.
+The application is deployed on Fly.io automatically after CI completes, with a
+GitHub Action. The `fly.toml` file contains the architecture for the production
+environment: an app server, a GoodJob worker server, a Redis cluster, and a
+PostgreSQL database cluster.
+
+The Rails processes run on a separate Fly.io cluster from the AnyCable
+processes. An nginx cluster reverse-proxies requests for `/cable` to the
+AnyCable process, and all other requests to the Rails process.
 
 ## Architecture
 
