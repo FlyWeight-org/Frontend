@@ -71,7 +71,7 @@ const en: LocaleMessage<VueMessageType> = {
         none: 'Couldn’t find that flight',
         owner: 'Here’s what you can see that they can’t:',
         loads: {
-          averageWeight: '({pax} avg. passenger, %{cargo} total cargo)',
+          averageWeight: '({pax} avg. passenger, {cargo} total cargo)',
           createButton: 'Add',
           noCargo: 'No cargo',
           noPassengers: 'No passengers',

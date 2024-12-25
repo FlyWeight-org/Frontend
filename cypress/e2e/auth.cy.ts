@@ -76,7 +76,7 @@ describe('forgot password', () => {
       cy.lastEmail()
         .its('html')
         .then((email: string) => {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+           
           const url = email.match(/"http:\/\/127\.0\.0\.1:4173(.+?)"/)![1]
           cy.visit(url)
 
@@ -93,7 +93,7 @@ describe('forgot password', () => {
       cy.lastEmail()
         .its('html')
         .then((email: string) => {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+           
           const url = email.match(/"http:\/\/127\.0\.0\.1:4173(.+?)"/)![1]
           cy.visit(url)
 

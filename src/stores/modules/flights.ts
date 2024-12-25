@@ -1,5 +1,3 @@
-/* eslint-disable no-shadow,no-param-reassign */
-
 import type { Errors, FlightsState } from '@/stores/types'
 import { defineStore } from 'pinia'
 import { clone, concat, isEmpty, isNull, some } from 'lodash-es'

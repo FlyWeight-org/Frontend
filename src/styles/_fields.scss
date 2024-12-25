@@ -6,7 +6,7 @@
   display: block;
   padding: 5px 10px;
   appearance: none;
-  border-image-source: vars.$gradient-1;
   outline: none;
+  border-image-source: vars.$gradient-1;
   transform: skewX(-10deg); // TODO unskew text
 }
