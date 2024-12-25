@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
-
 import type { Result } from 'ts-results'
 import type { Flight, FlightListItem, Pilot } from '@/types'
 import { Subscription } from '@rails/actioncable'
@@ -10,6 +8,7 @@ import { Subscription } from '@rails/actioncable'
  */
 export type Errors = Record<string, string[]>
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface RootState {}
 
 export interface AccountState {

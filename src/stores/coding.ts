@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import { isNull, map, omit } from 'lodash-es'
 import * as luxon from 'luxon'
 import type { Flight, FlightListItem, Load, EditableFlight, Pilot } from '@/types'
@@ -15,7 +13,7 @@ export type PilotJSONUp = Pilot & {
 export type LoadJSONDown = Omit<Load, 'bagsWeight' | 'covid19Vaccination'> & {
   bags_weight: number
   covid19_vaccination: boolean
-  // eslint-disable-next-line no-use-before-define
+
   flight?: FlightJSONDown
   'destroyed?'?: boolean
 }

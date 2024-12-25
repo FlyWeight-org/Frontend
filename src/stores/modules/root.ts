@@ -1,5 +1,3 @@
-/* eslint-disable no-shadow */
-
 import { isNull, isString } from 'lodash-es'
 import config from '@/config'
 import type { APIResponse } from '@/stores/types'
