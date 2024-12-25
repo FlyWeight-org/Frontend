@@ -1,5 +1,3 @@
-/* eslint-disable camelcase,no-shadow */
-
 import { defineStore } from 'pinia'
 import type { AccountState, APIResponse, Errors } from '@/stores/types'
 import type { PilotJSONUp } from '@/stores/coding'

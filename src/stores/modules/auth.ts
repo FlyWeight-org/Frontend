@@ -1,5 +1,3 @@
-/* eslint-disable no-shadow */
-
 import { defineStore } from 'pinia'
 import { clone, isEmpty, isNull, isNumber, isString } from 'lodash-es'
 import type { APIResponse, AuthState, Errors } from '@/stores/types'
