@@ -22,7 +22,6 @@ describe('as a passenger', () => {
     cy.findByTestId('passenger-name').type('New Pax')
     cy.findByTestId('passenger-weight').type('123')
     cy.findByTestId('passenger-bags-weight').type('23')
-    cy.findByTestId('passenger-covid19-vaccination').click()
     cy.findByTestId('passenger-submit').click()
 
     cy.findByTestId('flight-finished').should('exist')
@@ -36,7 +35,6 @@ describe('as a passenger', () => {
         cy.findByTestId('passenger-name').should('contain', 'New Pax')
         cy.findByTestId('passenger-weight').should('contain', '123')
         cy.findByTestId('passenger-bags-weight').should('contain', '23')
-        cy.findByTestId('passenger-covid19-vaccination').should('exist')
       })
 
     cy.findByTestId('total-weight').should('contain', '331 lb')

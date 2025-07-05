@@ -18,13 +18,6 @@
       <img :src="luggageImageURL" alt="Bags" />
       {{ n(passenger.bagsWeight, 'pounds') }}
     </div>
-    <div
-      v-if="passenger.covid19Vaccination"
-      class="icon"
-      data-testid="passenger-covid19-vaccination"
-    >
-      <img :src="vaccineImageURL" alt="Vaccinated" />
-    </div>
 
     <div class="delete">
       <a href="#" data-testid="passenger-delete" @click.prevent="deleteClicked">&times;</a>
@@ -41,7 +34,6 @@ import { ref } from 'vue'
 import type { Load } from '@/types'
 import personImageURL from '@/images/person.svg'
 import luggageImageURL from '@/images/luggage.svg'
-import vaccineImageURL from '@/images/vaccine.svg'
 import { errorToString, notifyBugsnag } from '@/utils/errors'
 import { useFlightStore } from '@/stores/modules/flight'
 

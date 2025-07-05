@@ -83,7 +83,6 @@ describe("as a pilot", () => {
             cy.findByTestId("passenger-name").type("New Pax");
             cy.findByTestId("passenger-weight").type("180");
             cy.findByTestId("passenger-bags-weight").type("25");
-            cy.findByTestId("passenger-covid19-vaccination").click();
             cy.findByTestId("passenger-submit").click();
           });
 
@@ -94,7 +93,6 @@ describe("as a pilot", () => {
               cy.findByTestId("passenger-name").should("contain", "New Pax");
               cy.findByTestId("passenger-weight").should("contain", "180");
               cy.findByTestId("passenger-bags-weight").should("contain", "25");
-              cy.findByTestId("passenger-covid19-vaccination").should("exist");
             });
         });
 
@@ -121,7 +119,6 @@ describe("as a pilot", () => {
             cy.findByTestId("passenger-name").should("contain", "Example Passenger");
             cy.findByTestId("passenger-weight").should("contain", "180");
             cy.findByTestId("passenger-bags-weight").should("contain", "25");
-            cy.findByTestId("passenger-covid19-vaccination").should("not.exist");
           });
         });
 

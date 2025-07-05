@@ -11,7 +11,6 @@ export interface Load {
   name: string
   weight: number
   bagsWeight: number
-  covid19Vaccination: boolean
 
   disabled: boolean
 }

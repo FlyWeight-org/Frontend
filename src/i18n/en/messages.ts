@@ -86,7 +86,7 @@ const en: LocaleMessage<VueMessageType> = {
           'If so, you should add your weight down below so your pilot can do their proper pre-flight planning. It’s important not to takeoff overweight, which is why you’re being asked to reveal your weight.',
         explanation2:
           'Your weight will not be shared with anyone except the pilot. It will be available to the pilot only until one week after the flight.',
-        form: 'My name is # [name] ## and I weigh # [weight] # pounds (with clothes on). ## My bags weigh around # [bags_weight] # pounds. ## [covid19_vaccine] ## [submit]',
+        form: 'My name is # [name] ## and I weigh # [weight] # pounds (with clothes on). ## My bags weigh around # [bags_weight] # pounds. ## [submit]',
         loads: {
           createButton: 'So pumped to go flying!'
         },
@@ -138,8 +138,7 @@ const en: LocaleMessage<VueMessageType> = {
   passenger: {
     name: 'Passenger name',
     weight: 'Weight',
-    bagsWeight: 'Bags weight',
-    covid19Vaccination: 'COVID-19 Vaccination'
+    bagsWeight: 'Bags weight'
   },
   pilot: {
     current_password: 'Current password',

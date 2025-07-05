@@ -45,17 +45,6 @@
         data-testid="passenger-bags-weight"
       />
 
-      <field
-        v-else-if="fragment === '[covid19_vaccine]'"
-        v-model="load.covid19Vaccination"
-        type="checkbox"
-        object="load"
-        field="covid19_vaccination"
-        :label="t('passenger.covid19Vaccination')"
-        :errors="errors"
-        data-testid="passenger-covid19-vaccination"
-      />
-
       <input
         v-else-if="fragment === '[submit]'"
         type="submit"
@@ -99,7 +88,6 @@ const load = reactive<EditableLoad>({
   name: '',
   weight: 0,
   bagsWeight: 0,
-  covid19Vaccination: false,
   disabled: false
 })
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Load>(

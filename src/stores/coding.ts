@@ -10,9 +10,8 @@ export type PilotJSONUp = Pilot & {
 }
 
 /** The shape of the JSON data for a Load sent from the back-end to the frontend. */
-export type LoadJSONDown = Omit<Load, 'bagsWeight' | 'covid19Vaccination'> & {
+export type LoadJSONDown = Omit<Load, 'bagsWeight'> & {
   bags_weight: number
-  covid19_vaccination: boolean
 
   flight?: FlightJSONDown
   'destroyed?'?: boolean
@@ -27,16 +26,14 @@ export type LoadJSONDown = Omit<Load, 'bagsWeight' | 'covid19Vaccination'> & {
 
 export function loadFromJSON(JSON: LoadJSONDown): Load {
   return {
-    ...omit(JSON, 'bags_weight', 'covid19_vaccination'),
-    bagsWeight: JSON.bags_weight,
-    covid19Vaccination: JSON.covid19_vaccination
+    ...omit(JSON, 'bags_weight'),
+    bagsWeight: JSON.bags_weight
   }
 }
 
 /** The shape of the JSON data for a Load sent from the frontend to the back-end. */
-export type LoadJSONUp = Omit<Load, 'slug' | 'bagsWeight' | 'covid19Vaccination'> & {
+export type LoadJSONUp = Omit<Load, 'slug' | 'bagsWeight'> & {
   bags_weight: number
-  covid19_vaccination: boolean
 }
 
 /**
@@ -48,9 +45,8 @@ export type LoadJSONUp = Omit<Load, 'slug' | 'bagsWeight' | 'covid19Vaccination'
 
 export function loadToJSON(load: Omit<Load, 'slug'>): LoadJSONUp {
   return {
-    ...omit(load, 'slug', 'bagsWeight', 'covid19Vaccination'),
-    bags_weight: load.bagsWeight,
-    covid19_vaccination: load.covid19Vaccination
+    ...omit(load, 'slug', 'bagsWeight'),
+    bags_weight: load.bagsWeight
   }
 }
 
