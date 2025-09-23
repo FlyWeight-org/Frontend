@@ -262,16 +262,20 @@ export const useFlightStore = defineStore('flight', {
       if (this.flight.UUID !== flightID) return
       if (isNil(this.flight.loads)) return
 
+      const flight = cloneDeep(this.flight)
+      if (isNil(flight.loads)) return
+
       if (loadJSON['destroyed?']) {
-        this.flight.loads = this.flight.loads.filter((p) => p.slug !== loadJSON.slug)
-      } else if (some(this.flight.loads, (p) => p.slug === loadJSON.slug)) {
-        this.flight.loads = [
-          ...this.flight.loads.filter((p) => p.slug !== loadJSON.slug),
+        flight.loads = flight.loads.filter((p) => p.slug !== loadJSON.slug)
+      } else if (some(flight.loads, (p) => p.slug === loadJSON.slug)) {
+        flight.loads = [
+          ...flight.loads.filter((p) => p.slug !== loadJSON.slug),
           loadFromJSON(loadJSON)
         ]
       } else {
-        this.flight.loads = concat(this.flight.loads, loadFromJSON(loadJSON))
+        flight.loads = concat(flight.loads, loadFromJSON(loadJSON))
       }
+      this.$patch({ flight })
     }
   }
 })

@@ -119,16 +119,18 @@ export const useFlightsStore = defineStore('flights', {
     flightsSubscriptionMessage(flightJSON: FlightListItemJSONDown) {
       if (isNull(this.flights)) return
 
+      let flights
       if (flightJSON['destroyed?']) {
-        this.flights = this.flights.filter((p) => p.UUID !== flightJSON.uuid)
+        flights = this.flights.filter((p) => p.UUID !== flightJSON.uuid)
       } else if (some(this.flights, (p) => p.UUID === flightJSON.uuid)) {
-        this.flights = [
+        flights = [
           ...this.flights.filter((p) => p.UUID !== flightJSON.uuid),
           flightListItemFromJSON(flightJSON)
         ]
       } else {
-        this.flights = concat(this.flights, flightListItemFromJSON(flightJSON))
+        flights = concat(this.flights, flightListItemFromJSON(flightJSON))
       }
+      this.$patch({ flights })
     }
   }
 })
