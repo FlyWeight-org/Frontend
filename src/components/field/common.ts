@@ -24,8 +24,8 @@ interface IDRefs {
 }
 
 export function defineErrorRefs(props: ErrorProps): ErrorRefs {
-  const fieldErrors = computed(() => (isUndefined(props.errors) ? [] : props.errors[props.field]))
-  const hasError = computed(() => !isEmpty(fieldErrors))
+  const fieldErrors = computed(() => (isUndefined(props.errors) ? [] : props.errors[props.field] || []))
+  const hasError = computed(() => !isEmpty(fieldErrors.value))
 
   return {
     fieldErrors,

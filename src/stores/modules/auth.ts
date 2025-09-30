@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => clone(initialState),
 
   getters: {
-    JWTPayload: (state) => (state.JWT ? JSON.parse(atob(state.JWT.split('.')[1])) : null),
+    JWTPayload: (state) => (state.JWT ? JSON.parse(atob(state.JWT.split('.')[1] || '')) : null),
 
     JWTExpiresAt(): Date | null {
       if (isNull(this.JWTPayload)) return null

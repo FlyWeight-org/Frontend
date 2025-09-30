@@ -8,7 +8,18 @@ if (config.bugsnagAPIKey) {
     apiKey: config.bugsnagAPIKey,
     plugins: [new BugsnagPluginVue() as Plugin],
     releaseStage: import.meta.env.MODE,
-    enabledReleaseStages: ['production']
+    enabledReleaseStages: ['production'],
+    onError: (event) => {
+      // Don't report internal server errors from the API to BugSnag
+      // These are already being tracked on the backend
+      const errorMessage = event.errors[0]?.errorMessage
+      if (errorMessage === 'An internal error has occurred.' ||
+          errorMessage === 'Internal Server Error' ||
+          errorMessage?.includes('internal error')) {
+        return false // Prevents this error from being sent to BugSnag
+      }
+      return true
+    }
   })
   BugsnagPerformance.start(config.bugsnagAPIKey)
 }

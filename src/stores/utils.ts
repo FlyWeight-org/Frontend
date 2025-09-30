@@ -28,8 +28,13 @@ function errorForResponseStatus(status: number): Error {
 }
 
 function returnErrorsForAPIResponse(failure: APIFailure): Errors {
+  // Validation errors are expected - return them
   if (failure.body.errors) return failure.body.errors
+
+  // API internal errors are exceptional - throw
   if (failure.body.error) throw new Error(failure.body.error)
+
+  // HTTP status errors without a proper error body are unexpected - throw
   throw errorForResponseStatus(failure.response.status)
 }
 
@@ -52,6 +57,7 @@ export function loadAPIResponseBodyOrThrowErrors<T>(response: APIResponse<T>): T
 export function loadAPIResponseBodyOrReturnErrors<T>(response: APIResponse<T>): Result<T, Errors> {
   if (response.ok) {
     if (isUndefined(response.val.body)) {
+      // Missing body when we expect one is unexpected - throw
       throw new LocalizableError('error.emptyBody')
     } else {
       return new Ok(response.val.body)

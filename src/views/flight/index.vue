@@ -12,8 +12,8 @@ const route = useRoute()
 const flightStore = useFlightStore()
 
 function flightUUID(): string {
-  if (isArray(route.params.flightID)) return route.params.flightID[0]
-  else return route.params.flightID
+  if (isArray(route.params.flightID)) return route.params.flightID[0] || ''
+  else return route.params.flightID || ''
 }
 
 onMounted(() => flightStore.loadFlight(flightUUID(), true))
