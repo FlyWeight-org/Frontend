@@ -1,5 +1,5 @@
 import { isError, isString, toString } from 'lodash-es'
-import Bugsnag from '@bugsnag/js'
+import * as Sentry from '@sentry/vue'
 
 export function errorToString(error: unknown): string {
   if (isError(error)) return error.message
@@ -7,7 +7,11 @@ export function errorToString(error: unknown): string {
   return toString(error)
 }
 
-export function notifyBugsnag(error: unknown): void {
+export function notifySentry(error: unknown): void {
   console.error(error)
-  if (isError(error) || isString(error)) Bugsnag.notify(error)
+  if (isError(error)) {
+    Sentry.captureException(error)
+  } else if (isString(error)) {
+    Sentry.captureMessage(error)
+  }
 }

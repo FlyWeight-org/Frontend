@@ -34,7 +34,7 @@ import { ref } from 'vue'
 import type { Load } from '@/types'
 import personImageURL from '@/images/person.svg'
 import luggageImageURL from '@/images/luggage.svg'
-import { errorToString, notifyBugsnag } from '@/utils/errors'
+import { errorToString, notifySentry } from '@/utils/errors'
 import { useFlightStore } from '@/stores/modules/flight'
 
 const { n } = useI18n()
@@ -50,7 +50,7 @@ async function deleteClicked() {
   try {
     await flightStore.removeLoad(props.passenger.slug)
   } catch (err) {
-    notifyBugsnag(err)
+    notifySentry(err)
     deleteError.value = errorToString(err)
   }
 }

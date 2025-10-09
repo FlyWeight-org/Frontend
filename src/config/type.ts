@@ -1,5 +1,5 @@
 export interface Config {
-  bugsnagAPIKey: string
+  sentryDSN: string
   APIURL: string
   actionCableURL: string
 }

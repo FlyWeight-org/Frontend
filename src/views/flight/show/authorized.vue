@@ -29,7 +29,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Flight } from '@/types'
 import EditForm from '@/components/flights/show/authorized/form.vue'
-import { errorToString, notifyBugsnag } from '@/utils/errors'
+import { errorToString, notifySentry } from '@/utils/errors'
 import requireAuth from '@/composables/requireAuth'
 import Manifest from '@/components/flights/show/authorized/manifest.vue'
 import { useFlightStore } from '@/stores/modules/flight'
@@ -59,7 +59,7 @@ async function onDelete() {
     await flightStore.deleteFlight(props.flight)
     await router.push({ name: 'flightsList' })
   } catch (error) {
-    notifyBugsnag(error)
+    notifySentry(error)
     deleteError.value = errorToString(error)
   }
   isDeleting.value = false

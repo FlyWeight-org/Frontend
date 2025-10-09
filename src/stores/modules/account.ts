@@ -11,7 +11,7 @@ import {
   loadAPIResponseBodyOrReturnErrors,
   loadAPIResponseBodyOrThrowErrors
 } from '@/stores/utils'
-import { notifyBugsnag } from '@/utils/errors'
+import { notifySentry } from '@/utils/errors'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useFlightsStore } from '@/stores/modules/flights'
 import { clone } from 'lodash-es'
@@ -157,7 +157,7 @@ export const useAccountStore = defineStore('account', {
           currentPilotLoading: false,
           currentPilotError: anythingToError(error)
         })
-        notifyBugsnag(error)
+        notifySentry(error)
       }
     },
 

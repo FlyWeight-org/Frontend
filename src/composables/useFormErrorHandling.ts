@@ -2,7 +2,7 @@ import type { Result } from 'ts-results'
 import { isObject, isUndefined, toString } from 'lodash-es'
 import type { Ref } from 'vue'
 import type { Errors } from '@/stores/types'
-import { errorToString, notifyBugsnag } from '@/utils/errors'
+import { errorToString, notifySentry } from '@/utils/errors'
 import { ref } from 'vue'
 
 type SubmitHandler<SuccessType> = () => Promise<Result<SuccessType, Errors>>
@@ -43,7 +43,7 @@ export default function useFormErrorHandling<SuccessType>(
         if (!isUndefined(onError)) await onError(result.val)
       }
     } catch (err) {
-      notifyBugsnag(err)
+      notifySentry(err)
       error.value = errorToString(err)
       if (!isUndefined(onError)) await onError(error.value)
     }

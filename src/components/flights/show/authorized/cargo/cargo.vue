@@ -29,7 +29,7 @@
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
 import type { Load } from '@/types'
-import { errorToString, notifyBugsnag } from '@/utils/errors'
+import { errorToString, notifySentry } from '@/utils/errors'
 import cargoImageURL from '@/images/cargo.svg'
 import { useFlightStore } from '@/stores/modules/flight'
 
@@ -46,7 +46,7 @@ async function deleteClicked() {
   try {
     await flightStore.removeLoad(props.cargo.slug)
   } catch (err) {
-    notifyBugsnag(err)
+    notifySentry(err)
     deleteError.value = errorToString(err)
   }
 }

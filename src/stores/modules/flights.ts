@@ -9,7 +9,7 @@ import {
   loadAPIResponseBodyOrReturnErrors,
   loadAPIResponseBodyOrThrowErrors
 } from '@/stores/utils'
-import { notifyBugsnag } from '@/utils/errors'
+import { notifySentry } from '@/utils/errors'
 import type { EditableFlight, Flight } from '@/types'
 import { Ok, Result } from 'ts-results'
 import { useAuthStore } from '@/stores/modules/auth'
@@ -72,7 +72,7 @@ export const useFlightsStore = defineStore('flights', {
           flightsLoading: false,
           flightsError: anythingToError(error)
         })
-        notifyBugsnag(error)
+        notifySentry(error)
       }
     },
 
