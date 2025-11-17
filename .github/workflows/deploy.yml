@@ -51,5 +51,5 @@ jobs:
             SENTRY_PROJECT: flyweight-frontend
           with:
             environment: production
-            version: ${{ github.sha }}
+            release: ${{ github.sha }}
             sourcemaps: "./dist"

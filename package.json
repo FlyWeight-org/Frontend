@@ -13,9 +13,10 @@
     "test:e2e:dev": "start-server-and-test 'vite dev --host 127.0.0.1 --port 4173' http://127.0.0.1:4173 'cypress open --e2e'",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
-    "lint": "eslint . --fix",
-    "format": "prettier --write src/",
-    "stylelint": "stylelint \"src/**/*.{vue,css,scss,sass}\""
+    "lint:eslint": "eslint . --fix",
+    "lint:stylelint": "stylelint \"src/**/*.{vue,css,scss,sass}\"",
+    "lint": "run-s 'lint:*'",
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "@intlify/core-base": "^11.1.12",
