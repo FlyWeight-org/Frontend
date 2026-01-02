@@ -19,5 +19,9 @@ primary_region = 'sjc'
   min_machines_running = 0
   processes = ['app']
 
+[metrics]
+  port = 9113
+  path = '/metrics'
+
 [[vm]]
   size = 'shared-cpu-1x'

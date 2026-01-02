@@ -35,15 +35,32 @@ RUN yarn run build
 RUN yarn workspaces focus --production
 
 
-# Final stage for app image
-FROM nginx
+# Download nginx-prometheus-exporter
+FROM alpine:3.19 as exporter-download
 
+ARG EXPORTER_VERSION=1.3.0
+RUN wget -qO- https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v${EXPORTER_VERSION}/nginx-prometheus-exporter_${EXPORTER_VERSION}_linux_amd64.tar.gz \
+    | tar xzf - -C /tmp \
+    && chmod +x /tmp/nginx-prometheus-exporter
+
+
+# Final stage for app image
+FROM nginx:1.27-alpine
+
+# Copy exporter binary
+COPY --from=exporter-download /tmp/nginx-prometheus-exporter /usr/local/bin/
+
+# Copy nginx configuration
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
 COPY .docker/default.conf /etc/nginx/conf.d/default.conf
+
+# Copy startup script
+COPY .docker/start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Copy built application
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 8080
-CMD [ "/usr/sbin/nginx", "-g", "daemon off;" ]
+EXPOSE 8080 9113
+CMD [ "/start.sh" ]
