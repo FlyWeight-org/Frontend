@@ -25,11 +25,11 @@ End-to-end testing is available with Cypress. To run end-to-end tests, create a
 `Procfile` similar to:
 
 ```
-backend: cd Backend && rvm 3.4.8@flyweight exec rails server -e cypress -b 127.0.0.1
+backend: cd Backend && rvm 4.0.1@flyweight exec rails server -e cypress -b 127.0.0.1
 frontend: cd Frontend && yarn test:e2e:dev
-jobs: cd Backend && RAILS_ENV=cypress rvm 3.4.8@flyweight exec bundle exec good_job start
-anycable: cd Backend && RAILS_ENV=cypress rvm 3.4.8@flyweight exec anycable
-ws: cd Backend && rvm 3.4.8@flyweight exec bin/anycable-go --port=8080
+jobs: cd Backend && RAILS_ENV=cypress rvm 4.0.1@flyweight exec bundle exec good_job start
+anycable: cd Backend && RAILS_ENV=cypress rvm 4.0.1@flyweight exec anycable
+ws: cd Backend && rvm 4.0.1@flyweight exec bin/anycable-go --port=8080
 ```
 
 Install the `foreman` gem to run the Procfile.

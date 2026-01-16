@@ -21,12 +21,13 @@ FROM base as build
 RUN apt-get update -qq && \
     apt-get install -y python-is-python3 pkg-config build-essential
 
-# Install node modules
-COPY --link package.json yarn.lock .
+# Copy application code and install dependencies
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
 RUN yarn install --immutable
 
-# Copy application code
-COPY --link . .
+# Copy remaining application code
+COPY . .
 
 # Build application
 RUN yarn run build
@@ -38,14 +39,14 @@ RUN yarn workspaces focus --production
 # Download nginx-prometheus-exporter
 FROM alpine:3.19 as exporter-download
 
-ARG EXPORTER_VERSION=1.3.0
+ARG EXPORTER_VERSION=1.5.1
 RUN wget -qO- https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v${EXPORTER_VERSION}/nginx-prometheus-exporter_${EXPORTER_VERSION}_linux_amd64.tar.gz \
     | tar xzf - -C /tmp \
     && chmod +x /tmp/nginx-prometheus-exporter
 
 
 # Final stage for app image
-FROM nginx:1.27-alpine
+FROM nginx:1.28-alpine
 
 # Copy exporter binary
 COPY --from=exporter-download /tmp/nginx-prometheus-exporter /usr/local/bin/
