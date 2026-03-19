@@ -17,9 +17,10 @@ import './styles/layout.scss'
 import './styles/nav.scss'
 import './styles/tabs.scss'
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App)
 
-const sentryDSN = import.meta.env.VITE_SENTRY_DSN
+const sentryDSN = String(import.meta.env.VITE_SENTRY_DSN ?? '')
 if (sentryDSN) {
   Sentry.init({
     app,
@@ -28,11 +29,11 @@ if (sentryDSN) {
     integrations: [
       Sentry.vueIntegration({
         tracingOptions: {
-          trackComponents: true
-        }
+          trackComponents: true,
+        },
       }),
       Sentry.browserTracingIntegration({ router }),
-      Sentry.replayIntegration()
+      Sentry.replayIntegration(),
     ],
     tracesSampleRate: 1.0,
     enableLogs: true,
@@ -50,7 +51,7 @@ if (sentryDSN) {
         return null // Prevents this error from being sent to Sentry
       }
       return event
-    }
+    },
   })
 }
 

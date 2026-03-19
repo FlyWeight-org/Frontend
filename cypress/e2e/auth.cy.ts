@@ -35,10 +35,7 @@ describe('logging in', () => {
     cy.findByTestId('login-password').type('wrongpassword')
     cy.findByTestId('login-submit').click()
 
-    cy.findByTestId('login-error').should(
-      'contain',
-      'Incorrect email or password'
-    )
+    cy.findByTestId('login-error').should('contain', 'Incorrect email or password')
   })
 
   it('authenticates a valid login', () => {
@@ -71,13 +68,12 @@ describe('forgot password', () => {
       cy.findByTestId('forgot-password-submit').click()
     })
 
-    it('shows an error if the password doesn\'t match the confirmation', () => {
+    it("shows an error if the password doesn't match the confirmation", () => {
       cy.findByTestId('forgot-password-success').should('exist')
       cy.lastEmail()
         .its('html')
         .then((email: string) => {
-           
-          const url = email.match(/"http:\/\/127\.0\.0\.1:4173(.+?)"/)![1]
+          const url = /"http:\/\/127\.0\.0\.1:4173(.+?)"/.exec(email)![1]
           cy.visit(url)
 
           cy.findByTestId('reset-password-password').type('newpassword')
@@ -93,8 +89,7 @@ describe('forgot password', () => {
       cy.lastEmail()
         .its('html')
         .then((email: string) => {
-           
-          const url = email.match(/"http:\/\/127\.0\.0\.1:4173(.+?)"/)![1]
+          const url = /"http:\/\/127\.0\.0\.1:4173(.+?)"/.exec(email)![1]
           cy.visit(url)
 
           cy.findByTestId('reset-password-password').type('newpassword')
@@ -103,7 +98,7 @@ describe('forgot password', () => {
 
           cy.findByTestId('reset-password-success').should(
             'contain',
-            'Your password has been changed.'
+            'Your password has been changed.',
           )
 
           cy.visit('/')

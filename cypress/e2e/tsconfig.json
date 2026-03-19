@@ -1,15 +1,8 @@
 {
-  "compilerOptions" : {
-    "isolatedModules" : false,
-    "types" : [
-      "cypress",
-      "@testing-library/cypress"
-    ]
+  "compilerOptions": {
+    "isolatedModules": false,
+    "types": ["cypress", "@testing-library/cypress"]
   },
-  "extends" : "@vue/tsconfig/tsconfig.dom.json",
-  "include" : [
-    "./**/*",
-    "../support/**/*",
-    "../support/commands.d.ts"
-  ]
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": ["./**/*", "../support/**/*", "../support/commands.d.ts"]
 }

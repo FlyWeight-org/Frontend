@@ -1,0 +1,39 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/**/*.spec.ts", "src/**/__tests__/**/*.ts", "cypress/**/*.ts", "vitest.setup.ts"],
+  "project": ["src/**/*.{ts,vue}"],
+  "ignore": [],
+  "ignoreBinaries": [
+    "eslint",
+    "knip",
+    "oxlint",
+    "prettier",
+    "run-p",
+    "run-s",
+    "start-server-and-test",
+    "stylelint",
+    "vite",
+    "vitest",
+    "vue-tsc"
+  ],
+  "ignoreDependencies": [
+    "@flydotio/dockerfile",
+    "@testing-library/vue",
+    "@vue/compiler-dom",
+    "@vue/server-renderer",
+    "eslint",
+    "jiti",
+    "npm-run-all2",
+    "oxlint",
+    "postcss",
+    "sass",
+    "start-server-and-test",
+    "vue-eslint-parser",
+    "vue-tsc"
+  ],
+  "ignoreExportsUsedInFile": true,
+  "rules": {
+    "exports": "warn",
+    "unresolved": "warn"
+  }
+}

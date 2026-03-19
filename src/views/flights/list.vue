@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import FlightView from '@/components/flights/list/flight.vue'
+import requireAuth from '@/composables/requireAuth'
+import { useFlightsStore } from '@/stores/modules/flights'
+
+const { t } = useI18n()
+const flightsStore = useFlightsStore()
+
+requireAuth()
+onMounted(() => flightsStore.loadFlights())
+</script>
+
 <template>
   <main>
     <div v-if="flightsStore.flightsLoading" class="empty">
@@ -21,17 +35,3 @@
     </div>
   </main>
 </template>
-
-<script setup lang="ts">
-import { onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
-import FlightView from '@/components/flights/list/flight.vue'
-import requireAuth from '@/composables/requireAuth'
-import { useFlightsStore } from '@/stores/modules/flights'
-
-const { t } = useI18n()
-const flightsStore = useFlightsStore()
-
-requireAuth()
-onMounted(() => flightsStore.loadFlights())
-</script>

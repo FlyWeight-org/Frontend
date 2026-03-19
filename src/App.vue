@@ -1,7 +1,3 @@
-<template>
-  <router-view />
-</template>
-
 <script setup lang="ts">
 import { useAccountStore } from '@/stores/modules/account'
 import { useAuthStore } from '@/stores/modules/auth'
@@ -12,8 +8,14 @@ const authStore = useAuthStore()
 
 onMounted(() => {
   authStore.initializeFromLocalStorage()
-  authStore.$subscribe(() => authStore.saveToLocalStorage())
+  authStore.$subscribe(() => {
+    authStore.saveToLocalStorage()
+  })
 
-  accountStore.loadAccount()
+  void accountStore.loadAccount()
 })
 </script>
+
+<template>
+  <router-view />
+</template>

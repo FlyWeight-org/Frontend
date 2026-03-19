@@ -1,3 +1,15 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
+
+const { t } = useI18n()
+const route = useRoute()
+
+const isLogin = computed(() => route.name === 'logIn')
+const isSignup = computed(() => route.name === 'signUp')
+</script>
+
 <template>
   <div class="tabs">
     <ul role="tablist">
@@ -14,15 +26,3 @@
     </ul>
   </div>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import { computed } from 'vue'
-
-const { t } = useI18n()
-const route = useRoute()
-
-const isLogin = computed(() => route.name === 'logIn')
-const isSignup = computed(() => route.name === 'signUp')
-</script>

@@ -8,9 +8,10 @@ const localStorageMock = (() => {
   return {
     getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
-      store[key] = value.toString()
+      store[key] = value
     },
     removeItem: (key: string) => {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete store[key]
     },
     clear: () => {
@@ -22,7 +23,7 @@ const localStorageMock = (() => {
     key: (index: number) => {
       const keys = Object.keys(store)
       return keys[index] || null
-    }
+    },
   }
 })()
 
@@ -30,5 +31,5 @@ const localStorageMock = (() => {
 Object.defineProperty(globalThis, 'localStorage', {
   value: localStorageMock,
   writable: true,
-  configurable: true
+  configurable: true,
 })

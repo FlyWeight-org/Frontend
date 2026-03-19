@@ -1,3 +1,13 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import AuthorizedFlight from './show/authorized.vue'
+import UnauthorizedFlight from './show/unauthorized.vue'
+import { useFlightStore } from '@/stores/modules/flight'
+
+const { t } = useI18n()
+const flightStore = useFlightStore()
+</script>
+
 <template>
   <main>
     <div v-if="flightStore.flightLoading" class="empty">
@@ -16,13 +26,3 @@
     </div>
   </main>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import AuthorizedFlight from './show/authorized.vue'
-import UnauthorizedFlight from './show/unauthorized.vue'
-import { useFlightStore } from '@/stores/modules/flight'
-
-const { t } = useI18n()
-const flightStore = useFlightStore()
-</script>

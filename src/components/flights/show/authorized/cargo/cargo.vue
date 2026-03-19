@@ -1,30 +1,3 @@
-<template>
-  <div class="cargo-list-item" data-testid="cargo-list-item">
-    <input
-      type="checkbox"
-      :checked="!cargo.disabled"
-      data-testid="cargo-enabled"
-      @change="toggleEnabled($event)"
-    />
-
-    <div class="name" data-testid="cargo-name">
-      {{ cargo.name }}
-    </div>
-    <div class="weight" data-testid="cargo-weight">
-      <img :src="cargoImageURL" alt="Cargo" />
-
-      {{ n(cargo.bagsWeight, 'pounds') }}
-    </div>
-
-    <div class="delete">
-      <a href="#" data-testid="cargo-delete" @click.prevent="deleteClicked">&times;</a>
-    </div>
-  </div>
-  <p v-if="deleteError" class="error" data-testid="cargo-delete-error">
-    <small>{{ deleteError }}</small>
-  </p>
-</template>
-
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
@@ -51,11 +24,38 @@ async function deleteClicked() {
   }
 }
 
-async function toggleEnabled(event: Event) {
+function toggleEnabled(event: Event) {
   const target = event.target as HTMLInputElement
-  await flightStore.toggleEnabled(props.cargo.slug, target.checked)
+  flightStore.toggleEnabled(props.cargo.slug, target.checked)
 }
 </script>
+
+<template>
+  <div class="cargo-list-item" data-testid="cargo-list-item">
+    <input
+      type="checkbox"
+      :checked="!cargo.disabled"
+      data-testid="cargo-enabled"
+      @change="toggleEnabled($event)"
+    />
+
+    <div class="name" data-testid="cargo-name">
+      {{ cargo.name }}
+    </div>
+    <div class="weight" data-testid="cargo-weight">
+      <img :src="cargoImageURL" alt="Cargo" />
+
+      {{ n(cargo.bagsWeight, 'pounds') }}
+    </div>
+
+    <div class="delete">
+      <a href="#" data-testid="cargo-delete" @click.prevent="deleteClicked">&times;</a>
+    </div>
+  </div>
+  <p v-if="deleteError" class="error" data-testid="cargo-delete-error">
+    <small>{{ deleteError }}</small>
+  </p>
+</template>
 
 <style scoped lang="scss">
 @use '@/styles/colors';

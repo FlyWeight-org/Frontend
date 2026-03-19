@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
+import { useFlightStore } from '@/stores/modules/flight'
+import { computed } from 'vue'
+
+const { t } = useI18n()
+const route = useRoute()
+const flightStore = useFlightStore()
+
+const passengerName = computed(() => route.params.loadName)
+const flight = computed(() => flightStore.flight)
+const pilotName = computed(() => flight.value?.pilot.name)
+</script>
+
 <template>
   <main data-testid="flight-finished">
     <div v-if="!flightStore.flight" class="empty error">
@@ -21,18 +36,3 @@
     </div>
   </main>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
-import { useFlightStore } from '@/stores/modules/flight'
-import { computed } from 'vue'
-
-const { t } = useI18n()
-const route = useRoute()
-const flightStore = useFlightStore()
-
-const passengerName = computed(() => route.params.loadName)
-const flight = computed(() => flightStore.flight)
-const pilotName = computed(() => flight.value?.pilot.name)
-</script>

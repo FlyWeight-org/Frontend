@@ -1,7 +1,13 @@
 import { isNull, isString } from 'lodash-es'
+import { z } from 'zod'
 import config from '@/config'
 import type { APIResponse } from '@/stores/types'
 import { Err, Ok } from 'ts-results'
+
+const apiErrorBodySchema = z.object({
+  errors: z.record(z.string(), z.array(z.string())).optional(),
+  error: z.string().optional(),
+})
 import { useAuthStore } from '@/stores/modules/auth'
 import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
@@ -10,7 +16,7 @@ export function request({
   method,
   path,
   body,
-  skipResetAuth
+  skipResetAuth,
 }: {
   method?: string
   path: string
@@ -30,7 +36,7 @@ export function request({
     }
 
     const headers: Record<string, string> = {
-      Accept: 'application/json'
+      Accept: 'application/json',
     }
     if (!skipResetAuth && !isNull(auth.authHeader)) headers.Authorization = auth.authHeader
     if (!(body instanceof FormData) && !isString(body)) {
@@ -38,10 +44,10 @@ export function request({
     }
 
     fetch(config.APIURL + path, {
-      method: method || 'get',
+      method: method ?? 'get',
       body: serializedBody,
       headers,
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((response) => {
         if (response.status === 401 && !skipResetAuth) {
@@ -53,7 +59,9 @@ export function request({
 
         resolve(response)
       })
-      .catch((error) => reject(error))
+      .catch((error: unknown) => {
+        reject(error instanceof Error ? error : new Error(String(error)))
+      })
   })
 }
 
@@ -67,11 +75,11 @@ export async function requestJSON<T>(args: {
   if (response.ok) {
     return new Ok({
       response,
-      body: response.status === 204 ? undefined : await response.json()
+      body: response.status === 204 ? undefined : ((await response.json()) as T),
     })
   }
   return new Err({
     response,
-    body: await response.json()
+    body: apiErrorBodySchema.parse(await response.json()),
   })
 }

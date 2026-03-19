@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/modules/auth'
+
+const { t } = useI18n()
+const router = useRouter()
+const authStore = useAuthStore()
+
+async function logoutClicked() {
+  await authStore.logOut()
+  await router.push({ name: 'logIn' })
+}
+</script>
+
 <template>
   <nav v-if="authStore.loggedIn">
     <ul role="menubar">
@@ -30,18 +45,3 @@
     </ul>
   </nav>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/modules/auth'
-
-const { t } = useI18n()
-const router = useRouter()
-const authStore = useAuthStore()
-
-async function logoutClicked() {
-  await authStore.logOut()
-  await router.push({ name: 'logIn' })
-}
-</script>

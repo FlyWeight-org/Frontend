@@ -1,3 +1,10 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import Navbar from './nav.vue'
+
+const { t } = useI18n()
+</script>
+
 <template>
   <main>
     <h1>
@@ -15,13 +22,6 @@
     <router-view />
   </main>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import Navbar from './nav.vue'
-
-const { t } = useI18n()
-</script>
 
 <style scoped lang="scss">
 @use '@/styles/vars';

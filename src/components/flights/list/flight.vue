@@ -1,17 +1,3 @@
-<template>
-  <a class="flight-list-item" :href="flightURL" data-testid="flight-list-item">
-    <div class="header">
-      <div class="date">{{ date }}</div>
-      <div class="passengers">
-        {{ t('flights.list.flight.passengers', { count: paxCount }) }}
-      </div>
-    </div>
-    <p v-if="flight.description" class="description">
-      {{ flight.description }}
-    </p>
-  </a>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -31,10 +17,24 @@ const flightURL = computed(
   () =>
     router.resolve({
       name: 'flightsShow',
-      params: { flightID: props.flight.UUID }
-    }).href
+      params: { flightID: props.flight.UUID },
+    }).href,
 )
 </script>
+
+<template>
+  <a class="flight-list-item" :href="flightURL" data-testid="flight-list-item">
+    <div class="header">
+      <div class="date">{{ date }}</div>
+      <div class="passengers">
+        {{ t('flights.list.flight.passengers', { count: paxCount }) }}
+      </div>
+    </div>
+    <p v-if="flight.description" class="description">
+      {{ flight.description }}
+    </p>
+  </a>
+</template>
 
 <style scoped lang="scss">
 @use '@/styles/colors';

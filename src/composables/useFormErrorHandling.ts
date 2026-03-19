@@ -6,8 +6,8 @@ import { errorToString, notifySentry } from '@/utils/errors'
 import { ref } from 'vue'
 
 type SubmitHandler<SuccessType> = () => Promise<Result<SuccessType, Errors>>
-type SuccessHandler<SuccessType> = (result: SuccessType) => Promise<void>
-type ErrorHandler = (errors: Errors | string) => Promise<void>
+type SuccessHandler<SuccessType> = (result: SuccessType) => void | Promise<void>
+type ErrorHandler = (errors: Errors | string) => void | Promise<void>
 
 interface ReturnType {
   submitHandler: () => Promise<void>
@@ -19,7 +19,7 @@ interface ReturnType {
 export default function useFormErrorHandling<SuccessType>(
   onSubmit: SubmitHandler<SuccessType>,
   onSuccess: SuccessHandler<SuccessType>,
-  onError?: ErrorHandler
+  onError?: ErrorHandler,
 ): ReturnType {
   const errors = ref<Errors>({})
   const error = ref<string | null>(null)
@@ -55,6 +55,6 @@ export default function useFormErrorHandling<SuccessType>(
     submitHandler,
     errors,
     error,
-    isProcessing
+    isProcessing,
   }
 }

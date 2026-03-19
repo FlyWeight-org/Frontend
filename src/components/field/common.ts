@@ -25,13 +25,13 @@ interface IDRefs {
 
 export function defineErrorRefs(props: ErrorProps): ErrorRefs {
   const fieldErrors = computed(() =>
-    isUndefined(props.errors) ? [] : props.errors[props.field] || []
+    isUndefined(props.errors) ? [] : (props.errors[props.field] ?? []),
   )
   const hasError = computed(() => !isEmpty(fieldErrors.value))
 
   return {
     fieldErrors,
-    hasError
+    hasError,
   }
 }
 
@@ -41,6 +41,6 @@ export function defineIDRefs(props: IDProps): IDRefs {
 
   return {
     id,
-    name
+    name,
   }
 }

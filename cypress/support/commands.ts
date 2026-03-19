@@ -19,7 +19,7 @@ Cypress.Commands.add('lastEmail', () => {
     .request({
       method: 'GET',
       url: `${Cypress.env('apiHost')}/__cypress__/last_email`,
-      failOnStatusCode: false
+      failOnStatusCode: false,
     })
     .then((response) => {
       if (response.status !== 200) return Promise.resolve(null)
@@ -28,5 +28,5 @@ Cypress.Commands.add('lastEmail', () => {
 })
 
 Cypress.Commands.add('errorsFor', (field: string) =>
-  cy.findAllByTestId('field-errors').filter(`[data-name=${field}]`)
+  cy.findAllByTestId('field-errors').filter(`[data-name=${field}]`),
 )

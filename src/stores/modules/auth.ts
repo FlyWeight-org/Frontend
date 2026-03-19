@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { clone, isEmpty, isNull, isNumber, isString } from 'lodash-es'
+import { z } from 'zod'
 import type { APIResponse, AuthState, Errors } from '@/stores/types'
 import config from '@/config'
 import type { SessionJSONDown } from '@/stores/coding'
@@ -11,28 +12,24 @@ import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
 import { Consumer, createConsumer } from '@rails/actioncable'
 
-interface JWTPayload {
-  iss: string
-  sub: string
-  aud: string
-  exp?: string | number
-  nbf?: string | number
-  iat: string | number
-  jti: string
+const jwtPayloadSchema = z.object({
+  exp: z.union([z.string(), z.number()]).optional(),
+  e: z.string(),
+})
 
-  u: string
-}
+type JWTPayload = z.infer<typeof jwtPayloadSchema>
 
 const initialState: AuthState = {
   JWT: null,
-  loggingIn: false
+  loggingIn: false,
 }
 
 export const useAuthStore = defineStore('auth', {
   state: () => clone(initialState),
 
   getters: {
-    JWTPayload: (state) => (state.JWT ? JSON.parse(atob(state.JWT.split('.')[1] || '')) : null),
+    JWTPayload: (state): JWTPayload | null =>
+      state.JWT ? jwtPayloadSchema.parse(JSON.parse(atob(state.JWT.split('.')[1] ?? ''))) : null,
 
     JWTExpiresAt(): Date | null {
       if (isNull(this.JWTPayload)) return null
@@ -51,9 +48,9 @@ export const useAuthStore = defineStore('auth', {
 
     /** The email of the Pilot that's logged in, if any. */
     currentEmail(): string | null {
-      const payload: JWTPayload | null = this.JWTPayload
+      const payload = this.JWTPayload
       if (isNull(payload)) return null
-      return payload.u
+      return payload.e
     },
 
     actionCableConsumer(state): Consumer | null {
@@ -63,7 +60,7 @@ export const useAuthStore = defineStore('auth', {
       return createConsumer(URL)
     },
 
-    authHeader: (state) => (state.JWT ? `Bearer ${state.JWT}` : null)
+    authHeader: (state) => (state.JWT ? `Bearer ${state.JWT}` : null),
   },
 
   actions: {
@@ -77,7 +74,7 @@ export const useAuthStore = defineStore('auth', {
     },
 
     saveToLocalStorage() {
-      localStorage.setItem('JWT', this.JWT || '')
+      localStorage.setItem('JWT', this.JWT ?? '')
     },
 
     /**
@@ -98,7 +95,7 @@ export const useAuthStore = defineStore('auth', {
           path: '/login.json',
           method: 'post',
           body: { pilot: session },
-          skipResetAuth: true
+          skipResetAuth: true,
         })
         const result = loadAPIResponseBodyOrReturnErrors(response)
         if (result.ok) {
@@ -118,11 +115,11 @@ export const useAuthStore = defineStore('auth', {
 
     setJWT(response: Response): void {
       const authorization = response.headers.get('Authorization')
-      if (authorization && authorization.match(/^Bearer /)) {
+      if (authorization && /^Bearer /.exec(authorization)) {
         const JWT = authorization.slice(7)
         this.$patch({
           JWT,
-          loggingIn: false
+          loggingIn: false,
         })
       }
     },
@@ -137,12 +134,12 @@ export const useAuthStore = defineStore('auth', {
 
       const result = await request({
         method: 'delete',
-        path: '/logout.json'
+        path: '/logout.json',
       })
       ignoreResponseBody(result)
       this.reset()
       account.reset()
       flights.reset()
-    }
-  }
+    },
+  },
 })

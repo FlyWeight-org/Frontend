@@ -66,14 +66,9 @@ export function loadAPIResponseBodyOrReturnErrors<T>(response: APIResponse<T>): 
   return new Err(returnErrorsForAPIResponse(response.val))
 }
 
-// use when you don't expect a JSON object or validation errors
-export function ignoreAPIResponseBodyOrThrowErrors(response: APIResponse<unknown>): void {
-  if (!response.ok) throw throwableErrorForAPIResponse(response.val)
-}
-
 // use when you expect only validation errors and don't care about the JSON object
 export function ignoreAPIResponseBodyOrReturnErrors(
-  response: APIResponse<unknown>
+  response: APIResponse<unknown>,
 ): Result<void, Errors> {
   if (response.ok) return Ok.EMPTY
   return new Err(returnErrorsForAPIResponse(response.val))

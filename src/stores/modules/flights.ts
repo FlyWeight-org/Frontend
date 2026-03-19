@@ -3,11 +3,16 @@ import { defineStore } from 'pinia'
 import { clone, concat, isEmpty, isNull, some } from 'lodash-es'
 import { requestJSON } from '@/stores/modules/root'
 import type { FlightJSONDown, FlightListItemJSONDown } from '@/stores/coding'
-import { editableFlightToJSON, flightFromJSON, flightListItemFromJSON } from '@/stores/coding'
+import {
+  editableFlightToJSON,
+  flightFromJSON,
+  flightListItemFromJSON,
+  flightListItemJSONDownSchema,
+} from '@/stores/coding'
 import {
   anythingToError,
   loadAPIResponseBodyOrReturnErrors,
-  loadAPIResponseBodyOrThrowErrors
+  loadAPIResponseBodyOrThrowErrors,
 } from '@/stores/utils'
 import { notifySentry } from '@/utils/errors'
 import type { EditableFlight, Flight } from '@/types'
@@ -18,7 +23,7 @@ const initialState: FlightsState = {
   flights: null,
   flightsLoading: false,
   flightsError: null,
-  flightsSubscription: null
+  flightsSubscription: null,
 }
 
 export const useFlightsStore = defineStore('flights', {
@@ -34,7 +39,7 @@ export const useFlightsStore = defineStore('flights', {
     sortedFlights: (state) =>
       isNull(state.flights)
         ? []
-        : state.flights.sort((a, b) => b.date.toMillis() - a.date.toMillis())
+        : state.flights.sort((a, b) => b.date.toMillis() - a.date.toMillis()),
   },
 
   actions: {
@@ -55,22 +60,22 @@ export const useFlightsStore = defineStore('flights', {
       this.reset()
       try {
         const result = await requestJSON<FlightListItemJSONDown[]>({
-          path: '/pilot/flights.json'
+          path: '/pilot/flights.json',
         })
         const flights = loadAPIResponseBodyOrThrowErrors(result).map((flight) =>
-          flightListItemFromJSON(flight)
+          flightListItemFromJSON(flight),
         )
         this.$patch({
           flights,
           flightsLoading: false,
           flightsError: null,
-          flightsSubscription: await this.createFlightsSubscription()
+          flightsSubscription: this.createFlightsSubscription(),
         })
       } catch (error) {
         this.$patch({
           flights: [],
           flightsLoading: false,
-          flightsError: anythingToError(error)
+          flightsError: anythingToError(error),
         })
         notifySentry(error)
       }
@@ -88,7 +93,7 @@ export const useFlightsStore = defineStore('flights', {
       const result = await requestJSON<FlightJSONDown>({
         method: 'post',
         path: '/pilot/flights.json',
-        body: { flight: editableFlightToJSON(flight) }
+        body: { flight: editableFlightToJSON(flight) },
       })
 
       const flightResult = loadAPIResponseBodyOrReturnErrors(result)
@@ -99,20 +104,23 @@ export const useFlightsStore = defineStore('flights', {
       return flightResult
     },
 
-    async createFlightsSubscription() {
+    createFlightsSubscription() {
       const auth = useAuthStore()
 
-      if (this.flightsSubscription) await this.flightsSubscription.unsubscribe()
+      if (this.flightsSubscription) this.flightsSubscription.unsubscribe()
       return (
-        auth.actionCableConsumer?.subscriptions?.create(
+        auth.actionCableConsumer?.subscriptions.create(
           {
-            channel: 'FlightsChannel'
+            channel: 'FlightsChannel',
           },
           {
-            received: (flightJSON: string) =>
-              this.flightsSubscriptionMessage(JSON.parse(flightJSON))
-          }
-        ) || null
+            received: (flightJSON: string) => {
+              this.flightsSubscriptionMessage(
+                flightListItemJSONDownSchema.parse(JSON.parse(flightJSON)),
+              )
+            },
+          },
+        ) ?? null
       )
     },
 
@@ -125,12 +133,12 @@ export const useFlightsStore = defineStore('flights', {
       } else if (some(this.flights, (p) => p.UUID === flightJSON.uuid)) {
         flights = [
           ...this.flights.filter((p) => p.UUID !== flightJSON.uuid),
-          flightListItemFromJSON(flightJSON)
+          flightListItemFromJSON(flightJSON),
         ]
       } else {
         flights = concat(this.flights, flightListItemFromJSON(flightJSON))
       }
       this.$patch({ flights })
-    }
-  }
+    },
+  },
 })

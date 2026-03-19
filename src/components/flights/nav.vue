@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/modules/auth'
+
+const { t } = useI18n()
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+
+const isMyFlights = computed(() => route.name === 'flightsList')
+const isAddFlight = computed(() => route.name === 'flightsNew')
+
+async function logoutClicked() {
+  await authStore.logOut()
+  await router.push({ name: 'logIn' })
+}
+</script>
+
 <template>
   <nav v-if="authStore.loggedIn">
     <ul role="menubar">
@@ -30,23 +50,3 @@
     </ul>
   </nav>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { useRoute, useRouter } from 'vue-router'
-import { computed } from 'vue'
-import { useAuthStore } from '@/stores/modules/auth'
-
-const { t } = useI18n()
-const route = useRoute()
-const router = useRouter()
-const authStore = useAuthStore()
-
-const isMyFlights = computed(() => route.name === 'flightsList')
-const isAddFlight = computed(() => route.name === 'flightsNew')
-
-async function logoutClicked() {
-  await authStore.logOut()
-  await router.push({ name: 'logIn' })
-}
-</script>

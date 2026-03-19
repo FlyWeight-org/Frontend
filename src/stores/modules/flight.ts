@@ -3,12 +3,18 @@ import { defineStore } from 'pinia'
 import { clone, cloneDeep, concat, isNil, isNull, isUndefined, some } from 'lodash-es'
 import { request, requestJSON } from '@/stores/modules/root'
 import type { FlightJSONDown, LoadJSONDown } from '@/stores/coding'
-import { editableFlightToJSON, flightFromJSON, loadFromJSON, loadToJSON } from '@/stores/coding'
+import {
+  editableFlightToJSON,
+  flightFromJSON,
+  loadFromJSON,
+  loadJSONDownSchema,
+  loadToJSON,
+} from '@/stores/coding'
 import {
   anythingToError,
   ignoreResponseBody,
   loadAPIResponseBodyOrReturnErrors,
-  loadAPIResponseBodyOrThrowErrors
+  loadAPIResponseBodyOrThrowErrors,
 } from '@/stores/utils'
 import { notifySentry } from '@/utils/errors'
 import type { EditableFlight, EditableLoad, Flight, Load } from '@/types'
@@ -20,7 +26,7 @@ const initialState: FlightState = {
   flight: null,
   flightLoading: false,
   flightError: null,
-  loadsSubscription: null
+  loadsSubscription: null,
 }
 
 export const useFlightStore = defineStore('flight', {
@@ -29,7 +35,7 @@ export const useFlightStore = defineStore('flight', {
   getters: {
     /** @return Whether the list of Flight has been loaded. */
     flightLoaded: (state) =>
-      !isNull(state.flight) && !state.flightLoading && isNull(state.flightError)
+      !isNull(state.flight) && !state.flightLoading && isNull(state.flightError),
   },
 
   actions: {
@@ -56,26 +62,28 @@ export const useFlightStore = defineStore('flight', {
         } else if (UUID === this.flight.UUID && !force) return
       }
 
+      if (isUndefined(UUID)) return
+
       this.$patch({
         flight: null,
         flightError: null,
-        flightLoading: true
+        flightLoading: true,
       })
       try {
         const result = await requestJSON<FlightJSONDown>({
-          path: `/flights/${UUID}.json`
+          path: `/flights/${UUID}.json`,
         })
         const flight = flightFromJSON(loadAPIResponseBodyOrThrowErrors(result))
         this.$patch({
           flight,
           flightLoading: false,
-          loadsSubscription: await this.createLoadsSubscription(flight.UUID)
+          loadsSubscription: this.createLoadsSubscription(flight.UUID),
         })
       } catch (error) {
         this.$patch({
           flightError: anythingToError(error),
           flightLoading: false,
-          flight: null
+          flight: null,
         })
         notifySentry(error)
       }
@@ -97,7 +105,7 @@ export const useFlightStore = defineStore('flight', {
       const response = await requestJSON<FlightJSONDown>({
         method: 'put',
         path: `/pilot/flights/${this.flight.UUID}.json`,
-        body: { flight: editableFlightToJSON(flight) }
+        body: { flight: editableFlightToJSON(flight) },
       })
 
       const result = loadAPIResponseBodyOrReturnErrors(response)
@@ -107,7 +115,7 @@ export const useFlightStore = defineStore('flight', {
         this.$patch({
           flight,
           flightLoading: false,
-          flightError: null
+          flightError: null,
         })
         return new Ok(flight)
       }
@@ -126,10 +134,10 @@ export const useFlightStore = defineStore('flight', {
 
       const response = await request({
         method: 'delete',
-        path: `/pilot/flights/${flight.UUID}.json`
+        path: `/pilot/flights/${flight.UUID}.json`,
       })
 
-      if (this.loadsSubscription) await this.loadsSubscription.unsubscribe()
+      if (this.loadsSubscription) this.loadsSubscription.unsubscribe()
       this.loadsSubscription = null
       await flights.loadFlights()
       ignoreResponseBody(response)
@@ -153,7 +161,7 @@ export const useFlightStore = defineStore('flight', {
       const response = await requestJSON<FlightJSONDown>({
         method: 'post',
         path: `/pilot/flights/${this.flight.UUID}/loads.json`,
-        body: { load: loadToJSON(load) }
+        body: { load: loadToJSON(load) },
       })
 
       const result = loadAPIResponseBodyOrReturnErrors(response)
@@ -163,7 +171,7 @@ export const useFlightStore = defineStore('flight', {
         this.$patch({
           flight,
           flightLoading: false,
-          flightError: null
+          flightError: null,
         })
         return new Ok(flight)
       }
@@ -185,7 +193,7 @@ export const useFlightStore = defineStore('flight', {
       const response = await requestJSON<LoadJSONDown>({
         method: 'post',
         path: `/flights/${this.flight.UUID}/loads.json`,
-        body: { load: loadToJSON(load) }
+        body: { load: loadToJSON(load) },
       })
 
       const result = loadAPIResponseBodyOrReturnErrors(response)
@@ -211,7 +219,7 @@ export const useFlightStore = defineStore('flight', {
 
       const response = await requestJSON<FlightJSONDown>({
         method: 'delete',
-        path: `/pilot/flights/${this.flight.UUID}/loads/${slug}.json`
+        path: `/pilot/flights/${this.flight.UUID}/loads/${slug}.json`,
       })
 
       const flightJSON = loadAPIResponseBodyOrThrowErrors(response)
@@ -220,7 +228,7 @@ export const useFlightStore = defineStore('flight', {
       this.$patch({
         flight,
         flightLoading: false,
-        flightError: null
+        flightError: null,
       })
       return flight
     },
@@ -239,21 +247,25 @@ export const useFlightStore = defineStore('flight', {
       this.$patch({ flight })
     },
 
-    async createLoadsSubscription(UUID: string) {
+    createLoadsSubscription(UUID: string) {
       const auth = useAuthStore()
 
-      if (this.loadsSubscription) await this.loadsSubscription.unsubscribe()
+      if (this.loadsSubscription) this.loadsSubscription.unsubscribe()
       return (
-        auth.actionCableConsumer?.subscriptions?.create(
+        auth.actionCableConsumer?.subscriptions.create(
           {
             channel: 'LoadsChannel',
-            id: UUID
+            id: UUID,
           },
           {
-            received: (loadJSON: string) =>
-              this.loadsSubscriptionMessage(UUID, JSON.parse(loadJSON))
-          }
-        ) || null
+            received: (loadJSON: string) => {
+              this.loadsSubscriptionMessage(
+                UUID,
+                loadJSONDownSchema.parse(JSON.parse(loadJSON)) as LoadJSONDown,
+              )
+            },
+          },
+        ) ?? null
       )
     },
 
@@ -270,12 +282,12 @@ export const useFlightStore = defineStore('flight', {
       } else if (some(flight.loads, (p) => p.slug === loadJSON.slug)) {
         flight.loads = [
           ...flight.loads.filter((p) => p.slug !== loadJSON.slug),
-          loadFromJSON(loadJSON)
+          loadFromJSON(loadJSON),
         ]
       } else {
         flight.loads = concat(flight.loads, loadFromJSON(loadJSON))
       }
       this.$patch({ flight })
-    }
-  }
+    },
+  },
 })

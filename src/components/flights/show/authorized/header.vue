@@ -1,3 +1,12 @@
+<script setup lang="ts">
+defineProps<{
+  title: string
+  adding: boolean
+}>()
+
+const emit = defineEmits<(e: 'addClicked') => void>()
+</script>
+
 <template>
   <div v-if="adding">
     <div class="header">
@@ -14,15 +23,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineProps<{
-  title: string
-  adding: boolean
-}>()
-
-const emit = defineEmits<{ (e: 'addClicked'): void }>()
-</script>
 
 <style scoped lang="scss">
 @use '@/styles/colors';

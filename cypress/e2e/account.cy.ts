@@ -15,7 +15,7 @@ describe('Account page', () => {
       cy.findByTestId('account-success').should('not.exist')
     })
 
-    it('requires the user\'s password', () => {
+    it("requires the user's password", () => {
       cy.findByTestId('account-name').clear()
       cy.findByTestId('account-name').type(' ')
       cy.findByTestId('account-password').type('wrongpassword')
@@ -25,7 +25,7 @@ describe('Account page', () => {
       cy.findByTestId('account-success').should('not.exist')
     })
 
-    it('updates the user\'s account', () => {
+    it("updates the user's account", () => {
       cy.findByTestId('account-name').clear()
       cy.findByTestId('account-name').type('New Name')
       cy.findByTestId('account-password').type('supersecret')
@@ -36,7 +36,7 @@ describe('Account page', () => {
   })
 
   context('changing password', () => {
-    it('requires the user\'s password', () => {
+    it("requires the user's password", () => {
       cy.findByTestId('account-password').type('wrongpassword')
       cy.findByTestId('account-new-password').type('newpassword')
       cy.findByTestId('account-new-password-confirmation').type('newpassword')
@@ -46,7 +46,7 @@ describe('Account page', () => {
       cy.findByTestId('account-success').should('not.exist')
     })
 
-    it('does not update the password if the confirmation doesn\'t match', () => {
+    it("does not update the password if the confirmation doesn't match", () => {
       cy.findByTestId('account-password').type('supersecret')
       cy.findByTestId('account-new-password').type('newpassword')
       cy.findByTestId('account-new-password-confirmation').type('doesntmatch')
@@ -56,7 +56,7 @@ describe('Account page', () => {
       cy.findByTestId('account-success').should('not.exist')
     })
 
-    it('changes the user\'s password', () => {
+    it("changes the user's password", () => {
       cy.findByTestId('account-password').type('supersecret')
       cy.findByTestId('account-new-password').type('newpassword')
       cy.findByTestId('account-new-password-confirmation').type('newpassword')

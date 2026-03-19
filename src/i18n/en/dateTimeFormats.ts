@@ -4,18 +4,18 @@ const en: DateTimeFormat = {
   short: {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
   },
   medium: {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   },
   long: {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    weekday: 'long'
-  }
+    weekday: 'long',
+  },
 }
 export default en

@@ -14,35 +14,43 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        cache: yarn
-        node-version-file: .nvmrc
-    - name: Install dependencies
-      run: yarn install
-    - name: Type check
-      run: yarn type-check
-    - name: Run unit tests
-      run: yarn test:unit
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+          node-version-file: .node-version
+      - name: Install dependencies
+        run: yarn install
+      - name: Type check
+        run: yarn type-check
+      - name: Run unit tests
+        run: yarn test:unit
   lint:
     name: Linters
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        cache: yarn
-        node-version-file: .nvmrc
-    - name: Install dependencies
-      run: yarn install
-    - name: Run ESLint
-      run: yarn lint:eslint
-    - name: Run Stylelint
-      run: yarn lint:stylelint
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          cache: yarn
+          node-version-file: .node-version
+      - name: Install dependencies
+        run: yarn install
+      - name: Run ESLint
+        run: yarn lint:eslint
+      - name: Run Stylelint
+        run: yarn lint:stylelint
+      - name: Run oxlint
+        run: yarn lint:oxlint
+      - name: Run knip
+        run: yarn lint:knip

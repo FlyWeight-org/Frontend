@@ -1,3 +1,40 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { reactive, ref } from 'vue'
+import config from '@/config'
+import Field from '@/components/field.vue'
+import { errorToString } from '@/utils/errors'
+import { useAccountStore } from '@/stores/modules/account'
+
+const { t } = useI18n()
+const accountStore = useAccountStore()
+
+interface ForgotPasswordForm {
+  email: string
+}
+
+const form = reactive<ForgotPasswordForm>({
+  email: '',
+})
+const URL = `${config.APIURL}/password_resets.json`
+const success = ref<boolean>(false)
+const error = ref<string | null>(null)
+const isProcessing = ref<boolean>(false)
+
+async function submitHandler() {
+  isProcessing.value = true
+  success.value = false
+
+  try {
+    await accountStore.forgotPassword(form.email)
+    success.value = true
+  } catch (err) {
+    error.value = errorToString(err)
+  }
+  isProcessing.value = false
+}
+</script>
+
 <template>
   <h2>{{ t('home.forgotPassword.title') }}</h2>
   <p>{{ t('home.forgotPassword.description') }}</p>
@@ -37,40 +74,3 @@
     </p>
   </form>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { reactive, ref } from 'vue'
-import config from '@/config'
-import Field from '@/components/field.vue'
-import { errorToString } from '@/utils/errors'
-import { useAccountStore } from '@/stores/modules/account'
-
-const { t } = useI18n()
-const accountStore = useAccountStore()
-
-interface ForgotPasswordForm {
-  email: string
-}
-
-const form = reactive<ForgotPasswordForm>({
-  email: ''
-})
-const URL = `${config.APIURL}/password_resets.json`
-const success = ref<boolean>(false)
-const error = ref<string | null>(null)
-const isProcessing = ref<boolean>(false)
-
-async function submitHandler() {
-  isProcessing.value = true
-  success.value = false
-
-  try {
-    await accountStore.forgotPassword(form.email)
-    success.value = true
-  } catch (err) {
-    error.value = errorToString(err)
-  }
-  isProcessing.value = false
-}
-</script>

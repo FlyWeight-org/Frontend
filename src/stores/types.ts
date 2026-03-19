@@ -8,13 +8,22 @@ import { Subscription } from '@rails/actioncable'
  */
 export type Errors = Record<string, string[]>
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface RootState {}
+/**
+ * A store-friendly error type that avoids the `cause` property on the native `Error` type.
+ * Pinia 3.x `_DeepPartial` cannot reconcile `Error.cause` (`unknown`) with
+ * `_DeepPartial<unknown> | undefined`, so we use this narrower type in store state interfaces
+ * while still being assignable from real `Error` instances.
+ */
+export interface StoreError {
+  name: string
+  message: string
+  stack?: string
+}
 
 export interface AccountState {
   currentPilot: Pilot | null
   currentPilotLoading: boolean
-  currentPilotError: Error | null
+  currentPilotError: StoreError | null
 }
 
 export interface AuthState {
@@ -25,18 +34,16 @@ export interface AuthState {
 export interface FlightsState {
   flights: FlightListItem[] | null
   flightsLoading: boolean
-  flightsError: Error | null
+  flightsError: StoreError | null
   flightsSubscription: Subscription | null
 }
 
 export interface FlightState {
   flight: Flight | null
   flightLoading: boolean
-  flightError: Error | null
+  flightError: StoreError | null
   loadsSubscription: Subscription | null
 }
-
-export type AnyModuleState = FlightsState | FlightState | AuthState
 
 export interface APISuccess<T> {
   response: Response

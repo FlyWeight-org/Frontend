@@ -1,3 +1,47 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { reactive, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import config from '@/config'
+import useFormErrorHandling from '@/composables/useFormErrorHandling'
+import Field from '@/components/field.vue'
+import { useAccountStore } from '@/stores/modules/account'
+import { isArray } from 'lodash-es'
+
+const { t } = useI18n()
+const route = useRoute()
+const accountStore = useAccountStore()
+
+interface ResetPasswordForm {
+  password: string
+  confirmation: string
+}
+
+function resetPasswordToken(): string {
+  if (isArray(route.query.reset_password_token)) return route.query.reset_password_token[0] ?? ''
+  return route.query.reset_password_token ?? ''
+}
+
+const form = reactive<ResetPasswordForm>({
+  password: '',
+  confirmation: '',
+})
+const URL = `${config.APIURL}/password_resets.json`
+const success = ref<boolean>(false)
+const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
+  () => {
+    success.value = false
+    return accountStore.resetPassword({
+      ...form,
+      token: resetPasswordToken(),
+    })
+  },
+  () => {
+    success.value = true
+  },
+)
+</script>
+
 <template>
   <h2>{{ t('home.resetPassword.title') }}</h2>
   <form method="patch" :action="URL" @submit.prevent="submitHandler">
@@ -49,48 +93,3 @@
     {{ t('home.resetPassword.success') }}
   </p>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import config from '@/config'
-import useFormErrorHandling from '@/composables/useFormErrorHandling'
-import Field from '@/components/field.vue'
-import { useAccountStore } from '@/stores/modules/account'
-import { isArray } from 'lodash-es'
-
-const { t } = useI18n()
-const route = useRoute()
-const accountStore = useAccountStore()
-
-interface ResetPasswordForm {
-  password: string
-  confirmation: string
-}
-
-function resetPasswordToken(): string {
-  if (isArray(route.query.reset_password_token)) return route.query.reset_password_token[0] || ''
-  return route.query.reset_password_token || ''
-}
-
-const form = reactive<ResetPasswordForm>({
-  password: '',
-  confirmation: ''
-})
-const URL = `${config.APIURL}/password_resets.json`
-const success = ref<boolean>(false)
-const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
-  () => {
-    success.value = false
-    return accountStore.resetPassword({
-      ...form,
-      token: resetPasswordToken()
-    })
-  },
-  async () => {
-    success.value = true
-  },
-  () => Promise.resolve()
-)
-</script>

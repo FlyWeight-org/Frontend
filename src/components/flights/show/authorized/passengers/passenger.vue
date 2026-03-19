@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+import { ref } from 'vue'
+import type { Load } from '@/types'
+import personImageURL from '@/images/person.svg'
+import luggageImageURL from '@/images/luggage.svg'
+import { errorToString, notifySentry } from '@/utils/errors'
+import { useFlightStore } from '@/stores/modules/flight'
+
+const { n } = useI18n()
+const flightStore = useFlightStore()
+
+const props = defineProps<{
+  passenger: Load
+}>()
+
+const deleteError = ref<string | null>(null)
+
+async function deleteClicked() {
+  try {
+    await flightStore.removeLoad(props.passenger.slug)
+  } catch (err) {
+    notifySentry(err)
+    deleteError.value = errorToString(err)
+  }
+}
+
+function toggleEnabled(event: Event) {
+  const target = event.target as HTMLInputElement
+  flightStore.toggleEnabled(props.passenger.slug, target.checked)
+}
+</script>
+
 <template>
   <div class="passenger-list-item" data-testid="passenger-list-item">
     <input
@@ -27,39 +60,6 @@
     <small>{{ deleteError }}</small>
   </p>
 </template>
-
-<script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import { ref } from 'vue'
-import type { Load } from '@/types'
-import personImageURL from '@/images/person.svg'
-import luggageImageURL from '@/images/luggage.svg'
-import { errorToString, notifySentry } from '@/utils/errors'
-import { useFlightStore } from '@/stores/modules/flight'
-
-const { n } = useI18n()
-const flightStore = useFlightStore()
-
-const props = defineProps<{
-  passenger: Load
-}>()
-
-const deleteError = ref<string | null>(null)
-
-async function deleteClicked() {
-  try {
-    await flightStore.removeLoad(props.passenger.slug)
-  } catch (err) {
-    notifySentry(err)
-    deleteError.value = errorToString(err)
-  }
-}
-
-async function toggleEnabled(event: Event) {
-  const target = event.target as HTMLInputElement
-  await flightStore.toggleEnabled(props.passenger.slug, target.checked)
-}
-</script>
 
 <style scoped lang="scss">
 @use '@/styles/colors';

@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=25
+ARG NODE_VERSION=25.6
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Vite"
@@ -23,8 +23,7 @@ RUN apt-get update -qq && \
 
 # Copy application code and install dependencies
 COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn .yarn
-RUN yarn install --immutable
+RUN yarn install --immutable --mode=skip-build
 
 # Copy remaining application code
 COPY . .

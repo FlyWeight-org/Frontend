@@ -5,7 +5,7 @@ const en: NumberFormat = {
     maximumFractionDigits: 0,
     style: 'unit',
     unit: 'pound',
-    unitDisplay: 'short'
-  }
+    unitDisplay: 'short',
+  },
 }
 export default en

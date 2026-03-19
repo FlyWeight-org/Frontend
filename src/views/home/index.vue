@@ -1,8 +1,3 @@
-<template>
-  <FlightsIndex v-if="authStore.loggedIn" />
-  <Welcome v-else />
-</template>
-
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -14,6 +9,11 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 onMounted(() => {
-  if (authStore.loggedIn) router.push({ name: 'flightsList' })
+  if (authStore.loggedIn) void router.push({ name: 'flightsList' })
 })
 </script>
+
+<template>
+  <FlightsIndex v-if="authStore.loggedIn" />
+  <Welcome v-else />
+</template>

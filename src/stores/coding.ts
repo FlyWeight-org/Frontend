@@ -1,6 +1,43 @@
-import { isNull, map, omit } from 'lodash-es'
+import { map, omit } from 'lodash-es'
 import * as luxon from 'luxon'
+import { z } from 'zod'
 import type { Flight, FlightListItem, Load, EditableFlight, Pilot } from '@/types'
+
+const pilotSchema = z.object({
+  email: z.string().optional(),
+  name: z.string(),
+})
+
+const loadJSONDownBaseSchema = z.object({
+  slug: z.string(),
+  name: z.string(),
+  weight: z.number(),
+  bags_weight: z.number(),
+  disabled: z.boolean().optional(),
+  'destroyed?': z.boolean().optional(),
+})
+
+const flightJSONDownSchema = z.object({
+  uuid: z.string(),
+  date: z.string(),
+  description: z.string(),
+  pilot: pilotSchema,
+  loads: z.array(loadJSONDownBaseSchema.extend({ flight: z.unknown().optional() })).nullish(),
+  can_edit: z.boolean(),
+  'destroyed?': z.boolean().optional(),
+})
+
+export const loadJSONDownSchema = loadJSONDownBaseSchema.extend({
+  flight: flightJSONDownSchema.optional(),
+})
+
+export const flightListItemJSONDownSchema = z.object({
+  uuid: z.string(),
+  date: z.string(),
+  description: z.string(),
+  passenger_count: z.number(),
+  'destroyed?': z.boolean().optional(),
+})
 
 /** The shape of the pilot JSON data sent from the frontend to the back-end. */
 export type PilotJSONUp = Pilot & {
@@ -24,10 +61,12 @@ export type LoadJSONDown = Omit<Load, 'bagsWeight'> & {
  * @return The Load object.
  */
 
-export function loadFromJSON(JSON: LoadJSONDown): Load {
+export function loadFromJSON(data: unknown): Load {
+  const JSON = loadJSONDownSchema.parse(data)
   return {
     ...omit(JSON, 'bags_weight'),
-    bagsWeight: JSON.bags_weight
+    bagsWeight: JSON.bags_weight,
+    disabled: JSON.disabled ?? false,
   }
 }
 
@@ -46,7 +85,7 @@ export type LoadJSONUp = Omit<Load, 'slug' | 'bagsWeight'> & {
 export function loadToJSON(load: Omit<Load, 'slug'>): LoadJSONUp {
   return {
     ...omit(load, 'slug', 'bagsWeight'),
-    bags_weight: load.bagsWeight
+    bags_weight: load.bagsWeight,
   }
 }
 
@@ -54,7 +93,7 @@ export function loadToJSON(load: Omit<Load, 'slug'>): LoadJSONUp {
 export type FlightJSONDown = Omit<Flight, 'UUID' | 'date' | 'loads' | 'canEdit'> & {
   uuid: string
   date: string
-  loads: LoadJSONDown[] | null
+  loads?: LoadJSONDown[] | null
   can_edit: boolean
   'destroyed?'?: boolean
 }
@@ -72,13 +111,14 @@ export type FlightJSONUp = Omit<Flight, 'UUID' | 'loads' | 'date' | 'canEdit'> &
  * @return A Flight interface.
  */
 
-export function flightFromJSON(JSON: FlightJSONDown): Flight {
+export function flightFromJSON(data: unknown): Flight {
+  const JSON = flightJSONDownSchema.parse(data)
   return {
     ...omit(JSON, 'uuid', 'date'),
     UUID: JSON.uuid,
     date: luxon.DateTime.fromISO(JSON.date),
-    loads: isNull(JSON.loads) ? undefined : map(JSON.loads, (load) => loadFromJSON(load)),
-    canEdit: JSON.can_edit
+    loads: JSON.loads == null ? undefined : map(JSON.loads, (load) => loadFromJSON(load)),
+    canEdit: JSON.can_edit,
   }
 }
 
@@ -92,7 +132,7 @@ export function flightFromJSON(JSON: FlightJSONDown): Flight {
 export function editableFlightToJSON(flight: EditableFlight): Partial<FlightJSONUp> {
   return {
     ...omit(flight, 'date'),
-    date: flight.date?.toJSON() ?? undefined
+    date: flight.date?.toJSON() ?? undefined,
   }
 }
 
@@ -112,12 +152,13 @@ export type FlightListItemJSONDown = Omit<FlightListItem, 'passengerCount' | 'da
  * @return A Flight list item interface.
  */
 
-export function flightListItemFromJSON(JSON: FlightListItemJSONDown): FlightListItem {
+export function flightListItemFromJSON(data: unknown): FlightListItem {
+  const JSON = flightListItemJSONDownSchema.parse(data)
   return {
     ...omit(JSON, 'uuid', 'date', 'passenger_count'),
     UUID: JSON.uuid,
     date: luxon.DateTime.fromISO(JSON.date),
-    passengerCount: JSON.passenger_count
+    passengerCount: JSON.passenger_count,
   }
 }
 

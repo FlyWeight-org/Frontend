@@ -11,12 +11,12 @@ const router = createRouter({
         {
           path: '',
           name: 'flightsList',
-          component: () => import('../views/flights/list.vue')
+          component: () => import('../views/flights/list.vue'),
         },
         {
           path: 'new',
           name: 'flightsNew',
-          component: () => import('../views/flights/new.vue')
+          component: () => import('../views/flights/new.vue'),
         },
         {
           path: ':flightID',
@@ -26,16 +26,16 @@ const router = createRouter({
             {
               path: '',
               name: 'flightsShow',
-              component: () => import('../views/flight/show.vue')
+              component: () => import('../views/flight/show.vue'),
             },
             {
               path: 'loads/:loadName',
               name: 'flightsFinished',
-              component: () => import('../views/flight/finished.vue')
-            }
-          ]
-        }
-      ]
+              component: () => import('../views/flight/finished.vue'),
+            },
+          ],
+        },
+      ],
     },
 
     {
@@ -46,9 +46,9 @@ const router = createRouter({
         {
           path: '',
           name: 'accountEdit',
-          component: () => import('../views/account/edit.vue')
-        }
-      ]
+          component: () => import('../views/account/edit.vue'),
+        },
+      ],
     },
 
     {
@@ -60,26 +60,26 @@ const router = createRouter({
           path: 'login',
           name: 'logIn',
           component: () => import('../views/home/logIn.vue'),
-          alias: ''
+          alias: '',
         },
         {
           path: 'signup',
           name: 'signUp',
-          component: () => import('../views/home/signUp.vue')
+          component: () => import('../views/home/signUp.vue'),
         },
         {
           path: 'forgot-password',
           name: 'forgotPassword',
-          component: () => import('../views/home/forgotPassword.vue')
+          component: () => import('../views/home/forgotPassword.vue'),
         },
         {
           path: 'reset-password',
           name: 'resetPassword',
-          component: () => import('../views/home/resetPassword.vue')
-        }
-      ]
-    }
-  ]
+          component: () => import('../views/home/resetPassword.vue'),
+        },
+      ],
+    },
+  ],
 })
 
 export default router

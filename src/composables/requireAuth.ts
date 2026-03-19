@@ -13,7 +13,7 @@ export default function requireAuth() {
       () => authStore.loggedIn,
       async (isLoggedIn) => {
         if (!isLoggedIn) await router.push({ name: 'logIn' })
-      }
+      },
     )
   })
 }

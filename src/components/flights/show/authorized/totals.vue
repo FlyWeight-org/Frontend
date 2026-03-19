@@ -1,20 +1,3 @@
-<template>
-  <div id="total-weight">
-    <div class="name">
-      {{ t('flights.show.authorized.loads.totalWeight') }}
-    </div>
-    <div class="weight" data-testid="total-weight">
-      {{ n(totalWeight, 'pounds') }}
-      <small v-if="paxCount > 0" data-testid="total-weight-breakdown">{{
-        t('flights.show.authorized.loads.averageWeight', {
-          pax: n(averagePaxWeight, 'pounds'),
-          cargo: n(totalCargoWeight, 'pounds')
-        })
-      }}</small>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
@@ -28,19 +11,36 @@ const props = defineProps<{
 }>()
 
 const loads = computed(() =>
-  props.flight.loads ? props.flight.loads.filter((load) => !load.disabled) : []
+  props.flight.loads ? props.flight.loads.filter((load) => !load.disabled) : [],
 )
 const paxCount = computed(() =>
-  loads.value.reduce((count, cur) => count + (isPassenger(cur) ? 1 : 0), 0)
+  loads.value.reduce((count, cur) => count + (isPassenger(cur) ? 1 : 0), 0),
 )
 const totalWeight = computed(() =>
-  loads.value.reduce((sum, cur) => sum + cur.weight + cur.bagsWeight, 0)
+  loads.value.reduce((sum, cur) => sum + cur.weight + cur.bagsWeight, 0),
 )
 const totalCargoWeight = computed(() => loads.value.reduce((sum, cur) => sum + cur.bagsWeight, 0))
 const averagePaxWeight = computed(
-  () => loads.value.reduce((sum, cur) => sum + cur.weight, 0) / paxCount.value
+  () => loads.value.reduce((sum, cur) => sum + cur.weight, 0) / paxCount.value,
 )
 </script>
+
+<template>
+  <div id="total-weight">
+    <div class="name">
+      {{ t('flights.show.authorized.loads.totalWeight') }}
+    </div>
+    <div class="weight" data-testid="total-weight">
+      {{ n(totalWeight, 'pounds') }}
+      <small v-if="paxCount > 0" data-testid="total-weight-breakdown">{{
+        t('flights.show.authorized.loads.averageWeight', {
+          pax: n(averagePaxWeight, 'pounds'),
+          cargo: n(totalCargoWeight, 'pounds'),
+        })
+      }}</small>
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 #total-weight {

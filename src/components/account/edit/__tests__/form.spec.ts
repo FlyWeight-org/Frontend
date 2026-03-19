@@ -11,29 +11,29 @@ describe('form.vue', () => {
   const initialState = {
     auth: {
       JWT,
-      loggingIn: false
+      loggingIn: false,
     },
     account: {
       currentPilot: {
         name: 'Sancho Sample',
-        email: 'sancho@example.com'
+        email: 'sancho@example.com',
       },
       currentPilotLoading: false,
-      currentPilotError: null
-    }
+      currentPilotError: null,
+    },
   }
 
   describe('form', () => {
     it('handles success', async () => {
       const pinia = createTestingPinia({
         createSpy: vi.fn,
-        initialState
+        initialState,
       })
 
       const wrapper = mount(Form, {
         global: {
-          plugins: [pinia, i18n]
-        }
+          plugins: [pinia, i18n],
+        },
       })
 
       const accountStore = useAccountStore(pinia)
@@ -49,22 +49,22 @@ describe('form.vue', () => {
     it('handles invalid data', async () => {
       const pinia = createTestingPinia({
         createSpy: vi.fn,
-        initialState
+        initialState,
       })
 
       const wrapper = mount(Form, {
         global: {
-          plugins: [pinia, i18n]
-        }
+          plugins: [pinia, i18n],
+        },
       })
 
       const accountStore = useAccountStore(pinia)
       vi.mocked(accountStore.updateAccount).mockReturnValue(
         Promise.resolve(
           new Err({
-            current_password: ['must not be blank']
-          })
-        )
+            current_password: ['must not be blank'],
+          }),
+        ),
       )
 
       await wrapper.get('input[name="pilot[name]"]').setValue('New Name')
@@ -77,13 +77,13 @@ describe('form.vue', () => {
     it('handles errors', async () => {
       const pinia = createTestingPinia({
         createSpy: vi.fn,
-        initialState
+        initialState,
       })
 
       const wrapper = mount(Form, {
         global: {
-          plugins: [pinia, i18n]
-        }
+          plugins: [pinia, i18n],
+        },
       })
 
       const accountStore = useAccountStore(pinia)
@@ -95,7 +95,7 @@ describe('form.vue', () => {
 
       expect(wrapper.get('p.error').text()).toEqual('some error')
       expect(
-        (wrapper.get('input[name="pilot[current_password]"]').element as HTMLInputElement).value
+        (wrapper.get('input[name="pilot[current_password]"]').element as HTMLInputElement).value,
       ).toEqual('')
     })
   })

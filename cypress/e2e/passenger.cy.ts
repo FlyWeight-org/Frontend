@@ -6,7 +6,7 @@ describe('as a passenger', () => {
   it('displays the unauthorized flight page', () => {
     cy.findByTestId('flight-unauth-title').should(
       'contain',
-      'Are you going on a flight with Cypress User on'
+      'Are you going on a flight with Cypress User on',
     )
   })
 
@@ -40,7 +40,7 @@ describe('as a passenger', () => {
     cy.findByTestId('total-weight').should('contain', '331 lb')
     cy.findByTestId('total-weight-breakdown').should(
       'contain',
-      '(137 lb avg. passenger, 58 lb total cargo)'
+      '(137 lb avg. passenger, 58 lb total cargo)',
     )
   })
 
@@ -66,7 +66,7 @@ describe('as a passenger', () => {
     cy.findByTestId('total-weight').should('contain', '171 lb')
     cy.findByTestId('total-weight-breakdown').should(
       'contain',
-      '(123 lb avg. passenger, 48 lb total cargo)'
+      '(123 lb avg. passenger, 48 lb total cargo)',
     )
   })
 })

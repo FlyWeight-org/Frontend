@@ -1,24 +1,3 @@
-<template>
-  <h2 data-testid="flight-unauth-title">
-    {{
-      t('flights.show.unauthorized.title', {
-        name: flight.pilot.name,
-        date: dateString
-      })
-    }}
-  </h2>
-
-  <div id="passenger-welcome">
-    <blockquote v-if="flight.description">
-      {{ flight.description }}
-    </blockquote>
-    <p>{{ t('flights.show.unauthorized.explanation') }}</p>
-    <p>{{ t('flights.show.unauthorized.explanation2') }}</p>
-  </div>
-
-  <passenger-form :flight="flight" />
-</template>
-
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import type { Flight } from '@/types'
@@ -33,6 +12,27 @@ const props = defineProps<{
 
 const dateString = computed(() => d(props.flight.date.toJSDate(), 'short'))
 </script>
+
+<template>
+  <h2 data-testid="flight-unauth-title">
+    {{
+      t('flights.show.unauthorized.title', {
+        name: flight.pilot.name,
+        date: dateString,
+      })
+    }}
+  </h2>
+
+  <div id="passenger-welcome">
+    <blockquote v-if="flight.description">
+      {{ flight.description }}
+    </blockquote>
+    <p>{{ t('flights.show.unauthorized.explanation') }}</p>
+    <p>{{ t('flights.show.unauthorized.explanation2') }}</p>
+  </div>
+
+  <passenger-form :flight="flight" />
+</template>
 
 <style scoped lang="scss">
 #passenger-welcome {

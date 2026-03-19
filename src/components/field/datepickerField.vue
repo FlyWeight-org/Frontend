@@ -1,23 +1,3 @@
-<template>
-  <label :for="id">
-    <span>{{ label }}</span>
-    <vue-date-picker
-      v-bind="$attrs"
-      :id="id"
-      v-model="internalDate"
-      :name="name"
-      :format="formatDate"
-      :preview-format="formatDatePreview"
-      :placeholder="datePlaceholder"
-      :enable-time-picker="false"
-      :month-change-on-scroll="false"
-      :clearable="false"
-      :class="{ invalid: hasError }"
-      :aria-invalid="hasError"
-    />
-  </label>
-</template>
-
 <script setup lang="ts">
 import type { Errors } from '@/stores/types'
 import { ref, watch } from 'vue'
@@ -40,9 +20,7 @@ interface Props {
 const { t, d } = useI18n()
 
 const props = defineProps<Props>()
-const emit = defineEmits<{
-  (event: 'update:modelValue', value: DateTime | undefined): void
-}>()
+const emit = defineEmits<(event: 'update:modelValue', value: DateTime | undefined) => void>()
 
 const { id, name } = defineIDRefs(props)
 const { hasError } = defineErrorRefs(props)
@@ -57,8 +35,8 @@ watch(
   () => props.modelValue,
   (newDate, oldDate) => {
     if (isEqual(oldDate, newDate)) return
-    internalDate.value = (newDate as DateTime | undefined)?.toJSDate()
-  }
+    internalDate.value = newDate?.toJSDate()
+  },
 )
 
 const datePlaceholder = isTouchDevice()
@@ -83,6 +61,26 @@ function dateOnly(date?: Date): DateTime | undefined {
 
 <script lang="ts">
 export default {
-  inheritAttrs: false
+  inheritAttrs: false,
 }
 </script>
+
+<template>
+  <label :for="id">
+    <span>{{ label }}</span>
+    <vue-date-picker
+      v-bind="$attrs"
+      :id="id"
+      v-model="internalDate"
+      :name="name"
+      :format="formatDate"
+      :preview-format="formatDatePreview"
+      :placeholder="datePlaceholder"
+      :enable-time-picker="false"
+      :month-change-on-scroll="false"
+      :clearable="false"
+      :class="{ invalid: hasError }"
+      :aria-invalid="hasError"
+    />
+  </label>
+</template>

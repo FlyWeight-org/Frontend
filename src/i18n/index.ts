@@ -9,7 +9,7 @@ const i18n = createI18n({
   datetimeFormats: dateTimeFormats,
   silentFallbackWarn: true,
   silentTranslationWarn: true,
-  allowComposition: true
+  allowComposition: true,
 })
 
 export default i18n

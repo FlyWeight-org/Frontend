@@ -1,12 +1,3 @@
-<template>
-  <div v-if="passengers.length">
-    <passenger v-for="passenger in passengers" :key="passenger.slug" :passenger="passenger" />
-  </div>
-  <p v-else class="empty" data-testid="no-passengers">
-    {{ t('flights.show.authorized.loads.noPassengers') }}
-  </p>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -21,6 +12,15 @@ const props = defineProps<{
 }>()
 
 const passengers = computed<Load[]>(
-  () => props.flight.loads?.filter((load) => isPassenger(load)) ?? []
+  () => props.flight.loads?.filter((load) => isPassenger(load)) ?? [],
 )
 </script>
+
+<template>
+  <div v-if="passengers.length">
+    <passenger v-for="passenger in passengers" :key="passenger.slug" :passenger="passenger" />
+  </div>
+  <p v-else class="empty" data-testid="no-passengers">
+    {{ t('flights.show.authorized.loads.noPassengers') }}
+  </p>
+</template>

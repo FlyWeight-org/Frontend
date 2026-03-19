@@ -9,7 +9,7 @@ import {
   ignoreAPIResponseBodyOrReturnErrors,
   ignoreResponseBody,
   loadAPIResponseBodyOrReturnErrors,
-  loadAPIResponseBodyOrThrowErrors
+  loadAPIResponseBodyOrThrowErrors,
 } from '@/stores/utils'
 import { notifySentry } from '@/utils/errors'
 import { useAuthStore } from '@/stores/modules/auth'
@@ -19,7 +19,7 @@ import { clone } from 'lodash-es'
 const initialState: AccountState = {
   currentPilot: null,
   currentPilotLoading: false,
-  currentPilotError: null
+  currentPilotError: null,
 }
 
 export const useAccountStore = defineStore('account', {
@@ -33,7 +33,7 @@ export const useAccountStore = defineStore('account', {
       this.$patch({
         currentPilot: pilot,
         currentPilotError: null,
-        currentPilotLoading: false
+        currentPilotLoading: false,
       })
     },
 
@@ -54,7 +54,7 @@ export const useAccountStore = defineStore('account', {
         const response = await requestJSON<Pilot>({
           method: 'post',
           path: '/signup.json',
-          body: { pilot }
+          body: { pilot },
         })
         const result = loadAPIResponseBodyOrReturnErrors(response)
         if (result.ok) {
@@ -86,7 +86,7 @@ export const useAccountStore = defineStore('account', {
       const response = await request({
         method: 'post',
         path: '/password_resets.json',
-        body: { pilot: { email } }
+        body: { pilot: { email } },
       })
       ignoreResponseBody(response)
     },
@@ -105,7 +105,7 @@ export const useAccountStore = defineStore('account', {
     async resetPassword({
       password,
       confirmation,
-      token
+      token,
     }: {
       password: string
       confirmation: string
@@ -118,9 +118,9 @@ export const useAccountStore = defineStore('account', {
           pilot: {
             password,
             password_confirmation: confirmation,
-            reset_password_token: token
-          }
-        }
+            reset_password_token: token,
+          },
+        },
       })
       return ignoreAPIResponseBodyOrReturnErrors(response)
     },
@@ -140,12 +140,12 @@ export const useAccountStore = defineStore('account', {
       this.$patch({
         currentPilot: null,
         currentPilotError: null,
-        currentPilotLoading: true
+        currentPilotLoading: true,
       })
       try {
         const response = await requestJSON<Pilot>({
           method: 'GET',
-          path: '/account.json'
+          path: '/account.json',
         })
         if (response.ok) {
           const pilot = loadAPIResponseBodyOrThrowErrors(response)
@@ -155,7 +155,7 @@ export const useAccountStore = defineStore('account', {
         this.$patch({
           currentPilot: null,
           currentPilotLoading: false,
-          currentPilotError: anythingToError(error)
+          currentPilotError: anythingToError(error),
         })
         notifySentry(error)
       }
@@ -177,7 +177,7 @@ export const useAccountStore = defineStore('account', {
       const response = await requestJSON<Pilot>({
         method: 'PATCH',
         path: '/account.json',
-        body: { pilot }
+        body: { pilot },
       })
       const result = loadAPIResponseBodyOrReturnErrors(response)
       if (result.ok) {
@@ -198,12 +198,12 @@ export const useAccountStore = defineStore('account', {
 
       const response: Response = await request({
         method: 'delete',
-        path: '/account.json'
+        path: '/account.json',
       })
       ignoreResponseBody(response)
       this.reset()
       auth.reset()
       flights.reset()
-    }
-  }
+    },
+  },
 })
