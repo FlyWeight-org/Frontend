@@ -12,22 +12,17 @@ const { t } = useI18n()
 const route = useRoute()
 const accountStore = useAccountStore()
 
-interface ResetPasswordForm {
-  password: string
-  confirmation: string
-}
-
 function resetPasswordToken(): string {
   if (isArray(route.query.reset_password_token)) return route.query.reset_password_token[0] ?? ''
   return route.query.reset_password_token ?? ''
 }
 
-const form = reactive<ResetPasswordForm>({
+const form = reactive({
   password: '',
   confirmation: '',
 })
 const URL = `${config.APIURL}/password_resets.json`
-const success = ref<boolean>(false)
+const success = ref(false)
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
   () => {
     success.value = false

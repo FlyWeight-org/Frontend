@@ -15,8 +15,8 @@ defineProps<{
   flight: Flight
 }>()
 
-const addingPassenger = ref<boolean>(false)
-const addingCargo = ref<boolean>(false)
+const addingPassenger = ref(false)
+const addingCargo = ref(false)
 </script>
 
 <template>

@@ -25,7 +25,7 @@ const title = computed(() =>
   }),
 )
 
-const isDeleting = ref<boolean>(false)
+const isDeleting = ref(false)
 const deleteError = ref<string | null>(null)
 
 async function onDelete() {

@@ -25,7 +25,7 @@ const emit = defineEmits<(event: 'update:modelValue', value: DateTime | undefine
 const { id, name } = defineIDRefs(props)
 const { hasError } = defineErrorRefs(props)
 
-const internalDate = ref<Date | undefined>(props.modelValue as Date | undefined)
+const internalDate = ref(props.modelValue as Date | undefined)
 
 watch(internalDate, (newDate: Date | undefined, oldDate: Date | undefined) => {
   if (isEqual(oldDate, newDate)) return

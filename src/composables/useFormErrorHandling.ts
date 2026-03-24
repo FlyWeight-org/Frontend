@@ -23,7 +23,7 @@ export default function useFormErrorHandling<SuccessType>(
 ): ReturnType {
   const errors = ref<Errors>({})
   const error = ref<string | null>(null)
-  const isProcessing = ref<boolean>(false)
+  const isProcessing = ref(false)
 
   const submitHandler = async () => {
     isProcessing.value = true

@@ -9,17 +9,13 @@ import { useAccountStore } from '@/stores/modules/account'
 const { t } = useI18n()
 const accountStore = useAccountStore()
 
-interface ForgotPasswordForm {
-  email: string
-}
-
-const form = reactive<ForgotPasswordForm>({
+const form = reactive({
   email: '',
 })
 const URL = `${config.APIURL}/password_resets.json`
-const success = ref<boolean>(false)
+const success = ref(false)
 const error = ref<string | null>(null)
-const isProcessing = ref<boolean>(false)
+const isProcessing = ref(false)
 
 async function submitHandler() {
   isProcessing.value = true
