@@ -3,6 +3,7 @@
   "entry": ["src/**/*.spec.ts", "src/**/__tests__/**/*.ts", "cypress/**/*.ts", "vitest.setup.ts"],
   "project": ["src/**/*.{ts,vue}"],
   "ignore": [],
+  "ignoreUnresolved": ["./vitest.setup.ts"],
   "ignoreBinaries": [
     "eslint",
     "knip",
