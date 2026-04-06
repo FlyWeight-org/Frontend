@@ -4,5 +4,11 @@
     "types": ["cypress", "@testing-library/cypress"]
   },
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["./**/*", "../support/**/*", "../support/commands.d.ts"]
+  "include": [
+    "./**/*",
+    "../support/**/*",
+    "../support/commands.d.ts",
+    "../pages/**/*",
+    "../components/**/*"
+  ]
 }

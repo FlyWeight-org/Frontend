@@ -1,3 +1,10 @@
+import { FlightsListPage } from '../pages/FlightsListPage'
+import { FlightShowPage } from '../pages/FlightShowPage'
+import { NavBar } from '../components/NavBar'
+import { PassengerManifest } from '../components/PassengerManifest'
+import { CargoManifest } from '../components/CargoManifest'
+import { TotalWeight } from '../components/TotalWeight'
+
 describe('as a pilot', () => {
   beforeEach(() => {
     cy.login()
@@ -5,241 +12,208 @@ describe('as a pilot', () => {
 
   context('viewing flights', () => {
     it('displays a list of flights', () => {
-      cy.findAllByTestId('flight-list').should('have.length', 1)
+      const flightsPage = new FlightsListPage()
+      flightsPage.flightList().should('have.length', 1)
     })
   })
 
   context('creating a flight', () => {
+    let flightPage: FlightShowPage
+
     beforeEach(() => {
-      cy.findByTestId('nav-add-flight').click()
+      const nav = new NavBar()
+      flightPage = nav.clickAddFlight()
     })
 
     it.skip('displays errors', () => {
       cy.findByTestId('flight-date').click()
-      cy.findByTestId('flight-description').type('example flight description')
-      cy.findByTestId('flight-submit').click()
+      flightPage.fillDescription('example flight description')
+      flightPage.submitFlight()
 
       cy.errorsFor('date').should('contain', 'invalid')
     })
 
     it('creates a flight', () => {
-      cy.findByTestId('flight-date').click()
-      cy.get('.dp__calendar_item:not([aria-disabled])').first().click()
-      cy.get('.dp__action_select').click()
-      cy.findByTestId('flight-description').type('example flight description')
-      cy.findByTestId('flight-submit').click()
+      flightPage.fillDate()
+      flightPage.fillDescription('example flight description')
+      flightPage.submitFlight()
 
-      cy.findByTestId('authorized-flight').should('exist')
+      flightPage.authorizedFlight().should('exist')
     })
   })
 
   context('editing a flight', () => {
+    let flightPage: FlightShowPage
+
     beforeEach(() => {
-      cy.findByTestId('flight-list-item').click()
+      const flightsPage = new FlightsListPage()
+      flightPage = flightsPage.clickFirstFlight()
     })
 
     it.skip('displays errors', () => {
       cy.findByTestId('flight-date').click()
-      cy.findByTestId('flight-submit').click()
+      flightPage.submitFlight()
 
       cy.errorsFor('date').should('contain', 'invalid')
     })
 
     it('edits a flight', () => {
-      cy.findByTestId('flight-description').clear()
-      cy.findByTestId('flight-description').type('new description')
-      cy.findByTestId('flight-submit').click()
+      flightPage.clearAndFillDescription('new description')
+      flightPage.submitFlight()
       cy.reload()
 
-      cy.findByTestId('flight-description').should('have.value', 'new description')
+      flightPage.flightDescription().should('have.value', 'new description')
     })
   })
 
   context('loads', () => {
     beforeEach(() => {
-      cy.findByTestId('flight-list-item').click()
+      const flightsPage = new FlightsListPage()
+      flightsPage.clickFirstFlight()
     })
 
     context('passengers', () => {
+      let passengerManifest: PassengerManifest
+      let totalWeight: TotalWeight
+
+      beforeEach(() => {
+        passengerManifest = new PassengerManifest()
+        totalWeight = new TotalWeight()
+      })
+
       it('displays errors', () => {
-        cy.findByTestId('passenger-manifest').within(() => {
-          cy.findByTestId('add-load').click()
+        passengerManifest.clickAdd()
+        passengerManifest.fillForm('New Pax', '0')
 
-          cy.findByTestId('passenger-form').within(() => {
-            cy.findByTestId('passenger-name').type('New Pax')
-            cy.findByTestId('passenger-weight').type('0')
-            cy.findByTestId('passenger-submit').click()
-          })
-
-          cy.errorsFor('weight').should('contain', 'greater than 0')
-        })
+        passengerManifest.errorsFor('weight').should('contain', 'greater than 0')
       })
 
       it('adds a load', () => {
-        cy.findByTestId('passenger-manifest').within(() => {
-          cy.findByTestId('add-load').click()
+        passengerManifest.clickAdd()
+        passengerManifest.fillForm('New Pax', '180', '25')
 
-          cy.findByTestId('passenger-form').within(() => {
-            cy.findByTestId('passenger-name').type('New Pax')
-            cy.findByTestId('passenger-weight').type('180')
-            cy.findByTestId('passenger-bags-weight').type('25')
-            cy.findByTestId('passenger-submit').click()
-          })
-
-          cy.findAllByTestId('passenger-list-item').should('have.length', 2)
-          cy.findAllByTestId('passenger-list-item')
-            .last()
-            .within(() => {
-              cy.findByTestId('passenger-name').should('contain', 'New Pax')
-              cy.findByTestId('passenger-weight').should('contain', '180')
-              cy.findByTestId('passenger-bags-weight').should('contain', '25')
-            })
-        })
-
-        cy.findByTestId('total-weight').should('contain', '390 lb')
-        cy.findByTestId('total-weight-breakdown').should(
-          'contain',
-          '(165 lb avg. passenger, 60 lb total cargo)',
-        )
-      })
-
-      it('updates an existing load', () => {
-        cy.findByTestId('passenger-manifest').within(() => {
-          cy.findByTestId('add-load').click()
-
-          cy.findByTestId('passenger-form').within(() => {
-            cy.findByTestId('passenger-name').type('Example Passenger')
-            cy.findByTestId('passenger-weight').type('180')
-            cy.findByTestId('passenger-bags-weight').type('25')
-            cy.findByTestId('passenger-submit').click()
-          })
-
-          cy.findAllByTestId('passenger-list-item').should('have.length', 1)
-          cy.findByTestId('passenger-list-item').within(() => {
-            cy.findByTestId('passenger-name').should('contain', 'Example Passenger')
+        passengerManifest.passengerListItems().should('have.length', 2)
+        passengerManifest
+          .passengerListItems()
+          .last()
+          .within(() => {
+            cy.findByTestId('passenger-name').should('contain', 'New Pax')
             cy.findByTestId('passenger-weight').should('contain', '180')
             cy.findByTestId('passenger-bags-weight').should('contain', '25')
           })
+
+        totalWeight.total().should('contain', '390 lb')
+        totalWeight.breakdown().should('contain', '(165 lb avg. passenger, 60 lb total cargo)')
+      })
+
+      it('updates an existing load', () => {
+        passengerManifest.clickAdd()
+        passengerManifest.fillForm('Example Passenger', '180', '25')
+
+        passengerManifest.passengerListItems().should('have.length', 1)
+        cy.findByTestId('passenger-list-item').within(() => {
+          cy.findByTestId('passenger-name').should('contain', 'Example Passenger')
+          cy.findByTestId('passenger-weight').should('contain', '180')
+          cy.findByTestId('passenger-bags-weight').should('contain', '25')
         })
 
-        cy.findByTestId('total-weight').should('contain', '230 lb')
-        cy.findByTestId('total-weight-breakdown').should(
-          'contain',
-          '(180 lb avg. passenger, 50 lb total cargo)',
-        )
+        totalWeight.total().should('contain', '230 lb')
+        totalWeight.breakdown().should('contain', '(180 lb avg. passenger, 50 lb total cargo)')
       })
 
       it('disables a load', () => {
-        cy.findByTestId('passenger-enabled').uncheck()
-        cy.findByTestId('total-weight').should('contain', '25 lb')
-        cy.findByTestId('total-weight-breakdown').should('not.exist')
+        passengerManifest.toggleEnabled()
+
+        totalWeight.total().should('contain', '25 lb')
+        totalWeight.breakdown().should('not.exist')
       })
 
       it('removes a load', () => {
-        cy.findByTestId('passenger-delete').click({ force: true })
-        cy.findByTestId('no-passengers').should('exist')
+        passengerManifest.deletePassenger()
 
-        cy.findByTestId('total-weight').should('contain', '25 lb')
-        cy.findByTestId('total-weight-breakdown').should('not.exist')
+        passengerManifest.noPassengersMessage().should('exist')
+        totalWeight.total().should('contain', '25 lb')
+        totalWeight.breakdown().should('not.exist')
       })
     })
 
     context('cargo', () => {
+      let cargoManifest: CargoManifest
+      let totalWeight: TotalWeight
+
+      beforeEach(() => {
+        cargoManifest = new CargoManifest()
+        totalWeight = new TotalWeight()
+      })
+
       it('displays errors', () => {
-        cy.findByTestId('cargo-manifest').within(() => {
-          cy.findByTestId('add-load').click()
+        cargoManifest.clickAdd()
+        cargoManifest.fillForm('New Cargo', '0')
 
-          cy.findByTestId('cargo-form').within(() => {
-            cy.findByTestId('cargo-name').type('New Cargo')
-            cy.findByTestId('cargo-weight').type('0')
-            cy.findByTestId('cargo-submit').click()
-          })
-
-          cy.errorsFor('bags_weight').should('contain', 'greater than 0')
-        })
+        cargoManifest.errorsFor('bags_weight').should('contain', 'greater than 0')
       })
 
       it('adds a load', () => {
-        cy.findByTestId('cargo-manifest').within(() => {
-          cy.findByTestId('add-load').click()
+        cargoManifest.clickAdd()
+        cargoManifest.fillForm('New Cargo', '50')
 
-          cy.findByTestId('cargo-form').within(() => {
-            cy.findByTestId('cargo-name').type('New Cargo')
-            cy.findByTestId('cargo-weight').type('50')
-            cy.findByTestId('cargo-submit').click()
+        cargoManifest.cargoListItems().should('have.length', 2)
+        cargoManifest
+          .cargoListItems()
+          .last()
+          .within(() => {
+            cy.findByTestId('cargo-name').should('contain', 'New Cargo')
+            cy.findByTestId('cargo-weight').should('contain', '50')
           })
 
-          cy.findAllByTestId('cargo-list-item').should('have.length', 2)
-          cy.findAllByTestId('cargo-list-item')
-            .last()
-            .within(() => {
-              cy.findByTestId('cargo-name').should('contain', 'New Cargo')
-              cy.findByTestId('cargo-weight').should('contain', '50')
-            })
-        })
-
-        cy.findByTestId('total-weight').should('contain', '235 lb')
-        cy.findByTestId('total-weight-breakdown').should(
-          'contain',
-          '(150 lb avg. passenger, 85 lb total cargo)',
-        )
+        totalWeight.total().should('contain', '235 lb')
+        totalWeight.breakdown().should('contain', '(150 lb avg. passenger, 85 lb total cargo)')
       })
 
       it('updates an existing load', () => {
-        cy.findByTestId('cargo-manifest').within(() => {
-          cy.findByTestId('add-load').click()
+        cargoManifest.clickAdd()
+        cargoManifest.fillForm('Example Cargo', '50')
 
-          cy.findByTestId('cargo-form').within(() => {
-            cy.findByTestId('cargo-name').type('Example Cargo')
-            cy.findByTestId('cargo-weight').type('50')
-            cy.findByTestId('cargo-submit').click()
-          })
-
-          cy.findAllByTestId('cargo-list-item').should('have.length', 1)
-          cy.findByTestId('cargo-list-item').within(() => {
-            cy.findByTestId('cargo-name').should('contain', 'Example Cargo')
-            cy.findByTestId('cargo-weight').should('contain', '50')
-          })
+        cargoManifest.cargoListItems().should('have.length', 1)
+        cy.findByTestId('cargo-list-item').within(() => {
+          cy.findByTestId('cargo-name').should('contain', 'Example Cargo')
+          cy.findByTestId('cargo-weight').should('contain', '50')
         })
 
-        cy.findByTestId('total-weight').should('contain', '210 lb')
-        cy.findByTestId('total-weight-breakdown').should(
-          'contain',
-          '(150 lb avg. passenger, 60 lb total cargo)',
-        )
+        totalWeight.total().should('contain', '210 lb')
+        totalWeight.breakdown().should('contain', '(150 lb avg. passenger, 60 lb total cargo)')
       })
 
       it('disables a load', () => {
-        cy.findByTestId('cargo-enabled').uncheck()
+        cargoManifest.toggleEnabled()
 
-        cy.findByTestId('total-weight').should('contain', '160 lb')
-        cy.findByTestId('total-weight-breakdown').should(
-          'contain',
-          '(150 lb avg. passenger, 10 lb total cargo)',
-        )
+        totalWeight.total().should('contain', '160 lb')
+        totalWeight.breakdown().should('contain', '(150 lb avg. passenger, 10 lb total cargo)')
       })
 
       it('removes a load', () => {
-        cy.findByTestId('cargo-delete').click({ force: true })
-        cy.findByTestId('no-cargo').should('exist')
+        cargoManifest.deleteCargo()
 
-        cy.findByTestId('total-weight').should('contain', '160 lb')
-        cy.findByTestId('total-weight-breakdown').should(
-          'contain',
-          '(150 lb avg. passenger, 10 lb total cargo)',
-        )
+        cargoManifest.noCargoMessage().should('exist')
+        totalWeight.total().should('contain', '160 lb')
+        totalWeight.breakdown().should('contain', '(150 lb avg. passenger, 10 lb total cargo)')
       })
     })
   })
 
   context('deleting a flight', () => {
+    let flightPage: FlightShowPage
+
     beforeEach(() => {
-      cy.findByTestId('flight-list-item').click()
+      const flightsPage = new FlightsListPage()
+      flightPage = flightsPage.clickFirstFlight()
     })
 
     it('deletes a flight', () => {
-      cy.findByTestId('delete-flight').click()
-      cy.findByTestId('no-flights').should('exist')
+      flightPage.deleteFlight()
+
+      const flightsPage = new FlightsListPage()
+      flightsPage.noFlightsMessage().should('exist')
     })
   })
 })

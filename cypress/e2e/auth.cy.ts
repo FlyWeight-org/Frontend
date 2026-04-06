@@ -1,112 +1,116 @@
+import { LoginPage, ForgotPasswordPage, ResetPasswordPage } from '../pages/LoginPage'
+import { SignUpPage } from '../pages/SignUpPage'
+import { NavBar } from '../components/NavBar'
+
 describe('signing up', () => {
+  let signUpPage: SignUpPage
+
   beforeEach(() => {
-    cy.visit('/')
-    cy.findByTestId('signup-tab').click()
+    signUpPage = new SignUpPage().visit()
   })
 
   it('handles validation errors', () => {
-    cy.findByTestId('signup-name').type('Sancho Sample')
-    cy.findByTestId('signup-email').type('sancho@example.com')
-    cy.findByTestId('signup-password').type('supersecret')
-    cy.findByTestId('signup-password-confirmation').type('doesntmatch')
-    cy.findByTestId('signup-submit').click()
+    signUpPage.fillName('Sancho Sample')
+    signUpPage.fillEmail('sancho@example.com')
+    signUpPage.fillPassword('supersecret')
+    signUpPage.fillPasswordConfirmation('doesntmatch')
+    signUpPage.submit()
 
-    cy.errorsFor('password_confirmation').should('contain', 'doesn’t match')
+    cy.errorsFor('password_confirmation').should('contain', 'doesn\u2019t match')
   })
 
   it('signs up a user', () => {
-    cy.findByTestId('signup-name').type('Sancho Sample')
-    cy.findByTestId('signup-email').type('sancho@example.com')
-    cy.findByTestId('signup-password').type('supersecret')
-    cy.findByTestId('signup-password-confirmation').type('supersecret')
-    cy.findByTestId('signup-submit').click()
+    signUpPage.fillName('Sancho Sample')
+    signUpPage.fillEmail('sancho@example.com')
+    signUpPage.fillPassword('supersecret')
+    signUpPage.fillPasswordConfirmation('supersecret')
+    signUpPage.submit()
 
     cy.findByTestId('no-flights').should('exist')
   })
 })
 
 describe('logging in', () => {
+  let loginPage: LoginPage
+
   beforeEach(() => {
-    cy.visit('/')
+    loginPage = new LoginPage().visit()
   })
 
   it('does not authenticate an invalid login', () => {
-    cy.findByTestId('login-email').type('cypress@example.com')
-    cy.findByTestId('login-password').type('wrongpassword')
-    cy.findByTestId('login-submit').click()
+    loginPage.fillEmail('cypress@example.com')
+    loginPage.fillPassword('wrongpassword')
+    loginPage.submit()
 
-    cy.findByTestId('login-error').should('contain', 'Incorrect email or password')
+    loginPage.loginError().should('contain', 'Incorrect email or password')
   })
 
   it('authenticates a valid login', () => {
-    cy.findByTestId('login-email').type('cypress@example.com')
-    cy.findByTestId('login-password').type('supersecret')
-    cy.findByTestId('login-submit').click()
+    const flightsPage = loginPage.loginAs('cypress@example.com', 'supersecret')
 
-    cy.findByTestId('flight-list').should('exist')
+    flightsPage.flightList().should('exist')
   })
 })
 
 describe('forgot password', () => {
+  let loginPage: LoginPage
+
   beforeEach(() => {
-    cy.visit('/')
+    loginPage = new LoginPage().visit()
   })
 
   it('does not send an email for an unknown email', () => {
-    cy.findByTestId('forgot-password-link').click()
-    cy.findByTestId('forgot-password-email').type('unknown@example.com')
-    cy.findByTestId('forgot-password-submit').click()
+    const forgotPage = loginPage.clickForgotPassword()
+    forgotPage.fillEmail('unknown@example.com')
+    forgotPage.submit()
 
-    cy.findByTestId('forgot-password-success').should('exist')
+    forgotPage.successMessage().should('exist')
     cy.lastEmail().should('be.null')
   })
 
   context('known email', () => {
+    let forgotPage: ForgotPasswordPage
+
     beforeEach(() => {
-      cy.findByTestId('forgot-password-link').click()
-      cy.findByTestId('forgot-password-email').type('cypress@example.com')
-      cy.findByTestId('forgot-password-submit').click()
+      forgotPage = loginPage.clickForgotPassword()
+      forgotPage.fillEmail('cypress@example.com')
+      forgotPage.submit()
     })
 
     it("shows an error if the password doesn't match the confirmation", () => {
-      cy.findByTestId('forgot-password-success').should('exist')
+      forgotPage.successMessage().should('exist')
       cy.lastEmail()
         .its('html')
         .then((email: string) => {
           const url = /"http:\/\/127\.0\.0\.1:4173(.+?)"/.exec(email)![1]
-          cy.visit(url)
+          const resetPage = new ResetPasswordPage().visit(url)
 
-          cy.findByTestId('reset-password-password').type('newpassword')
-          cy.findByTestId('reset-password-password-confirmation').type('doesntmatch')
-          cy.findByTestId('reset-password-submit').click()
+          resetPage.fillPassword('newpassword')
+          resetPage.fillPasswordConfirmation('doesntmatch')
+          resetPage.submit()
 
-          cy.errorsFor('password_confirmation').should('contain', 'doesn’t match')
+          cy.errorsFor('password_confirmation').should('contain', 'doesn\u2019t match')
         })
     })
 
     it('resets the password', () => {
-      cy.findByTestId('forgot-password-success').should('exist')
+      forgotPage.successMessage().should('exist')
       cy.lastEmail()
         .its('html')
         .then((email: string) => {
           const url = /"http:\/\/127\.0\.0\.1:4173(.+?)"/.exec(email)![1]
-          cy.visit(url)
+          const resetPage = new ResetPasswordPage().visit(url)
 
-          cy.findByTestId('reset-password-password').type('newpassword')
-          cy.findByTestId('reset-password-password-confirmation').type('newpassword')
-          cy.findByTestId('reset-password-submit').click()
+          resetPage.fillPassword('newpassword')
+          resetPage.fillPasswordConfirmation('newpassword')
+          resetPage.submit()
 
-          cy.findByTestId('reset-password-success').should(
-            'contain',
-            'Your password has been changed.',
-          )
+          resetPage.successMessage().should('contain', 'Your password has been changed.')
 
-          cy.visit('/')
-          cy.findByTestId('login-email').type('cypress@example.com')
-          cy.findByTestId('login-password').type('newpassword')
-          cy.findByTestId('login-submit').click()
+          const newLoginPage = new LoginPage().visit()
+          const flightsPage = newLoginPage.loginAs('cypress@example.com', 'newpassword')
 
-          cy.findByTestId('flight-list').should('exist')
+          flightsPage.flightList().should('exist')
         })
     })
   })
@@ -118,8 +122,10 @@ describe('logging out', () => {
   })
 
   it('logs the user out', () => {
-    cy.findByTestId('nav-logout').click()
-    cy.findByTestId('nav-logout').should('not.exist')
+    const nav = new NavBar()
+    nav.clickLogout()
+
+    nav.logoutLink().should('not.exist')
     cy.findByTestId('login-email').should('exist')
   })
 })

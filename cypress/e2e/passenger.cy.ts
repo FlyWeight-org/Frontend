@@ -1,33 +1,37 @@
+import { PassengerFlightPage } from '../pages/PassengerFlightPage'
+import { FlightsListPage } from '../pages/FlightsListPage'
+
 describe('as a passenger', () => {
+  let passengerPage: PassengerFlightPage
+
   beforeEach(() => {
-    cy.visit(`/flights/${Cypress.env('flightUUID')}`)
+    passengerPage = new PassengerFlightPage().visit(Cypress.env('flightUUID'))
   })
 
   it('displays the unauthorized flight page', () => {
-    cy.findByTestId('flight-unauth-title').should(
-      'contain',
-      'Are you going on a flight with Cypress User on',
-    )
+    passengerPage.unauthTitle().should('contain', 'Are you going on a flight with Cypress User on')
   })
 
   it('handles form errors', () => {
-    cy.findByTestId('passenger-name').type(' ')
-    cy.findByTestId('passenger-weight').type('123')
-    cy.findByTestId('passenger-submit').click()
+    passengerPage.fillName(' ')
+    passengerPage.fillWeight('123')
+    passengerPage.submit()
 
-    cy.errorsFor('name').should('contain', 'can’t be blank')
+    cy.errorsFor('name').should('contain', 'can\u2019t be blank')
   })
 
   it('adds a passenger', () => {
-    cy.findByTestId('passenger-name').type('New Pax')
-    cy.findByTestId('passenger-weight').type('123')
-    cy.findByTestId('passenger-bags-weight').type('23')
-    cy.findByTestId('passenger-submit').click()
+    passengerPage.fillName('New Pax')
+    passengerPage.fillWeight('123')
+    passengerPage.fillBagsWeight('23')
+    passengerPage.submit()
 
-    cy.findByTestId('flight-finished').should('exist')
+    passengerPage.finishedMessage().should('exist')
 
     cy.login()
-    cy.findByTestId('flight-list-item').click()
+    const flightsPage = new FlightsListPage()
+    flightsPage.clickFirstFlight()
+
     cy.findAllByTestId('passenger-list-item').should('have.length', 2)
     cy.findAllByTestId('passenger-list-item')
       .last()
@@ -45,15 +49,17 @@ describe('as a passenger', () => {
   })
 
   it('updates a passenger', () => {
-    cy.findByTestId('passenger-name').type('Example Passenger')
-    cy.findByTestId('passenger-weight').type('123')
-    cy.findByTestId('passenger-bags-weight').type('23')
-    cy.findByTestId('passenger-submit').click()
+    passengerPage.fillName('Example Passenger')
+    passengerPage.fillWeight('123')
+    passengerPage.fillBagsWeight('23')
+    passengerPage.submit()
 
-    cy.findByTestId('flight-finished').should('exist')
+    passengerPage.finishedMessage().should('exist')
 
     cy.login()
-    cy.findByTestId('flight-list-item').click()
+    const flightsPage = new FlightsListPage()
+    flightsPage.clickFirstFlight()
+
     cy.findAllByTestId('passenger-list-item').should('have.length', 1)
     cy.findAllByTestId('passenger-list-item')
       .last()

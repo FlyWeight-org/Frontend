@@ -92,7 +92,12 @@ export default tseslint.config(
   {
     name: 'app/cypress',
     ...pluginCypress.configs.recommended,
-    files: ['cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}', 'cypress/support/**/*.{js,ts,jsx,tsx}'],
+    files: [
+      'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}',
+      'cypress/support/**/*.{js,ts,jsx,tsx}',
+      'cypress/pages/**/*.{js,ts,jsx,tsx}',
+      'cypress/components/**/*.{js,ts,jsx,tsx}',
+    ],
     extends: [tseslint.configs.disableTypeChecked],
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',

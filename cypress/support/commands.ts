@@ -7,10 +7,34 @@ import 'setimmediate'
 import PostalMime from 'postal-mime'
 
 Cypress.Commands.add('login', () => {
+  cy.session(
+    'cypress-user',
+    () => {
+      cy.request({
+        method: 'POST',
+        url: `${Cypress.env('apiHost')}/login.json`,
+        body: {
+          pilot: {
+            email: 'cypress@example.com',
+            password: 'supersecret',
+            remember_me: false,
+          },
+        },
+      }).then((response) => {
+        const authorization = response.headers['authorization'] as string
+        const jwt = authorization.replace(/^Bearer /, '')
+        window.localStorage.setItem('JWT', jwt)
+      })
+    },
+    {
+      validate() {
+        const jwt = window.localStorage.getItem('JWT')
+        assert.isString(jwt)
+        assert.isNotEmpty(jwt)
+      },
+    },
+  )
   cy.visit('/')
-  cy.findByTestId('login-email').type('cypress@example.com')
-  cy.findByTestId('login-password').type('supersecret')
-  cy.findByTestId('login-submit').click()
   cy.findByTestId('flight-list').should('exist')
 })
 
