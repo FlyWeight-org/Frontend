@@ -20,7 +20,6 @@
     "no-new-func": "warn",
     "no-new-wrappers": "warn",
     "no-object-constructor": "warn",
-    "no-octal-escape": "warn",
     "no-proto": "warn",
     "no-script-url": "warn",
     "no-template-curly-in-string": "warn",

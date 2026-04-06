@@ -1,6 +1,5 @@
 import js from '@eslint/js'
 import pluginVue from 'eslint-plugin-vue'
-import pluginCypress from 'eslint-plugin-cypress'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
@@ -90,17 +89,14 @@ export default tseslint.config(
   },
 
   {
-    name: 'app/cypress',
-    ...pluginCypress.configs.recommended,
-    files: [
-      'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}',
-      'cypress/support/**/*.{js,ts,jsx,tsx}',
-      'cypress/pages/**/*.{js,ts,jsx,tsx}',
-      'cypress/components/**/*.{js,ts,jsx,tsx}',
-    ],
+    name: 'app/e2e',
+    files: ['e2e/**/*.{ts,tsx}'],
     extends: [tseslint.configs.disableTypeChecked],
     rules: {
+      '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/no-invalid-void-type': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 )
