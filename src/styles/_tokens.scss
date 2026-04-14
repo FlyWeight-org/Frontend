@@ -1,0 +1,73 @@
+// Theme tokens — all colors defined as CSS custom properties
+// Switch themes by setting data-theme="dark" or data-theme="light" on <html>
+
+@mixin dark-tokens {
+  --color-bg-base: #1a0e2e;
+  --color-bg-mid: #2d1b4e;
+  --color-bg-end: #4a1942;
+  --color-surface: rgb(255 255 255 / 4%);
+  --color-surface-border: rgb(192 132 252 / 10%);
+  --color-surface-hover: rgb(255 255 255 / 6%);
+  --color-surface-shadow: none;
+  --color-text-primary: #f3e8ff;
+  --color-text-secondary: #a78bfa;
+  --color-text-muted: #7c3aed;
+  --color-accent-purple: #7c3aed;
+  --color-accent-pink: #ec4899;
+  --color-status-enabled: #34d399;
+  --color-input-bg: rgb(255 255 255 / 6%);
+  --color-input-border: rgb(192 132 252 / 20%);
+  --color-input-focus: rgb(192 132 252 / 40%);
+  --color-error: #f87171;
+  --color-totals-bg: rgb(124 58 237 / 10%);
+  --color-totals-border: rgb(124 58 237 / 20%);
+  --color-danger: #f87171;
+  --color-danger-hover: #fca5a5;
+  --color-success: #34d399;
+}
+
+@mixin light-tokens {
+  --color-bg-base: #faf5ff;
+  --color-bg-mid: #f3e8ff;
+  --color-bg-end: #fdf2f8;
+  --color-surface: #fff;
+  --color-surface-border: rgb(192 132 252 / 15%);
+  --color-surface-hover: #faf5ff;
+  --color-surface-shadow: 0 1px 3px rgb(124 58 237 / 6%);
+  --color-text-primary: #1e1b2e;
+  --color-text-secondary: #7c3aed;
+  --color-text-muted: #a78bfa;
+  --color-accent-purple: #7c3aed;
+  --color-accent-pink: #be185d;
+  --color-status-enabled: #16a34a;
+  --color-input-bg: #fff;
+  --color-input-border: rgb(192 132 252 / 25%);
+  --color-input-focus: rgb(124 58 237 / 40%);
+  --color-error: #dc2626;
+  --color-totals-bg: rgb(124 58 237 / 6%);
+  --color-totals-border: rgb(124 58 237 / 12%);
+  --color-danger: #dc2626;
+  --color-danger-hover: #ef4444;
+  --color-success: #16a34a;
+}
+
+[data-theme='dark'] {
+  @include dark-tokens;
+}
+
+[data-theme='light'] {
+  @include light-tokens;
+}
+
+// Fallback if data-theme not set (before JS runs or if JS is disabled)
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    @include dark-tokens;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    @include light-tokens;
+  }
+}

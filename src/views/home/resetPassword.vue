@@ -38,53 +38,66 @@ const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
 </script>
 
 <template>
-  <h2>{{ t('home.resetPassword.title') }}</h2>
-  <form method="patch" :action="URL" @submit.prevent="submitHandler">
-    <field
-      v-model="form.password"
-      type="password"
-      object="pilot"
-      field="password"
-      :label="t('pilot.password')"
-      :errors="errors"
-      required
-      autocomplete="new-password"
-      data-testid="reset-password-password"
-    />
-
-    <field
-      v-model="form.confirmation"
-      type="password"
-      object="pilot"
-      field="password_confirmation"
-      :label="t('pilot.password_confirmation')"
-      :errors="errors"
-      required
-      autocomplete="new-password"
-      data-testid="reset-password-password-confirmation"
-    />
-
-    <fieldset class="actions">
-      <input
-        type="submit"
-        name="commit"
-        :value="t('home.resetPassword.button')"
-        :class="{ processing: isProcessing }"
-        data-testid="reset-password-submit"
+  <div class="card auth-card">
+    <h2>{{ t('home.resetPassword.title') }}</h2>
+    <form method="patch" :action="URL" @submit.prevent="submitHandler">
+      <field
+        v-model="form.password"
+        type="password"
+        object="pilot"
+        field="password"
+        :label="t('pilot.password')"
+        :errors="errors"
+        required
+        autocomplete="new-password"
+        data-testid="reset-password-password"
       />
-    </fieldset>
-  </form>
 
-  <p v-if="error" class="error">
-    {{ error }}
-  </p>
-  <ul v-if="errors.reset_password_token?.length" class="error" data-testid="reset-password-errors">
-    <li v-for="err in errors.reset_password_token" :key="err">
-      {{ t('home.resetPassword.tokenError', { error }) }}
-    </li>
-  </ul>
+      <field
+        v-model="form.confirmation"
+        type="password"
+        object="pilot"
+        field="password_confirmation"
+        :label="t('pilot.password_confirmation')"
+        :errors="errors"
+        required
+        autocomplete="new-password"
+        data-testid="reset-password-password-confirmation"
+      />
 
-  <p v-if="success" class="success" data-testid="reset-password-success">
-    {{ t('home.resetPassword.success') }}
-  </p>
+      <fieldset class="actions">
+        <input
+          type="submit"
+          name="commit"
+          :value="t('home.resetPassword.button')"
+          :class="{ processing: isProcessing }"
+          data-testid="reset-password-submit"
+        />
+      </fieldset>
+    </form>
+
+    <p v-if="error" class="error">
+      {{ error }}
+    </p>
+    <ul
+      v-if="errors.reset_password_token?.length"
+      class="error"
+      data-testid="reset-password-errors"
+    >
+      <li v-for="err in errors.reset_password_token" :key="err">
+        {{ t('home.resetPassword.tokenError', { error }) }}
+      </li>
+    </ul>
+
+    <p v-if="success" class="success" data-testid="reset-password-success">
+      {{ t('home.resetPassword.success') }}
+    </p>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.auth-card {
+  padding: 24px;
+  text-align: left;
+}
+</style>

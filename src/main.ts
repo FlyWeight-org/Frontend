@@ -9,13 +9,12 @@ import router from './router'
 import i18n from '@/i18n'
 
 import 'normalize.css'
-import './styles/archivo.scss'
+import './styles/_tokens.scss'
 import './styles/base.scss'
 import './styles/datepicker.scss'
 import './styles/forms.scss'
 import './styles/layout.scss'
 import './styles/nav.scss'
-import './styles/tabs.scss'
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App)

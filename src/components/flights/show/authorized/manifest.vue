@@ -21,7 +21,7 @@ const addingCargo = ref(false)
 
 <template>
   <div class="manifest">
-    <div class="passenger-manifest" data-testid="passenger-manifest">
+    <section class="manifest-section" data-testid="passenger-manifest">
       <load-header
         :title="t('flights.show.authorized.header.passengers')"
         :adding="addingPassenger"
@@ -30,9 +30,9 @@ const addingCargo = ref(false)
         <passenger-form :flight="flight" @reset="addingPassenger = false" />
       </load-header>
       <passengers :flight="flight" />
-    </div>
+    </section>
 
-    <div class="cargo-manifest" data-testid="cargo-manifest">
+    <section class="manifest-section" data-testid="cargo-manifest">
       <load-header
         :title="t('flights.show.authorized.header.cargo')"
         :adding="addingCargo"
@@ -41,23 +41,14 @@ const addingCargo = ref(false)
         <cargo-form :flight="flight" @reset="addingCargo = false" />
       </load-header>
       <cargo :flight="flight" />
-    </div>
-
-    <hr />
+    </section>
 
     <totals :flight="flight" />
   </div>
 </template>
 
 <style scoped lang="scss">
-@use '@/styles/vars';
-
-hr {
-  margin: 5px 0;
-  border: 1px solid vars.$body-color;
-}
-
-.cargo-manifest {
-  margin-top: 20px;
+.manifest-section {
+  margin-bottom: 24px;
 }
 </style>

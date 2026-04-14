@@ -6,39 +6,41 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <main>
-    <h1>
-      <span>{{ t('title') }}</span>
-    </h1>
-    <h2>{{ t('home.welcome.subtitle') }}</h2>
-
-    <i18n-t tag="p" keypath="home.welcome.description">
-      <template #title>
-        <strong>{{ t('title') }}</strong>
-      </template>
-    </i18n-t>
-
-    <navbar />
-    <router-view />
+  <main class="welcome">
+    <div class="welcome-content">
+      <h1 class="wordmark gradient-text">{{ t('title') }}</h1>
+      <p class="tagline">{{ t('home.welcome.subtitle') }}</p>
+      <navbar />
+      <router-view />
+    </div>
   </main>
 </template>
 
 <style scoped lang="scss">
-@use '@/styles/vars';
+.welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 16px;
+}
 
-h1 {
-  font-stretch: semi-expanded;
+.welcome-content {
+  width: 100%;
+  max-width: 400px;
   text-align: center;
+}
 
-  > span {
-    @include vars.text-gradient(vars.$gradient-1);
+.wordmark {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
 
-    display: inline-block;
-    margin-right: auto;
-    margin-left: auto;
-    font-size: 32pt;
-    font-style: italic;
-    font-weight: bold;
-  }
+.tagline {
+  margin-bottom: 32px;
+  font-size: 15px;
+  color: var(--color-text-secondary);
 }
 </style>

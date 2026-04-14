@@ -2,17 +2,20 @@
 import { useAccountStore } from '@/stores/modules/account'
 import { useAuthStore } from '@/stores/modules/auth'
 import { onMounted } from 'vue'
+import useTheme from '@/composables/useTheme'
 
 const accountStore = useAccountStore()
 const authStore = useAuthStore()
 
-onMounted(() => {
+useTheme()
+
+onMounted(async () => {
   authStore.initializeFromLocalStorage()
   authStore.$subscribe(() => {
     authStore.saveToLocalStorage()
   })
 
-  void accountStore.loadAccount()
+  await accountStore.loadAccount()
 })
 </script>
 

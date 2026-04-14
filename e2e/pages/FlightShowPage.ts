@@ -17,7 +17,15 @@ export class FlightShowPage {
     await this.page.getByTestId('flight-description').fill(description)
   }
 
+  async openEditSection(): Promise<void> {
+    const details = this.page.locator('details.edit-section')
+    if ((await details.getAttribute('open')) === null) {
+      await details.locator('summary').click()
+    }
+  }
+
   async clearAndFillDescription(description: string): Promise<void> {
+    await this.openEditSection()
     await this.page.getByTestId('flight-description').clear()
     await this.page.getByTestId('flight-description').fill(description)
   }
@@ -27,6 +35,7 @@ export class FlightShowPage {
   }
 
   async deleteFlight(): Promise<void> {
+    await this.openEditSection()
     await this.page.getByTestId('delete-flight').click()
   }
 

@@ -23,56 +23,63 @@ const flightURL = computed(
 </script>
 
 <template>
-  <a class="flight-list-item" :href="flightURL" data-testid="flight-list-item">
-    <div class="header">
-      <div class="date">{{ date }}</div>
-      <div class="passengers">
-        {{ t('flights.list.flight.passengers', { count: paxCount }) }}
+  <a class="flight-card" :href="flightURL" data-testid="flight-list-item">
+    <div class="flight-card-body">
+      <div class="flight-card-info">
+        <div class="flight-card-description" v-if="flight.description">
+          {{ flight.description }}
+        </div>
+        <div class="flight-card-meta">
+          <span class="flight-card-date">{{ date }}</span>
+          <span class="flight-card-pax">
+            {{ t('flights.list.flight.passengers', { count: paxCount }) }}
+          </span>
+        </div>
       </div>
     </div>
-    <p v-if="flight.description" class="description">
-      {{ flight.description }}
-    </p>
   </a>
 </template>
 
 <style scoped lang="scss">
-@use '@/styles/colors';
-@use '@/styles/vars';
-
-a.flight-list-item {
-  @include vars.slant;
-
+.flight-card {
   display: block;
-  padding: 5px;
-  margin-bottom: 20px;
-  border: 0;
+  padding: 14px 16px;
+  text-decoration: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  border-radius: 12px;
+  box-shadow: var(--color-surface-shadow);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 
   &:hover {
-    background: vars.$gradient-2, colors.$cultured;
+    background: var(--color-surface-hover);
+    border-color: var(--color-input-border);
   }
+}
 
-  .header {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: baseline;
+.flight-card-description {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
 
-    .date {
-      margin-right: 0.5em;
-      font-size: 16pt;
-      font-weight: 700;
-    }
+.flight-card-meta {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 13px;
+}
 
-    .passengers {
-      margin-right: 0.5em;
-      font-size: 12pt;
-      font-weight: 200;
-    }
-  }
+.flight-card-date {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
 
-  .description {
-    margin: 0;
-    font-size: 12pt;
-  }
+.flight-card-pax {
+  color: var(--color-text-muted);
 }
 </style>

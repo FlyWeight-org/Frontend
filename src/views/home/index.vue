@@ -8,8 +8,8 @@ import { useAuthStore } from '@/stores/modules/auth'
 const router = useRouter()
 const authStore = useAuthStore()
 
-onMounted(() => {
-  if (authStore.loggedIn) void router.push({ name: 'flightsList' })
+onMounted(async () => {
+  if (authStore.loggedIn) await router.replace({ name: 'flightsList' })
 })
 </script>
 

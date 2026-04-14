@@ -13,7 +13,7 @@ export class NavBar {
   }
 
   async clickAddFlight(): Promise<FlightShowPage> {
-    await this.page.getByRole('link', { name: /add a flight/i }).click()
+    await this.page.getByTestId('nav-add-flight').click()
     return new FlightShowPage(this.page)
   }
 

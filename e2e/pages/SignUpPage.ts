@@ -4,8 +4,7 @@ export class SignUpPage {
   constructor(private readonly page: Page) {}
 
   async visit(): Promise<this> {
-    await this.page.goto('/')
-    await this.page.getByRole('tab', { name: /sign up/i }).click()
+    await this.page.goto('/signup')
     return this
   }
 

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
+import { X } from 'lucide-vue-next'
 import type { Load } from '@/types'
 import { errorToString, notifySentry } from '@/utils/errors'
-import cargoImageURL from '@/images/cargo.svg'
 import { useFlightStore } from '@/stores/modules/flight'
 
-const { n } = useI18n()
+const { n, t } = useI18n()
 const flightStore = useFlightStore()
 
 const props = defineProps<{
@@ -31,26 +31,27 @@ function toggleEnabled(event: Event) {
 </script>
 
 <template>
-  <div class="cargo-list-item" data-testid="cargo-list-item">
+  <div class="load-row" :class="{ disabled: cargo.disabled }" data-testid="cargo-list-item">
     <input
       type="checkbox"
       :checked="!cargo.disabled"
       data-testid="cargo-enabled"
       @change="toggleEnabled($event)"
     />
-
-    <div class="name" data-testid="cargo-name">
-      {{ cargo.name }}
+    <div class="load-info">
+      <span class="load-name" data-testid="cargo-name">{{ cargo.name }}</span>
     </div>
-    <div class="weight" data-testid="cargo-weight">
-      <img :src="cargoImageURL" alt="Cargo" />
-
+    <div class="load-weight" data-testid="cargo-weight">
       {{ n(cargo.bagsWeight, 'pounds') }}
     </div>
-
-    <div class="delete">
-      <a href="#" data-testid="cargo-delete" @click.prevent="deleteClicked">&times;</a>
-    </div>
+    <button
+      class="load-delete"
+      data-testid="cargo-delete"
+      :aria-label="t('flights.show.authorized.loads.removeAria')"
+      @click="deleteClicked"
+    >
+      <X :size="16" :stroke-width="2.5" />
+    </button>
   </div>
   <p v-if="deleteError" class="error" data-testid="cargo-delete-error">
     <small>{{ deleteError }}</small>
@@ -58,60 +59,7 @@ function toggleEnabled(event: Event) {
 </template>
 
 <style scoped lang="scss">
-@use '@/styles/colors';
-@use '@/styles/vars';
+@use '@/styles/load-row';
 
-.cargo-list-item {
-  @include vars.slant($padding-v: 2.5px);
-
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-
-  .name {
-    margin-right: 0.5em;
-    font-weight: 700;
-  }
-
-  .weight {
-    margin-right: 0.5em;
-    font-size: 14pt;
-    font-weight: 200;
-  }
-
-  img {
-    margin-right: 0.1em;
-  }
-
-  .delete {
-    display: none;
-    flex-grow: 1;
-    text-align: right;
-
-    a {
-      padding: 0;
-      margin: 0;
-      font-weight: 700;
-      color: vars.$body-color;
-      background: none;
-      border: 0;
-
-      &:active {
-        transform: translate(1px, 1px);
-      }
-    }
-  }
-
-  &:hover {
-    background: vars.$gradient-2, colors.$cultured;
-
-    .delete {
-      display: block;
-    }
-  }
-}
-
-p.error {
-  margin: 0;
-}
+@include load-row.load-row;
 </style>

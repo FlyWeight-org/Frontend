@@ -7,6 +7,7 @@ const en: LocaleMessage<VueMessageType> = {
     edit: {
       title: 'Edit Account',
       button: 'Update',
+      changePassword: 'Change Password',
       success: 'Your account information has been changed.',
     },
     nav: {
@@ -43,6 +44,7 @@ const en: LocaleMessage<VueMessageType> = {
       title: 'Thanks, {name}!',
     },
     list: {
+      addFABAria: 'Add a Flight',
       empty: 'No flights yet.',
       flight: {
         passengers: 'no passengers | 1 passenger | {count} passengers',
@@ -71,10 +73,16 @@ const en: LocaleMessage<VueMessageType> = {
         none: 'Couldn’t find that flight',
         owner: 'Here’s what you can see that they can’t:',
         loads: {
+          addAria: 'Add',
           averageWeight: '({pax} avg. passenger, {cargo} total cargo)',
+          averageWeightLabel: 'avg weight',
+          bags: 'Bags',
+          bagsWithWeight: '{weight} bags',
+          cargoAndBagsLabel: 'Cargo & bags',
           createButton: 'Add',
           noCargo: 'No cargo',
           noPassengers: 'No passengers',
+          removeAria: 'Remove',
           totalWeight: 'Total',
         },
         share:
@@ -83,13 +91,12 @@ const en: LocaleMessage<VueMessageType> = {
       },
       unauthorized: {
         explanation:
-          'If so, you should add your weight down below so your pilot can do their proper pre-flight planning. It’s important not to takeoff overweight, which is why you’re being asked to reveal your weight.',
-        explanation2:
-          'Your weight will not be shared with anyone except the pilot. It will be available to the pilot only until one week after the flight.',
+          'Add your weight below so your pilot can plan for a safe takeoff. It will only be shared with the pilot, and only until one week after the flight.',
         form: 'My name is # [name] ## and I weigh # [weight] # pounds (with clothes on). ## My bags weigh around # [bags_weight] # pounds. ## [submit]',
         loads: {
           createButton: 'So pumped to go flying!',
         },
+        privacy: 'Your weight is private — only the pilot sees totals',
         title: 'Are you going on a flight with {name} on {date}?',
       },
     },
@@ -109,8 +116,6 @@ const en: LocaleMessage<VueMessageType> = {
       error: 'Couldn’t log you in: {error}',
       forgotPassword: 'I forgot my password :(',
       rememberMe: 'Remember me',
-      newAccounts:
-        'Important Note: FlyWeight has been re-released. If you had an account on the old website, you will need to sign up for a new one here before logging in.',
     },
     nav: {
       logIn: 'Log In',

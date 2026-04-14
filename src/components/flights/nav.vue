@@ -22,10 +22,11 @@ async function logoutClicked() {
   <nav v-if="authStore.loggedIn">
     <ul role="menubar">
       <li>
-        <h1>
-          <span>{{ t('title') }}</span>
-        </h1>
+        <router-link to="/flights" class="wordmark gradient-text">
+          {{ t('title') }}
+        </router-link>
       </li>
+      <li role="none" class="spacer">&nbsp;</li>
       <li role="menuitem" :class="{ active: isMyFlights }" data-testid="nav-my-flights">
         <router-link to="/flights">
           {{ t('flights.nav.myFlights') }}
@@ -36,17 +37,29 @@ async function logoutClicked() {
           {{ t('flights.nav.addFlight') }}
         </router-link>
       </li>
-      <li role="none" class="spacer">&nbsp;</li>
       <li role="menuitem" data-testid="nav-account">
         <router-link to="/account">
           {{ t('account.nav.myAccount') }}
         </router-link>
       </li>
       <li>
-        <a href="/logout.json" data-testid="nav-logout" @click.prevent="logoutClicked">{{
-          t('flights.nav.logout')
-        }}</a>
+        <a href="/logout.json" data-testid="nav-logout" @click.prevent="logoutClicked">
+          {{ t('flights.nav.logout') }}
+        </a>
       </li>
     </ul>
   </nav>
 </template>
+
+<style scoped lang="scss">
+.wordmark {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+</style>

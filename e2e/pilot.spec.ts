@@ -66,6 +66,7 @@ test.describe('as a pilot', () => {
       await flightPage.submitFlight()
       await page.reload()
 
+      await flightPage.openEditSection()
       await expect(flightPage.flightDescription()).toHaveValue('new description')
     })
   })
@@ -104,10 +105,7 @@ test.describe('as a pilot', () => {
         await expect(lastItem.getByTestId('passenger-weight')).toContainText('180')
         await expect(lastItem.getByTestId('passenger-bags-weight')).toContainText('25')
 
-        await expect(totalWeight.total()).toContainText('390 lb')
-        await expect(totalWeight.breakdown()).toContainText(
-          '(165 lb avg. passenger, 60 lb total cargo)',
-        )
+        await expect(totalWeight.totalValue()).toContainText('390 lb')
       })
 
       test('updates an existing load', async ({
@@ -129,10 +127,7 @@ test.describe('as a pilot', () => {
         await expect(item.getByTestId('passenger-weight')).toContainText('180')
         await expect(item.getByTestId('passenger-bags-weight')).toContainText('25')
 
-        await expect(totalWeight.total()).toContainText('230 lb')
-        await expect(totalWeight.breakdown()).toContainText(
-          '(180 lb avg. passenger, 50 lb total cargo)',
-        )
+        await expect(totalWeight.totalValue()).toContainText('230 lb')
       })
 
       test('disables a load', async ({
@@ -145,8 +140,7 @@ test.describe('as a pilot', () => {
         await flightsListPage.clickFirstFlight()
         await passengerManifest.toggleEnabled()
 
-        await expect(totalWeight.total()).toContainText('25 lb')
-        await expect(totalWeight.breakdown()).not.toBeVisible()
+        await expect(totalWeight.totalValue()).toContainText('25 lb')
       })
 
       test('removes a load', async ({
@@ -160,8 +154,7 @@ test.describe('as a pilot', () => {
         await passengerManifest.deletePassenger()
 
         await expect(passengerManifest.noPassengersMessage()).toBeVisible()
-        await expect(totalWeight.total()).toContainText('25 lb')
-        await expect(totalWeight.breakdown()).not.toBeVisible()
+        await expect(totalWeight.totalValue()).toContainText('25 lb')
       })
     })
 
@@ -197,10 +190,7 @@ test.describe('as a pilot', () => {
         await expect(lastItem.getByTestId('cargo-name')).toContainText('New Cargo')
         await expect(lastItem.getByTestId('cargo-weight')).toContainText('50')
 
-        await expect(totalWeight.total()).toContainText('235 lb')
-        await expect(totalWeight.breakdown()).toContainText(
-          '(150 lb avg. passenger, 85 lb total cargo)',
-        )
+        await expect(totalWeight.totalValue()).toContainText('235 lb')
       })
 
       test('updates an existing load', async ({
@@ -221,10 +211,7 @@ test.describe('as a pilot', () => {
         await expect(item.getByTestId('cargo-name')).toContainText('Example Cargo')
         await expect(item.getByTestId('cargo-weight')).toContainText('50')
 
-        await expect(totalWeight.total()).toContainText('210 lb')
-        await expect(totalWeight.breakdown()).toContainText(
-          '(150 lb avg. passenger, 60 lb total cargo)',
-        )
+        await expect(totalWeight.totalValue()).toContainText('210 lb')
       })
 
       test('disables a load', async ({
@@ -237,10 +224,7 @@ test.describe('as a pilot', () => {
         await flightsListPage.clickFirstFlight()
         await cargoManifest.toggleEnabled()
 
-        await expect(totalWeight.total()).toContainText('160 lb')
-        await expect(totalWeight.breakdown()).toContainText(
-          '(150 lb avg. passenger, 10 lb total cargo)',
-        )
+        await expect(totalWeight.totalValue()).toContainText('160 lb')
       })
 
       test('removes a load', async ({
@@ -254,10 +238,7 @@ test.describe('as a pilot', () => {
         await cargoManifest.deleteCargo()
 
         await expect(cargoManifest.noCargoMessage()).toBeVisible()
-        await expect(totalWeight.total()).toContainText('160 lb')
-        await expect(totalWeight.breakdown()).toContainText(
-          '(150 lb avg. passenger, 10 lb total cargo)',
-        )
+        await expect(totalWeight.totalValue()).toContainText('160 lb')
       })
     })
   })

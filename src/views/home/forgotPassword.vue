@@ -32,41 +32,50 @@ async function submitHandler() {
 </script>
 
 <template>
-  <h2>{{ t('home.forgotPassword.title') }}</h2>
-  <p>{{ t('home.forgotPassword.description') }}</p>
-  <form method="post" :action="URL" @submit.prevent="submitHandler">
-    <field
-      v-model="form.email"
-      type="email"
-      object="form"
-      field="email"
-      :label="t('pilot.email')"
-      required
-      autocomplete="email"
-      data-testid="forgot-password-email"
-    />
-
-    <fieldset class="actions">
-      <input
-        type="submit"
-        name="commit"
-        :value="t('home.forgotPassword.button')"
-        :class="{ processing: isProcessing }"
-        data-testid="forgot-password-submit"
+  <div class="card auth-card">
+    <h2>{{ t('home.forgotPassword.title') }}</h2>
+    <p>{{ t('home.forgotPassword.description') }}</p>
+    <form method="post" :action="URL" @submit.prevent="submitHandler">
+      <field
+        v-model="form.email"
+        type="email"
+        object="form"
+        field="email"
+        :label="t('pilot.email')"
+        required
+        autocomplete="email"
+        data-testid="forgot-password-email"
       />
 
-      <p>
-        <router-link to="/login">
-          {{ t('home.forgotPassword.cancelButton') }}
-        </router-link>
-      </p>
-    </fieldset>
+      <fieldset class="actions">
+        <input
+          type="submit"
+          name="commit"
+          :value="t('home.forgotPassword.button')"
+          :class="{ processing: isProcessing }"
+          data-testid="forgot-password-submit"
+        />
 
-    <p v-if="success" class="success" data-testid="forgot-password-success">
-      {{ t('home.forgotPassword.success', { email: form.email }) }}
-    </p>
-    <p v-if="error" class="error">
-      {{ error }}
-    </p>
-  </form>
+        <p>
+          <router-link to="/login">
+            {{ t('home.forgotPassword.cancelButton') }}
+          </router-link>
+        </p>
+      </fieldset>
+
+      <p v-if="success" class="success" data-testid="forgot-password-success">
+        {{ t('home.forgotPassword.success', { email: form.email }) }}
+      </p>
+      <p v-if="error" class="error">
+        {{ error }}
+      </p>
+    </form>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.auth-card {
+  padding: 24px;
+  text-align: left;
+}
+</style>

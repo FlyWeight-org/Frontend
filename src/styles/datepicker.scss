@@ -1,31 +1,30 @@
-@use 'sass:color';
-@use 'colors';
 @use 'fields';
 
 @import '@vuepic/vue-datepicker/dist/main.css';
 
-$dp__font_family: archivo, sans-serif;
+$dp__font_family: 'DM Sans', sans-serif;
 $dp__font_size: 100%;
 
-.dp__theme_light {
-  --dp-background-color: #fff;
-  --dp-text-color: #212121;
-  --dp-hover-color: #f3f3f3;
-  --dp-hover-text-color: #212121;
-  --dp-hover-icon-color: #959595;
-  --dp-primary-color: #{colors.$resolution-blue};
-  --dp-primary-text-color: #f8f5f5;
-  --dp-secondary-color: #c0c4cc;
-  --dp-border-color: #ddd;
-  --dp-menu-border-color: #ddd;
-  --dp-border-color-hover: #aaaeb7;
-  --dp-disabled-color: #f6f6f6;
-  --dp-scroll-bar-background: #f3f3f3;
-  --dp-scroll-bar-color: #959595;
-  --dp-success-color: #{colors.$fandango};
-  --dp-success-color-disabled: #{color.adjust(colors.$fandango, $lightness: 50%)};
-  --dp-icon-color: #959595;
-  --dp-danger-color: #ff6f60;
+.dp__theme_light,
+.dp__theme_dark {
+  --dp-background-color: var(--color-surface);
+  --dp-text-color: var(--color-text-primary);
+  --dp-hover-color: var(--color-surface-hover);
+  --dp-hover-text-color: var(--color-text-primary);
+  --dp-hover-icon-color: var(--color-text-muted);
+  --dp-primary-color: var(--color-accent-purple);
+  --dp-primary-text-color: #fff;
+  --dp-secondary-color: var(--color-text-muted);
+  --dp-border-color: var(--color-surface-border);
+  --dp-menu-border-color: var(--color-surface-border);
+  --dp-border-color-hover: var(--color-input-focus);
+  --dp-disabled-color: var(--color-surface);
+  --dp-scroll-bar-background: var(--color-surface);
+  --dp-scroll-bar-color: var(--color-text-muted);
+  --dp-success-color: var(--color-accent-purple);
+  --dp-success-color-disabled: var(--color-text-muted);
+  --dp-icon-color: var(--color-text-muted);
+  --dp-danger-color: var(--color-error);
 }
 
 input.dp__input {
@@ -33,7 +32,7 @@ input.dp__input {
 
   width: unset;
   padding-left: 35px;
-  font-family: Archivo, sans-serif;
-  font-size: 80%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
   line-height: 1.15;
 }

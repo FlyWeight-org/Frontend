@@ -33,67 +33,76 @@ const errorMessage = computed<string | null>(() =>
 </script>
 
 <template>
-  <form method="post" :action="URL" @submit.prevent="submitHandler">
-    <field
-      v-model="pilot.name"
-      type="text"
-      object="pilot"
-      field="name"
-      :errors="errors"
-      :label="t('pilot.name')"
-      required
-      autocomplete="name"
-      data-testid="signup-name"
-    />
+  <div class="card auth-card">
+    <p v-if="error" class="error">
+      {{ errorMessage }}
+    </p>
 
-    <field
-      v-model="pilot.email"
-      type="email"
-      object="pilot"
-      field="email"
-      :errors="errors"
-      :label="t('pilot.email')"
-      required
-      autocomplete="email"
-      data-testid="signup-email"
-    />
-
-    <field
-      v-model="pilot.password"
-      type="password"
-      object="pilot"
-      field="password"
-      :errors="errors"
-      :label="t('pilot.password')"
-      required
-      autocomplete="new-password"
-      data-testid="signup-password"
-    />
-
-    <field
-      v-model="pilot.password_confirmation"
-      type="password"
-      object="pilot"
-      field="password_confirmation"
-      :errors="errors"
-      :label="t('pilot.password_confirmation')"
-      required
-      autocomplete="new-password"
-      data-testid="signup-password-confirmation"
-    />
-
-    <fieldset class="actions">
-      <input
-        type="submit"
-        name="commit"
-        :value="t('home.signUp.button')"
-        :class="{ processing: isProcessing }"
-        data-testid="signup-submit"
+    <form method="post" :action="URL" @submit.prevent="submitHandler">
+      <field
+        v-model="pilot.name"
+        type="text"
+        object="pilot"
+        field="name"
+        :errors="errors"
+        :label="t('pilot.name')"
+        required
+        autocomplete="name"
+        data-testid="signup-name"
       />
-    </fieldset>
-  </form>
 
-  <p v-if="error" class="error">
-    {{ errorMessage }}
-  </p>
+      <field
+        v-model="pilot.email"
+        type="email"
+        object="pilot"
+        field="email"
+        :errors="errors"
+        :label="t('pilot.email')"
+        required
+        autocomplete="email"
+        data-testid="signup-email"
+      />
+
+      <field
+        v-model="pilot.password"
+        type="password"
+        object="pilot"
+        field="password"
+        :errors="errors"
+        :label="t('pilot.password')"
+        required
+        autocomplete="new-password"
+        data-testid="signup-password"
+      />
+
+      <field
+        v-model="pilot.password_confirmation"
+        type="password"
+        object="pilot"
+        field="password_confirmation"
+        :errors="errors"
+        :label="t('pilot.password_confirmation')"
+        required
+        autocomplete="new-password"
+        data-testid="signup-password-confirmation"
+      />
+
+      <fieldset class="actions">
+        <input
+          type="submit"
+          name="commit"
+          :value="t('home.signUp.button')"
+          :class="{ processing: isProcessing }"
+          data-testid="signup-submit"
+        />
+      </fieldset>
+    </form>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.auth-card {
+  padding: 24px;
+  text-align: left;
+}
+</style>

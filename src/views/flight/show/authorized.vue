@@ -42,40 +42,82 @@ async function onDelete() {
 </script>
 
 <template>
-  <h1>{{ title }}</h1>
+  <div class="flight-detail">
+    <div class="flight-header">
+      <h1>{{ flight.description || title }}</h1>
+      <p class="flight-date">{{ d(flight.date.toJSDate(), 'medium') }}</p>
+    </div>
 
-  <p>{{ t('flights.show.authorized.share') }}</p>
-  <p>{{ t('flights.show.authorized.owner') }}</p>
+    <div class="share-row">
+      <span class="share-label">{{ t('flights.show.authorized.share') }}</span>
+    </div>
 
-  <manifest :flight="flight" />
+    <manifest :flight="flight" />
 
-  <h2>{{ t('flights.show.authorized.header.edit') }}</h2>
-  <edit-form :flight="flight" />
+    <details class="edit-section">
+      <summary>{{ t('flights.show.authorized.header.edit') }}</summary>
+      <edit-form :flight="flight" />
 
-  <p
-    v-if="deleteError"
-    id="delete-error"
-    class="error"
-    :class="{ disabled: isDeleting }"
-    :aria-disabled="isDeleting"
-  >
-    {{ deleteError }}
-  </p>
-  <a v-else class="danger" href="#" data-testid="delete-flight" @click.prevent="onDelete">{{
-    t('flights.show.authorized.delete')
-  }}</a>
+      <p
+        v-if="deleteError"
+        class="error delete-error"
+        :class="{ disabled: isDeleting }"
+        :aria-disabled="isDeleting"
+      >
+        {{ deleteError }}
+      </p>
+      <a v-else class="danger" href="#" data-testid="delete-flight" @click.prevent="onDelete">
+        {{ t('flights.show.authorized.delete') }}
+      </a>
+    </details>
+  </div>
 </template>
 
 <style scoped lang="scss">
-h2 {
-  margin-top: 50px;
+.flight-header {
+  margin-bottom: 20px;
+
+  h1 {
+    margin: 0;
+  }
+
+  .flight-date {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+}
+
+.share-row {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-surface-border);
+  border-radius: 12px;
+}
+
+.edit-section {
+  margin-top: 32px;
+  padding-bottom: 100px;
+
+  summary {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+}
+
+.delete-error {
+  font-size: 13px;
 }
 
 a.danger {
-  font-size: 75%;
-}
-
-p#delete-error {
-  font-size: 75%;
+  font-size: 13px;
 }
 </style>

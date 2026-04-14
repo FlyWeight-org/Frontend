@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Navbar from '@/components/account/nav.vue'
+import Navbar from '@/components/flights/nav.vue'
 </script>
 
 <template>

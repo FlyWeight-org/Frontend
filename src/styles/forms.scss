@@ -1,29 +1,18 @@
-@use 'colors';
 @use 'fields';
-@use 'vars';
-
-$animation-speed: 3s;
-
-@keyframes shimmer {
-  0% {
-    background-position: -200px 0;
-  }
-
-  100% {
-    background-position: 200px 0;
-  }
-}
+@use 'animations';
 
 fieldset {
   padding: 0;
-  margin: 20px 0;
+  margin: 16px 0;
   border: 0;
 }
 
 label.checkbox-label {
   display: flex;
   flex-flow: row nowrap;
+  gap: 10px;
   align-items: center;
+  cursor: pointer;
 }
 
 input[type='text'],
@@ -37,121 +26,141 @@ textarea {
 button,
 input[type='submit'],
 input[type='button'] {
-  @include vars.slant;
-
-  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
   color: white;
   appearance: none;
-  background: vars.$gradient-1, colors.$resolution-blue;
-  background-size: 200px 50px; // TODO doesn't quite line up with length of gradient
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-pink));
   border: 0;
+  border-radius: 12px;
+  transition:
+    transform 0.1s ease,
+    opacity 0.15s ease;
 
   &:disabled {
+    cursor: default;
     opacity: 0.5;
   }
 
-  &:not(:disabled, .processing) {
-    cursor: pointer;
-  }
-
-  &:active:not(:disabled, .processing) {
-    transform: translate(5px, 5px);
+  &:not(:disabled, .processing):active {
+    transform: scale(0.98);
   }
 
   &.processing {
-    animation: shimmer $animation-speed linear infinite;
+    animation: shimmer 3s linear infinite;
+    background-size: 200px 50px;
   }
 }
 
 input[type='checkbox'] {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  padding: 10px;
-  margin-right: 0.5em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  padding: 0;
   appearance: none;
   cursor: pointer;
-  background-image: url('../images/checkmark.svg');
+  background: var(--color-input-bg);
+  border: 1px solid var(--color-input-border);
+  border-radius: 6px;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 
   &:checked {
-    background-image: url('../images/checkmark-checked.svg');
+    background: linear-gradient(135deg, var(--color-accent-purple), var(--color-accent-pink));
+    border-color: transparent;
+  }
+
+  &:checked::after {
+    content: '\2713';
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
   }
 }
 
 ul.error {
   padding-left: 0;
-  margin: 0;
+  margin: 4px 0;
   list-style-type: none;
 }
 
 .error,
 .error p,
-.error li {
-  font-size: 12pt;
-
-  h2 {
-    font-size: 12pt;
-    font-weight: bold;
-    color: colors.$fandango;
-  }
-}
-
-.error,
-.error * {
-  color: colors.$fandango;
+.error li,
+.error h2 {
+  font-size: 13px;
+  color: var(--color-error);
 }
 
 .field_with_errors label {
-  color: colors.$fandango;
+  color: var(--color-error);
 }
 
 fieldset.actions {
   display: flex;
   flex-flow: row wrap;
-  align-items: baseline;
-
-  > * {
-    margin: 0 10px;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
+  gap: 12px;
+  align-items: center;
 
   > a {
-    font-size: 11pt;
+    font-size: 13px;
   }
 }
 
-form:not(.inline) label {
+form:not(.inline) label:not(.checkbox-label) {
   display: block;
-  margin-bottom: 5px;
-  font-size: 12pt;
-  font-weight: bold;
-  font-stretch: condensed;
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
 }
 
 form.inline {
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  gap: 8px;
+  align-items: flex-end;
 
   fieldset {
-    margin: 5px 0;
-
-    &:not(:last-child) {
-      margin-right: 10px;
-    }
+    margin: 4px 0;
   }
 
   label:not(.checkbox-label) {
-    font-size: 50%;
+    font-size: 11px;
   }
 
   input,
   select,
   textarea {
     max-width: 200px;
-    font-size: 12pt;
+    font-size: 14px;
   }
+}
+
+button.link,
+input[type='submit'].link {
+  padding: 0;
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.flex-break-h {
+  flex-basis: 100%;
+  height: 0;
 }

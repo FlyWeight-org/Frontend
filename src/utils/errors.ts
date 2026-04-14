@@ -8,6 +8,7 @@ export function errorToString(error: unknown): string {
 }
 
 export function notifySentry(error: unknown): void {
+  // eslint-disable-next-line no-console
   console.error(error)
   if (isError(error)) {
     Sentry.captureException(error)

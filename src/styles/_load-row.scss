@@ -1,0 +1,65 @@
+@mixin load-row {
+  .load-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-surface-border);
+    border-radius: 12px;
+    transition: opacity 0.2s ease;
+
+    &.disabled {
+      opacity: 0.4;
+    }
+  }
+
+  .load-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .load-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-primary);
+  }
+
+  .load-weight {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-accent-purple);
+    white-space: nowrap;
+  }
+
+  .load-delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease;
+
+    &:hover {
+      color: var(--color-danger);
+      border-color: var(--color-danger);
+    }
+  }
+
+  p.error {
+    margin: 0 0 6px;
+  }
+}

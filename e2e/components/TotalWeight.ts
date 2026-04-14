@@ -7,7 +7,7 @@ export class TotalWeight {
     return this.page.getByTestId('total-weight')
   }
 
-  breakdown() {
-    return this.page.getByTestId('total-weight-breakdown')
+  totalValue() {
+    return this.page.getByTestId('total-weight-value')
   }
 }

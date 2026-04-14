@@ -8,6 +8,14 @@ const { t } = useI18n()
 <template>
   <main>
     <h1>{{ t('account.edit.title') }}</h1>
-    <account-form />
+    <div class="card form-card">
+      <account-form />
+    </div>
   </main>
 </template>
+
+<style scoped lang="scss">
+.form-card {
+  padding: 20px;
+}
+</style>

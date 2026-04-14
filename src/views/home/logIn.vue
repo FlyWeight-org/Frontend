@@ -34,62 +34,73 @@ const errorMessage = computed<string | null>(() =>
 </script>
 
 <template>
-  <p class="error">
-    {{ t('home.logIn.newAccounts') }}
-  </p>
+  <div class="card auth-card">
+    <p v-if="error" class="error" data-testid="login-error">
+      {{ errorMessage }}
+    </p>
 
-  <form method="post" :action="URL" @submit.prevent="submitHandler">
-    <field
-      v-model="session.email"
-      type="email"
-      object="session"
-      field="email"
-      :label="t('pilot.email')"
-      :errors="errors"
-      required
-      autocomplete="email"
-      data-testid="login-email"
-    />
-
-    <field
-      v-model="session.password"
-      type="password"
-      object="session"
-      field="password"
-      :label="t('session.password')"
-      :errors="errors"
-      required
-      autocomplete="current-password"
-      data-testid="login-password"
-    />
-
-    <field
-      v-model="session.remember_me"
-      type="checkbox"
-      object="session"
-      field="remember_me"
-      :errors="errors"
-      :label="t('home.logIn.rememberMe')"
-    />
-
-    <fieldset class="actions">
-      <input
-        type="submit"
-        name="commit"
-        :value="t('home.logIn.button')"
-        :class="{ processing: isProcessing }"
-        data-testid="login-submit"
+    <form method="post" :action="URL" @submit.prevent="submitHandler">
+      <field
+        v-model="session.email"
+        type="email"
+        object="session"
+        field="email"
+        :label="t('pilot.email')"
+        :errors="errors"
+        required
+        autocomplete="email"
+        data-testid="login-email"
       />
 
-      <p data-testid="forgot-password-link">
-        <router-link to="/forgot-password">
-          {{ t('home.logIn.forgotPassword') }}
-        </router-link>
-      </p>
-    </fieldset>
-  </form>
+      <field
+        v-model="session.password"
+        type="password"
+        object="session"
+        field="password"
+        :label="t('session.password')"
+        :errors="errors"
+        required
+        autocomplete="current-password"
+        data-testid="login-password"
+      />
 
-  <p v-if="error" class="error" data-testid="login-error">
-    {{ errorMessage }}
-  </p>
+      <field
+        v-model="session.remember_me"
+        type="checkbox"
+        object="session"
+        field="remember_me"
+        :errors="errors"
+        :label="t('home.logIn.rememberMe')"
+      />
+
+      <fieldset class="actions">
+        <input
+          type="submit"
+          name="commit"
+          :value="t('home.logIn.button')"
+          :class="{ processing: isProcessing }"
+          data-testid="login-submit"
+        />
+      </fieldset>
+    </form>
+
+    <p class="auth-link" data-testid="forgot-password-link">
+      <router-link to="/forgot-password">
+        {{ t('home.logIn.forgotPassword') }}
+      </router-link>
+    </p>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.auth-card {
+  padding: 24px;
+  text-align: left;
+}
+
+.auth-link {
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: center;
+}
+</style>

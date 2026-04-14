@@ -17,14 +17,17 @@ export class PassengerFlightPage {
   }
 
   async fillWeight(weight: string): Promise<void> {
+    await this.page.getByTestId('passenger-weight').waitFor({ state: 'visible' })
     await this.page.getByTestId('passenger-weight').fill(weight)
   }
 
   async fillBagsWeight(weight: string): Promise<void> {
+    await this.page.getByTestId('passenger-bags-weight').waitFor({ state: 'visible' })
     await this.page.getByTestId('passenger-bags-weight').fill(weight)
   }
 
   async submit(): Promise<void> {
+    await this.page.getByTestId('passenger-submit').waitFor({ state: 'visible' })
     await this.page.getByTestId('passenger-submit').click()
   }
 

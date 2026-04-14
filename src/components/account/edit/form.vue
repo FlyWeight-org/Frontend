@@ -109,7 +109,7 @@ watch(
       data-testid="account-password"
     />
 
-    <h2>Change Password</h2>
+    <h2>{{ t('account.edit.changePassword') }}</h2>
 
     <field
       v-model="pilot.password"

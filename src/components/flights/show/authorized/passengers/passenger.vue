@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
+import { X } from 'lucide-vue-next'
 import type { Load } from '@/types'
-import personImageURL from '@/images/person.svg'
-import luggageImageURL from '@/images/luggage.svg'
 import { errorToString, notifySentry } from '@/utils/errors'
 import { useFlightStore } from '@/stores/modules/flight'
 
-const { n } = useI18n()
+const { n, t } = useI18n()
 const flightStore = useFlightStore()
 
 const props = defineProps<{
@@ -32,29 +31,34 @@ function toggleEnabled(event: Event) {
 </script>
 
 <template>
-  <div class="passenger-list-item" data-testid="passenger-list-item">
+  <div class="load-row" :class="{ disabled: passenger.disabled }" data-testid="passenger-list-item">
     <input
       type="checkbox"
       :checked="!passenger.disabled"
       data-testid="passenger-enabled"
       @change="toggleEnabled($event)"
     />
-
-    <div class="name" data-testid="passenger-name">
-      {{ passenger.name }}
+    <div class="load-info">
+      <span class="load-name" data-testid="passenger-name">{{ passenger.name }}</span>
+      <span v-if="passenger.bagsWeight" class="load-bags" data-testid="passenger-bags-weight">
+        {{
+          t('flights.show.authorized.loads.bagsWithWeight', {
+            weight: n(passenger.bagsWeight, 'pounds'),
+          })
+        }}
+      </span>
     </div>
-    <div class="weight" data-testid="passenger-weight">
-      <img :src="personImageURL" alt="Person" />
+    <div class="load-weight" data-testid="passenger-weight">
       {{ n(passenger.weight, 'pounds') }}
     </div>
-    <div v-if="passenger.bagsWeight" class="weight" data-testid="passenger-bags-weight">
-      <img :src="luggageImageURL" alt="Bags" />
-      {{ n(passenger.bagsWeight, 'pounds') }}
-    </div>
-
-    <div class="delete">
-      <a href="#" data-testid="passenger-delete" @click.prevent="deleteClicked">&times;</a>
-    </div>
+    <button
+      class="load-delete"
+      data-testid="passenger-delete"
+      :aria-label="t('flights.show.authorized.loads.removeAria')"
+      @click="deleteClicked"
+    >
+      <X :size="16" :stroke-width="2.5" />
+    </button>
   </div>
   <p v-if="deleteError" class="error" data-testid="passenger-delete-error">
     <small>{{ deleteError }}</small>
@@ -62,67 +66,18 @@ function toggleEnabled(event: Event) {
 </template>
 
 <style scoped lang="scss">
-@use '@/styles/colors';
-@use '@/styles/vars';
+@use '@/styles/load-row';
 
-.passenger-list-item {
-  @include vars.slant($padding-v: 2.5px);
+@include load-row.load-row;
 
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-
-  .name {
-    margin-right: 0.5em;
-    font-weight: 700;
-  }
-
-  .weight {
-    margin-right: 0.5em;
-    font-size: 14pt;
-    font-weight: 200;
-  }
-
-  img {
-    margin-right: 0.1em;
-  }
-
-  .icon {
-    img {
-      width: 16px;
-      height: 16px;
-    }
-  }
-
-  .delete {
-    display: none;
-    flex-grow: 1;
-    text-align: right;
-
-    a {
-      padding: 0;
-      margin: 0;
-      font-weight: 700;
-      color: vars.$body-color;
-      background: none;
-      border: 0;
-
-      &:active {
-        transform: translate(1px, 1px);
-      }
-    }
-  }
-
-  &:hover {
-    background: vars.$gradient-2, colors.$cultured;
-
-    .delete {
-      display: block;
-    }
-  }
+.load-name {
+  line-height: 1.2;
 }
 
-p.error {
-  margin: 0;
+.load-bags {
+  display: block;
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--color-text-muted);
 }
 </style>

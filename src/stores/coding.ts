@@ -117,7 +117,10 @@ export function flightFromJSON(data: unknown): Flight {
     ...omit(JSON, 'uuid', 'date'),
     UUID: JSON.uuid,
     date: luxon.DateTime.fromISO(JSON.date),
-    loads: JSON.loads == null ? undefined : map(JSON.loads, (load) => loadFromJSON(load)),
+    loads:
+      JSON.loads === null || JSON.loads === undefined
+        ? undefined
+        : map(JSON.loads, (load) => loadFromJSON(load)),
     canEdit: JSON.can_edit,
   }
 }
