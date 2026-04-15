@@ -3,6 +3,9 @@ import type { LocaleMessage } from '@intlify/core-base'
 
 const en: LocaleMessage<VueMessageType> = {
   title: 'FlyWeight',
+  a11y: {
+    skipToContent: 'Skip to main content',
+  },
   account: {
     edit: {
       title: 'Edit Account',
@@ -139,6 +142,10 @@ const en: LocaleMessage<VueMessageType> = {
   },
   messages: {
     loading: 'Loading…',
+  },
+  notFound: {
+    message: 'We couldn’t find that page. It may have moved or never existed.',
+    goHome: 'Back to home',
   },
   passenger: {
     name: 'Passenger name',

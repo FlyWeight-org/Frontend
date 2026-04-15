@@ -14,7 +14,7 @@ onMounted(() => flightsStore.loadFlights())
 </script>
 
 <template>
-  <main>
+  <main id="main-content">
     <div v-if="flightsStore.flightsLoading" class="empty">
       {{ t('messages.loading') }}
     </div>

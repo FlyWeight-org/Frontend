@@ -7,5 +7,7 @@
 
 # TECHNOLOGY COLOPHON
 
-    CSS3, HTML5, Vue.js, Normalize.css
-    Ruby on Rails, Heroku
+    HTML5, SCSS, Vue 3, Vite, TypeScript, Pinia, Vue Router, Vue I18n
+    Sentry, Normalize.css, Lucide icons
+    Backend: Ruby on Rails (separate repo)
+    Hosting: Fly.io (nginx static), GitHub Actions for CI/CD

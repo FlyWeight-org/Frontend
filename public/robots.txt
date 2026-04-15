@@ -1,5 +1,8 @@
 # www.robotstxt.org/
 
-# Allow crawling of home page only
-Allow: /$
-Disallow: /
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /flights/
+
+Sitemap: https://flyweight.fly.dev/sitemap.xml

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1a0e2e" />
+    <title>FlyWeight</title>
+    <script>
+      // SPA fallback: rewrite to / so the Vue Router can handle the path.
+      // Preserves the original path/search/hash via sessionStorage so the
+      // app can restore navigation after bootstrapping.
+      ;(function () {
+        try {
+          var path = window.location.pathname + window.location.search + window.location.hash
+          sessionStorage.setItem('spa-redirect', path)
+        } catch (e) {}
+        window.location.replace('/')
+      })()
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <p>Page not found. <a href="/">Return to FlyWeight</a>.</p>
+    </noscript>
+  </body>
+</html>

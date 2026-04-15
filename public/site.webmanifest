@@ -1,29 +1,39 @@
 {
   "short_name": "FlyWeight",
   "name": "FlyWeight",
+  "description": "Discrete weight and balance entry for passengers.",
   "icons": [
     {
-      "src": "apple-touch-icon-ipad-pro.png",
+      "src": "apple-touch-icon-iphone-retina.png",
       "type": "image/png",
-      "sizes": "167x167"
+      "sizes": "120x120",
+      "purpose": "any"
     },
     {
       "src": "apple-touch-icon-ipad-retina.png",
       "type": "image/png",
-      "sizes": "152x152"
+      "sizes": "152x152",
+      "purpose": "any"
+    },
+    {
+      "src": "apple-touch-icon-ipad-pro.png",
+      "type": "image/png",
+      "sizes": "167x167",
+      "purpose": "any"
     },
     {
       "src": "apple-touch-icon-iphone-6p.png",
       "type": "image/png",
-      "sizes": "180x180"
-    },
-    {
-      "src": "apple-touch-icon-iphone-retina.png",
-      "type": "image/png",
-      "sizes": "120x120"
+      "sizes": "180x180",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "/",
-  "background_color": "#ffffff",
-  "theme_color": "#14248a"
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a0e2e",
+  "theme_color": "#1a0e2e",
+  "categories": ["productivity", "travel", "utilities"],
+  "lang": "en"
 }

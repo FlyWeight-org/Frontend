@@ -6,7 +6,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <main>
+  <main id="main-content">
     <h1>{{ t('flights.new.title') }}</h1>
     <div class="card form-card">
       <flight-form />

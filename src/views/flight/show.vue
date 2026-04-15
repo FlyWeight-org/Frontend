@@ -9,7 +9,7 @@ const flightStore = useFlightStore()
 </script>
 
 <template>
-  <main>
+  <main id="main-content">
     <div v-if="flightStore.flightLoading" class="empty">
       {{ t('messages.loading') }}
     </div>

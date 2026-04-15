@@ -6,7 +6,7 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <main class="welcome">
+  <main id="main-content" class="welcome">
     <div class="welcome-content">
       <h1 class="wordmark gradient-text">{{ t('title') }}</h1>
       <p class="tagline">{{ t('home.welcome.subtitle') }}</p>

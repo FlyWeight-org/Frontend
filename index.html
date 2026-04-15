@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta
+      http-equiv="Permissions-Policy"
+      content="camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -16,14 +22,25 @@
     <title>FlyWeight</title>
     <meta name="title" content="FlyWeight" />
     <meta name="description" content="Discrete weight and balance entry for passengers." />
+    <meta name="author" content="Tim Morgan" />
     <meta name="theme-color" content="#1a0e2e" />
+    <link rel="canonical" href="https://flyweight.fly.dev/" />
+
+    <!-- Apple PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="FlyWeight" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="FlyWeight" />
     <meta property="og:url" content="https://flyweight.fly.dev/" />
     <meta property="og:title" content="FlyWeight" />
     <meta property="og:description" content="Discrete weight and balance entry for passengers." />
     <meta property="og:image" content="/favicon.ico" />
+    <meta property="og:image:alt" content="FlyWeight app icon" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary" />
@@ -34,12 +51,57 @@
       content="Discrete weight and balance entry for passengers."
     />
     <meta property="twitter:image" content="/favicon.ico" />
+    <meta property="twitter:image:alt" content="FlyWeight app icon" />
 
     <link rel="icon" href="/favicon.ico" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "FlyWeight",
+        "description": "Discrete weight and balance entry for passengers.",
+        "url": "https://flyweight.fly.dev/",
+        "applicationCategory": "TravelApplication",
+        "operatingSystem": "Any",
+        "browserRequirements": "Requires JavaScript and a modern browser.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Tim Morgan"
+        }
+      }
+    </script>
   </head>
 
   <body>
+    <noscript>
+      <div
+        style="
+          padding: 24px;
+          margin: 24px auto;
+          max-width: 480px;
+          font-family: system-ui, sans-serif;
+          color: #f3e8ff;
+          background: #2d1b4e;
+          border: 1px solid #7c3aed;
+          border-radius: 12px;
+          text-align: center;
+        "
+      >
+        <h1 style="margin-top: 0">FlyWeight requires JavaScript</h1>
+        <p>
+          This application needs JavaScript to run. Please enable JavaScript in your browser
+          settings and reload the page.
+        </p>
+      </div>
+    </noscript>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

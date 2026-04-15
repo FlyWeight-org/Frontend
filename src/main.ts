@@ -62,4 +62,14 @@ app.use(pinia)
 app.use(router)
 app.use(i18n)
 
+// Global Vue error handler — forwards uncaught component errors to Sentry
+// when configured. In dev, Vue's own warnings will surface in the console.
+app.config.errorHandler = (err, _instance, info) => {
+  if (sentryDSN) {
+    Sentry.captureException(err, {
+      extra: { componentInfo: info },
+    })
+  }
+}
+
 app.component('VueDatePicker', VueDatePicker).mount('#app')
