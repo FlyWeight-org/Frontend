@@ -10,7 +10,15 @@ export default tseslint.config(
 
   {
     name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**', '.yarn/**', '.pnp.*'],
+    ignores: [
+      '**/dist/**',
+      '**/dist-ssr/**',
+      '**/coverage/**',
+      '**/playwright-report/**',
+      '**/test-results/**',
+      '.yarn/**',
+      '.pnp.*',
+    ],
   },
 
   js.configs.recommended,
@@ -64,6 +72,18 @@ export default tseslint.config(
     name: 'app/config-files',
     files: ['**/*.config.ts', '**/*.config.js'],
     extends: [tseslint.configs.disableTypeChecked],
+  },
+
+  {
+    name: 'app/node-scripts',
+    files: ['scripts/**/*.{js,mjs,cjs}'],
+    extends: [tseslint.configs.disableTypeChecked],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+      },
+    },
   },
 
   {

@@ -31,6 +31,9 @@ COPY . .
 # Build application
 RUN yarn run build
 
+# Generate nginx config with CSP script hashes from built HTML
+RUN node scripts/generate-nginx-conf.mjs
+
 # Remove development dependencies
 RUN yarn workspaces focus --production
 
@@ -52,7 +55,7 @@ COPY --from=exporter-download /tmp/nginx-prometheus-exporter /usr/local/bin/
 
 # Copy nginx configuration
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
-COPY .docker/default.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/.docker/default.conf.generated /etc/nginx/conf.d/default.conf
 
 # Copy startup script
 COPY .docker/start.sh /start.sh

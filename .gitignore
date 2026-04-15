@@ -13,6 +13,7 @@ dist
 dist-ssr
 coverage
 *.local
+.docker/default.conf.generated
 
 /test-results/
 /playwright-report/
