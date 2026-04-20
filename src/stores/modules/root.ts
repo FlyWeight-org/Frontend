@@ -4,25 +4,39 @@ import config from '@/config'
 import type { APIResponse } from '@/stores/types'
 import { Err, Ok } from 'ts-results'
 
+// Rodauth returns errors as either:
+//   { error: "message" }
+//   { "field-error": ["field_name", "error message"], error: "message" }
+// Custom Rails controllers return:
+//   { errors: { field: ["error 1"] } }
 const apiErrorBodySchema = z.object({
   errors: z.record(z.string(), z.array(z.string())).optional(),
   error: z.string().optional(),
+  'field-error': z.tuple([z.string(), z.string()]).optional(),
 })
+
 import { useAuthStore } from '@/stores/modules/auth'
 import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
+
+interface RequestArgs {
+  method?: string
+  path: string
+  body?: Record<string, unknown> | FormData | string
+  /** Don't log the user out if the response is 401 (for endpoints where 401
+   *  is a business-logic outcome, e.g. login, password reset request). */
+  skipResetAuth?: boolean
+  /** Don't include the Authorization header (for fully public endpoints). */
+  unauthenticated?: boolean
+}
 
 export function request({
   method,
   path,
   body,
   skipResetAuth,
-}: {
-  method?: string
-  path: string
-  body?: Record<string, unknown> | FormData | string
-  skipResetAuth?: boolean
-}): Promise<Response> {
+  unauthenticated,
+}: RequestArgs): Promise<Response> {
   const auth = useAuthStore()
   const account = useAccountStore()
   const flights = useFlightsStore()
@@ -38,7 +52,7 @@ export function request({
     const headers: Record<string, string> = {
       Accept: 'application/json',
     }
-    if (!skipResetAuth && !isNull(auth.authHeader)) headers.Authorization = auth.authHeader
+    if (!unauthenticated && !isNull(auth.authHeader)) headers.Authorization = auth.authHeader
     if (!(body instanceof FormData) && !isString(body)) {
       headers['Content-Type'] = 'application/json'
     }
@@ -65,12 +79,7 @@ export function request({
   })
 }
 
-export async function requestJSON<T>(args: {
-  method?: string
-  path: string
-  body?: Record<string, unknown>
-  skipResetAuth?: boolean
-}): Promise<APIResponse<T>> {
+export async function requestJSON<T>(args: RequestArgs): Promise<APIResponse<T>> {
   const response = await request(args)
   if (response.ok) {
     return new Ok({
@@ -78,8 +87,13 @@ export async function requestJSON<T>(args: {
       body: response.status === 204 ? undefined : ((await response.json()) as T),
     })
   }
+  const parsed = apiErrorBodySchema.parse(await response.json())
+  // Normalize Rodauth's ["field", "message"] tuple into { field: ["message"] }.
+  const errors =
+    parsed.errors ??
+    (parsed['field-error'] ? { [parsed['field-error'][0]]: [parsed['field-error'][1]] } : undefined)
   return new Err({
     response,
-    body: apiErrorBodySchema.parse(await response.json()),
+    body: { errors, error: parsed.error },
   })
 }

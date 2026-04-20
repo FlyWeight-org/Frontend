@@ -26,6 +26,7 @@
     "@intlify/core-base": "^11.3.0",
     "@rails/actioncable": "^8.1.300",
     "@sentry/vue": "^10.45.0",
+    "@simplewebauthn/browser": "^13.3.0",
     "@vuepic/vue-datepicker": "^12.1.0",
     "is-touch-device": "^1.0.1",
     "lodash-es": "^4.17.23",

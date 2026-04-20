@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { isNull } from 'lodash-es'
+import { browserSupportsWebAuthnAutofill, WebAuthnAbortService } from '@simplewebauthn/browser'
 import config from '@/config'
 import type { SessionJSONDown } from '@/stores/coding'
 import Field from '@/components/field.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { useAuthStore } from '@/stores/modules/auth'
+import { usePasskeysStore } from '@/stores/modules/passkeys'
 
 const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
+const passkeysStore = usePasskeysStore()
 
-const session = reactive<SessionJSONDown>({
-  email: '',
+const session: SessionJSONDown = reactive({
+  login: '',
   password: '',
-  remember_me: false,
 })
-const URL = `${config.APIURL}/login.json`
+const URL = `${config.APIURL}/login`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<unknown>(
   () => authStore.logIn(session),
   async () => {
@@ -31,6 +33,21 @@ const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<unkn
 const errorMessage = computed<string | null>(() =>
   isNull(error) ? null : t('home.logIn.error', { error: error.value }),
 )
+
+onMounted(async () => {
+  if (!(await browserSupportsWebAuthnAutofill())) return
+  try {
+    const result = await passkeysStore.autofillLogIn()
+    if (result.ok) await router.push({ name: 'flightsList' })
+  } catch {
+    // Autofill rejects when the user dismisses it, navigates away, or
+    // submits the password form. None of these are errors worth surfacing.
+  }
+})
+
+onBeforeUnmount(() => {
+  WebAuthnAbortService.cancelCeremony()
+})
 </script>
 
 <template>
@@ -41,14 +58,14 @@ const errorMessage = computed<string | null>(() =>
 
     <form method="post" :action="URL" @submit.prevent="submitHandler">
       <field
-        v-model="session.email"
+        v-model="session.login"
         type="email"
         object="session"
-        field="email"
+        field="login"
         :label="t('pilot.email')"
         :errors="errors"
         required
-        autocomplete="email"
+        autocomplete="email webauthn"
         data-testid="login-email"
       />
 
@@ -62,15 +79,6 @@ const errorMessage = computed<string | null>(() =>
         required
         autocomplete="current-password"
         data-testid="login-password"
-      />
-
-      <field
-        v-model="session.remember_me"
-        type="checkbox"
-        object="session"
-        field="remember_me"
-        :errors="errors"
-        :label="t('home.logIn.rememberMe')"
       />
 
       <fieldset class="actions">

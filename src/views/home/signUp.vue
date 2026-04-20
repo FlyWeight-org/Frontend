@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { isNull } from 'lodash-es'
 import config from '@/config'
-import type { PilotJSONUp } from '@/stores/coding'
+import type { SignUpJSONUp } from '@/stores/coding'
 import Field from '@/components/field.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { useAccountStore } from '@/stores/modules/account'
@@ -13,13 +13,12 @@ const { t } = useI18n()
 const router = useRouter()
 const accountStore = useAccountStore()
 
-const pilot = reactive<PilotJSONUp>({
+const pilot: SignUpJSONUp = reactive({
   name: '',
-  email: '',
+  login: '',
   password: '',
-  password_confirmation: '',
 })
-const URL = `${config.APIURL}/signup.json`
+const URL = `${config.APIURL}/signup`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
   () => accountStore.signUp(pilot),
   async () => {
@@ -52,10 +51,10 @@ const errorMessage = computed<string | null>(() =>
       />
 
       <field
-        v-model="pilot.email"
+        v-model="pilot.login"
         type="email"
         object="pilot"
-        field="email"
+        field="login"
         :errors="errors"
         :label="t('pilot.email')"
         required
@@ -73,18 +72,6 @@ const errorMessage = computed<string | null>(() =>
         required
         autocomplete="new-password"
         data-testid="signup-password"
-      />
-
-      <field
-        v-model="pilot.password_confirmation"
-        type="password"
-        object="pilot"
-        field="password_confirmation"
-        :errors="errors"
-        :label="t('pilot.password_confirmation')"
-        required
-        autocomplete="new-password"
-        data-testid="signup-password-confirmation"
       />
 
       <fieldset class="actions">

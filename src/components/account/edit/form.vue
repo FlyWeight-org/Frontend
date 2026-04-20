@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, reactive, ref, watch } from 'vue'
-import { isEmpty, isNull } from 'lodash-es'
+import { isNull } from 'lodash-es'
 import Field from '@/components/field.vue'
 import config from '@/config'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
@@ -14,15 +14,10 @@ const accountStore = useAccountStore()
 
 requireAuth()
 
-const URL = `${config.APIURL}/account.json`
-const pilot = reactive<PilotJSONUp>({
-  ...(accountStore.currentPilot ?? {
-    email: '',
-    name: '',
-  }),
-  current_password: '',
-  password: '',
-  password_confirmation: '',
+const URL = `${config.APIURL}/account`
+const pilot: PilotJSONUp = reactive({
+  email: accountStore.currentPilot?.email ?? '',
+  name: accountStore.currentPilot?.name ?? '',
 })
 const success = ref(false)
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
@@ -35,19 +30,13 @@ const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
   },
   () => {
     success.value = false
-    pilot.current_password = ''
-    pilot.password = ''
-    pilot.password_confirmation = ''
   },
 )
 
 const dirty = computed<boolean>(() => {
   if (isNull(accountStore.currentPilot)) return true
   return (
-    pilot.email !== accountStore.currentPilot.email ||
-    pilot.name !== accountStore.currentPilot.name ||
-    !isEmpty(pilot.password) ||
-    !isEmpty(pilot.password_confirmation)
+    pilot.email !== accountStore.currentPilot.email || pilot.name !== accountStore.currentPilot.name
   )
 })
 
@@ -55,7 +44,7 @@ watch(
   () => accountStore.currentPilot,
   () => {
     if (isNull(accountStore.currentPilot)) return // requireAuth will handle redirect
-    pilot.email = accountStore.currentPilot.email
+    pilot.email = accountStore.currentPilot.email ?? ''
     pilot.name = accountStore.currentPilot.name
   },
 )
@@ -95,44 +84,6 @@ watch(
       :label="t('pilot.email')"
       autocomplete="email"
       data-testid="account-email"
-    />
-
-    <field
-      v-model="pilot.current_password"
-      type="password"
-      object="pilot"
-      field="current_password"
-      requried
-      :errors="errors"
-      :label="t('pilot.current_password')"
-      autocomplete="current-password"
-      data-testid="account-password"
-    />
-
-    <h2>{{ t('account.edit.changePassword') }}</h2>
-
-    <field
-      v-model="pilot.password"
-      type="password"
-      object="pilot"
-      field="password"
-      requried
-      :errors="errors"
-      :label="t('pilot.password')"
-      autocomplete="new-password"
-      data-testid="account-new-password"
-    />
-
-    <field
-      v-model="pilot.password_confirmation"
-      type="password"
-      object="pilot"
-      field="password_confirmation"
-      requried
-      :errors="errors"
-      :label="t('pilot.password_confirmation')"
-      autocomplete="new-password"
-      data-testid="account-new-password-confirmation"
     />
 
     <fieldset class="actions">

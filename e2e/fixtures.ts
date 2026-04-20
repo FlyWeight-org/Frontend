@@ -99,20 +99,28 @@ export const test = base.extend<Fixtures>({
 
 export async function fetchLastEmail(): Promise<{
   html: string
+  text: string
 } | null> {
   const response = await fetch(`${API_HOST}/__cypress__/last_email`)
   if (response.status !== 200) return null
 
   const { default: PostalMime } = await import('postal-mime')
-  const text = await response.text()
-  const parsed = await PostalMime.parse(text)
-  return { html: parsed.html ?? '' }
+  const raw = await response.text()
+  const parsed = await PostalMime.parse(raw)
+  return { html: parsed.html ?? '', text: parsed.text ?? '' }
 }
 
-export function extractEmailPath(html: string, baseURL: string): string {
-  const match = /href="([^"]+)"/.exec(html)
-  if (!match) throw new Error('No link found in email HTML')
-  const url = new URL(match[1], baseURL)
+export function extractEmailPath(body: { html: string; text: string }, baseURL: string): string {
+  // Try HTML anchor first, then fall back to any URL in the plain-text body.
+  const hrefMatch = /href="([^"]+)"/.exec(body.html)
+  if (hrefMatch) {
+    const url = new URL(hrefMatch[1], baseURL)
+    return url.pathname + url.search
+  }
+
+  const urlMatch = /https?:\/\/\S+/.exec(body.text || body.html)
+  if (!urlMatch) throw new Error('No link found in email')
+  const url = new URL(urlMatch[0], baseURL)
   return url.pathname + url.search
 }
 

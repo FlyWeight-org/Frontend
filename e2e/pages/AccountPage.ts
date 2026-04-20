@@ -8,16 +8,9 @@ export class AccountPage {
     await this.page.getByTestId('account-name').fill(name)
   }
 
-  async fillCurrentPassword(password: string): Promise<void> {
-    await this.page.getByTestId('account-password').fill(password)
-  }
-
-  async fillNewPassword(password: string): Promise<void> {
-    await this.page.getByTestId('account-new-password').fill(password)
-  }
-
-  async fillNewPasswordConfirmation(confirmation: string): Promise<void> {
-    await this.page.getByTestId('account-new-password-confirmation').fill(confirmation)
+  async clearAndFillEmail(email: string): Promise<void> {
+    await this.page.getByTestId('account-email').clear()
+    await this.page.getByTestId('account-email').fill(email)
   }
 
   async submit(): Promise<void> {

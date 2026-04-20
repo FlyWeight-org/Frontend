@@ -11,12 +11,14 @@ describe('form.vue', () => {
   const initialState = {
     auth: {
       JWT,
+      refreshToken: null,
       loggingIn: false,
     },
     account: {
       currentPilot: {
         name: 'Sancho Sample',
         email: 'sancho@example.com',
+        passkeys: [],
       },
       currentPilotLoading: false,
       currentPilotError: null,
@@ -62,7 +64,7 @@ describe('form.vue', () => {
       vi.mocked(accountStore.updateAccount).mockReturnValue(
         Promise.resolve(
           new Err({
-            current_password: ['must not be blank'],
+            email: ['must not be blank'],
           }),
         ),
       )
@@ -94,9 +96,6 @@ describe('form.vue', () => {
       await wrapper.vm.$nextTick()
 
       expect(wrapper.get('p.error').text()).toEqual('some error')
-      expect(
-        (wrapper.get('input[name="pilot[current_password]"]').element as HTMLInputElement).value,
-      ).toEqual('')
     })
   })
 })

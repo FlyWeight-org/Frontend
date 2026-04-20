@@ -1,8 +1,15 @@
 import type { DateTime } from 'luxon'
 
+export interface Passkey {
+  id: string
+  label: string | null
+  lastUsedAt: DateTime | null
+}
+
 export interface Pilot {
   email?: string
   name: string
+  passkeys?: Passkey[]
 }
 
 export interface Load {

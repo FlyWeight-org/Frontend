@@ -65,6 +65,10 @@ export default tseslint.config(
       'vue/max-attributes-per-line': 'off',
       'vue/singleline-html-element-content-newline': 'off',
       'no-useless-assignment': 'off',
+      // typescript-eslint's eslint-recommended config disables no-undef only
+      // for .ts/.tsx/.mts/.cts files. Vue SFCs are type-checked too, so do
+      // the same there — browser globals come from TypeScript's lib.dom.
+      'no-undef': 'off',
     },
   },
 

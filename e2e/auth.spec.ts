@@ -7,13 +7,10 @@ test.describe('signing up', () => {
     await signUpPage.visit()
     await signUpPage.fillName('Sancho Sample')
     await signUpPage.fillEmail('sancho@example.com')
-    await signUpPage.fillPassword('supersecret')
-    await signUpPage.fillPasswordConfirmation('doesntmatch')
+    await signUpPage.fillPassword('x') // too short
     await signUpPage.submit()
 
-    await expect(
-      page.locator('[data-testid="field-errors"][data-name="password_confirmation"]'),
-    ).toContainText('doesn\u2019t match')
+    await expect(page.locator('[data-testid="field-errors"][data-name="password"]')).toBeVisible()
   })
 
   test('signs up a user', async ({ page, signUpPage, resetDatabase: _reset }) => {
@@ -21,7 +18,6 @@ test.describe('signing up', () => {
     await signUpPage.fillName('Sancho Sample')
     await signUpPage.fillEmail('sancho@example.com')
     await signUpPage.fillPassword('supersecret')
-    await signUpPage.fillPasswordConfirmation('supersecret')
     await signUpPage.submit()
 
     await expect(page.getByTestId('no-flights')).toBeVisible()
@@ -35,7 +31,7 @@ test.describe('logging in', () => {
     await loginPage.fillPassword('wrongpassword')
     await loginPage.submit()
 
-    await expect(loginPage.loginError()).toContainText('Incorrect email or password')
+    await expect(loginPage.loginError()).toBeVisible()
   })
 
   test('authenticates a valid login', async ({ loginPage, resetDatabase: _reset }) => {
@@ -47,7 +43,7 @@ test.describe('logging in', () => {
 })
 
 test.describe('forgot password', () => {
-  test('does not send an email for an unknown email', async ({
+  test('shows success for unknown email (no enumeration)', async ({
     loginPage,
     resetDatabase: _reset,
   }) => {
@@ -78,7 +74,7 @@ test.describe('forgot password', () => {
       const email = await fetchLastEmail()
       expect(email).not.toBeNull()
 
-      const url = extractEmailPath(email!.html, 'http://127.0.0.1:4173')
+      const url = extractEmailPath(email!, 'http://127.0.0.1:4173')
       const resetPage = new ResetPasswordPage(page)
       await resetPage.visit(url)
 
@@ -88,7 +84,7 @@ test.describe('forgot password', () => {
 
       await expect(
         page.locator('[data-testid="field-errors"][data-name="password_confirmation"]'),
-      ).toContainText('doesn\u2019t match')
+      ).toContainText('do not match')
     })
 
     test('resets the password', async ({ page, loginPage, resetDatabase: _reset }) => {
@@ -102,7 +98,7 @@ test.describe('forgot password', () => {
       const email = await fetchLastEmail()
       expect(email).not.toBeNull()
 
-      const url = extractEmailPath(email!.html, 'http://127.0.0.1:4173')
+      const url = extractEmailPath(email!, 'http://127.0.0.1:4173')
       const resetPage = new ResetPasswordPage(page)
       await resetPage.visit(url)
 

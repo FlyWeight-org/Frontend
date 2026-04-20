@@ -43,7 +43,7 @@ async function logoutClicked() {
         </router-link>
       </li>
       <li>
-        <a href="/logout.json" data-testid="nav-logout" @click.prevent="logoutClicked">
+        <a href="#" data-testid="nav-logout" @click.prevent="logoutClicked">
           {{ t('flights.nav.logout') }}
         </a>
       </li>

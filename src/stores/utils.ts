@@ -28,6 +28,11 @@ function errorForResponseStatus(status: number): Error {
 }
 
 function returnErrorsForAPIResponse(failure: APIFailure): Errors {
+  // Authentication failures surface as a general error message, not field errors.
+  if (failure.response.status === 401 && failure.body.error) {
+    throw new Error(failure.body.error)
+  }
+
   // Validation errors are expected - return them
   if (failure.body.errors) return failure.body.errors
 

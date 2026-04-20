@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import type { AccountState, APIResponse, Errors } from '@/stores/types'
-import type { PilotJSONUp } from '@/stores/coding'
+import {
+  pilotFromJSON,
+  type PilotJSONDown,
+  type PilotJSONUp,
+  type SignUpJSONUp,
+} from '@/stores/coding'
 import { Err, Ok, Result } from 'ts-results'
 import type { Pilot } from '@/types'
 import { request, requestJSON } from '@/stores/modules/root'
@@ -40,27 +45,28 @@ export const useAccountStore = defineStore('account', {
     /**
      * Creates a new pilot and sets `currentPilot`.
      *
-     * @param pilot The pilot attributes.
+     * @param signUp The signup attributes (login, password, name).
      * @throws If an HTTP error occurs.
      */
 
-    async signUp(pilot: PilotJSONUp): Promise<Result<void, Errors>> {
+    async signUp(signUp: SignUpJSONUp): Promise<Result<void, Errors>> {
       const auth = useAuthStore()
       const flights = useFlightsStore()
 
       auth.reset()
 
       try {
-        const response = await requestJSON<Pilot>({
+        const response = await requestJSON<PilotJSONDown>({
           method: 'post',
-          path: '/signup.json',
-          body: { pilot },
+          path: '/signup',
+          body: { ...signUp },
+          unauthenticated: true,
+          skipResetAuth: true,
         })
         const result = loadAPIResponseBodyOrReturnErrors(response)
         if (result.ok) {
-          auth.setJWT(response.val.response)
-          this.setCurrentPilot(result.val)
-
+          auth.setTokens(response.val.response, result.val)
+          this.setCurrentPilot(pilotFromJSON(result.val))
           flights.reset()
           return Ok.EMPTY
         }
@@ -77,16 +83,14 @@ export const useAccountStore = defineStore('account', {
      * Generates a reset-password email.
      *
      * @param email The pilot email address to send the reset-password link to.
-     * @return A Result containing nothing if successful, or the validation errors
-     * if failed.
      * @throws If an HTTP error occurs.
      */
 
     async forgotPassword(email: string): Promise<void> {
       const response = await request({
         method: 'post',
-        path: '/password_resets.json',
-        body: { pilot: { email } },
+        path: '/password-resets',
+        body: { login: email },
       })
       ignoreResponseBody(response)
     },
@@ -95,7 +99,6 @@ export const useAccountStore = defineStore('account', {
      * Resets a pilot password using a token from a reset-password email.
      *
      * @param password The new pilot password.
-     * @param confirmation The password confirmation.
      * @param token The token from the reset-password email.
      * @return A Result containing nothing if successful, or the validation errors
      * if failed.
@@ -104,23 +107,17 @@ export const useAccountStore = defineStore('account', {
 
     async resetPassword({
       password,
-      confirmation,
       token,
     }: {
       password: string
-      confirmation: string
       token: string
     }): Promise<Result<void, Errors>> {
       const response: APIResponse<void> = await requestJSON({
-        method: 'PATCH',
-        path: '/password_resets.json',
-        body: {
-          pilot: {
-            password,
-            password_confirmation: confirmation,
-            reset_password_token: token,
-          },
-        },
+        method: 'post',
+        path: '/reset-password',
+        body: { key: token, password },
+        unauthenticated: true,
+        skipResetAuth: true,
       })
       return ignoreAPIResponseBodyOrReturnErrors(response)
     },
@@ -143,13 +140,13 @@ export const useAccountStore = defineStore('account', {
         currentPilotLoading: true,
       })
       try {
-        const response = await requestJSON<Pilot>({
+        const response = await requestJSON<PilotJSONDown>({
           method: 'GET',
-          path: '/account.json',
+          path: '/account',
         })
         if (response.ok) {
-          const pilot = loadAPIResponseBodyOrThrowErrors(response)
-          this.setCurrentPilot(pilot)
+          const body = loadAPIResponseBodyOrThrowErrors(response)
+          this.setCurrentPilot(pilotFromJSON(body))
         }
       } catch (error) {
         this.$patch({
@@ -162,34 +159,30 @@ export const useAccountStore = defineStore('account', {
     },
 
     /**
-     * Update a Pilot account.
+     * Updates the Pilot's profile (name, email).
      *
-     * @param pilot The new pilot information. Must include a `current_password`
-     * attribute.
+     * @param pilot The new pilot attributes.
      * @return A Result containing nothing if successful, or the validation errors
      * if failed.
      * @throws If an HTTP error occurs.
      */
 
     async updateAccount(pilot: PilotJSONUp): Promise<Result<void, Errors>> {
-      const auth = useAuthStore()
-
-      const response = await requestJSON<Pilot>({
+      const response = await requestJSON<PilotJSONDown>({
         method: 'PATCH',
-        path: '/account.json',
+        path: '/account',
         body: { pilot },
       })
       const result = loadAPIResponseBodyOrReturnErrors(response)
       if (result.ok) {
-        auth.setJWT(response.val.response)
-        this.setCurrentPilot(pilot)
+        this.setCurrentPilot(pilotFromJSON(result.val))
         return Ok.EMPTY
       }
       return new Err(result.val)
     },
 
     /**
-     * Deletes a Pilot.
+     * Deletes the current Pilot account.
      */
 
     async deleteAccount(): Promise<void> {
@@ -198,7 +191,7 @@ export const useAccountStore = defineStore('account', {
 
       const response: Response = await request({
         method: 'delete',
-        path: '/account.json',
+        path: '/account',
       })
       ignoreResponseBody(response)
       this.reset()

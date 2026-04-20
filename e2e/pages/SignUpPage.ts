@@ -20,10 +20,6 @@ export class SignUpPage {
     await this.page.getByTestId('signup-password').fill(password)
   }
 
-  async fillPasswordConfirmation(confirmation: string): Promise<void> {
-    await this.page.getByTestId('signup-password-confirmation').fill(confirmation)
-  }
-
   async submit(): Promise<void> {
     await this.page.getByTestId('signup-submit').click()
   }

@@ -28,6 +28,7 @@ export interface AccountState {
 
 export interface AuthState {
   JWT: string | null
+  refreshToken: string | null
   loggingIn: boolean
 }
 

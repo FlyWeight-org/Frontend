@@ -12,7 +12,7 @@ const accountStore = useAccountStore()
 const form = reactive({
   email: '',
 })
-const URL = `${config.APIURL}/password_resets.json`
+const URL = `${config.APIURL}/password-resets`
 const success = ref(false)
 const error = ref<string | null>(null)
 const isProcessing = ref(false)

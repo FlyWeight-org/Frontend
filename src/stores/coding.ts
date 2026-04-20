@@ -1,11 +1,18 @@
 import { map, omit } from 'lodash-es'
 import * as luxon from 'luxon'
 import { z } from 'zod'
-import type { Flight, FlightListItem, Load, EditableFlight, Pilot } from '@/types'
+import type { Flight, FlightListItem, Load, EditableFlight, Passkey, Pilot } from '@/types'
+
+const passkeySchema = z.object({
+  id: z.string(),
+  label: z.string().nullable(),
+  last_used_at: z.string().nullable(),
+})
 
 const pilotSchema = z.object({
   email: z.string().optional(),
   name: z.string(),
+  passkeys: z.array(passkeySchema).optional(),
 })
 
 const loadJSONDownBaseSchema = z.object({
@@ -39,11 +46,56 @@ export const flightListItemJSONDownSchema = z.object({
   'destroyed?': z.boolean().optional(),
 })
 
-/** The shape of the pilot JSON data sent from the frontend to the back-end. */
-export type PilotJSONUp = Pilot & {
-  password?: string
-  password_confirmation?: string
-  current_password?: string
+/** Shape of pilot JSON data sent from the frontend to the back-end. */
+export interface PilotJSONUp {
+  name: string
+  email: string
+}
+
+/** Shape of pilot JSON data received from the back-end. */
+export interface PilotJSONDown {
+  name: string
+  email: string
+  passkeys: PasskeyJSONDown[]
+  access_token?: string
+  refresh_token?: string
+}
+
+export interface PasskeyJSONDown {
+  id: string
+  label: string | null
+  last_used_at: string | null
+}
+
+/**
+ * Converts received pilot JSON to a Pilot interface.
+ *
+ * @param data The JSON data received.
+ * @return The Pilot object.
+ */
+
+export function pilotFromJSON(data: unknown): Pilot {
+  const JSON = pilotSchema.parse(data)
+  return {
+    email: JSON.email,
+    name: JSON.name,
+    passkeys: JSON.passkeys?.map(passkeyFromJSON) ?? [],
+  }
+}
+
+/**
+ * Converts received passkey JSON to a Passkey interface.
+ *
+ * @param data The JSON data received.
+ * @return The Passkey object.
+ */
+
+export function passkeyFromJSON(data: PasskeyJSONDown): Passkey {
+  return {
+    id: data.id,
+    label: data.label,
+    lastUsedAt: data.last_used_at ? luxon.DateTime.fromISO(data.last_used_at) : null,
+  }
 }
 
 /** The shape of the JSON data for a Load sent from the back-end to the frontend. */
@@ -114,9 +166,10 @@ export type FlightJSONUp = Omit<Flight, 'UUID' | 'loads' | 'date' | 'canEdit'> &
 export function flightFromJSON(data: unknown): Flight {
   const JSON = flightJSONDownSchema.parse(data)
   return {
-    ...omit(JSON, 'uuid', 'date'),
+    ...omit(JSON, 'uuid', 'date', 'pilot'),
     UUID: JSON.uuid,
     date: luxon.DateTime.fromISO(JSON.date),
+    pilot: pilotFromJSON(JSON.pilot),
     loads:
       JSON.loads === null || JSON.loads === undefined
         ? undefined
@@ -165,9 +218,15 @@ export function flightListItemFromJSON(data: unknown): FlightListItem {
   }
 }
 
-/** Information passed to the `logIn` action. */
+/** Credentials sent to the `logIn` action. */
 export interface SessionJSONDown {
-  email: string
+  login: string
   password: string
-  remember_me: boolean
+}
+
+/** Payload sent to the `signUp` action. */
+export interface SignUpJSONUp {
+  login: string
+  password: string
+  name: string
 }
