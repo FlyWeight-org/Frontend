@@ -30,6 +30,13 @@ interface RequestArgs {
   unauthenticated?: boolean
 }
 
+// Retried on cold-start failures: Fly's proxy returns 504 without CORS
+// headers when the backend is slow to wake, which surfaces in the browser
+// as a generic network error (fetch rejects, not a readable status). A
+// single retry after a short delay is enough to cover typical Fly + Neon
+// wake latency.
+const RETRY_DELAY_MS = 2000
+
 export function request({
   method,
   path,
@@ -57,25 +64,39 @@ export function request({
       headers['Content-Type'] = 'application/json'
     }
 
-    fetch(config.APIURL + path, {
+    const fetchInit: RequestInit = {
       method: method ?? 'get',
       body: serializedBody,
       headers,
       credentials: 'include',
-    })
-      .then((response) => {
-        if (response.status === 401 && !skipResetAuth) {
-          auth.reset()
-          account.reset()
-          flights.reset()
-          return
-        }
+    }
+    const url = config.APIURL + path
 
-        resolve(response)
-      })
-      .catch((error: unknown) => {
-        reject(error instanceof Error ? error : new Error(String(error)))
-      })
+    const handleResponse = (response: Response): void => {
+      if (response.status === 401 && !skipResetAuth) {
+        auth.reset()
+        account.reset()
+        flights.reset()
+        return
+      }
+      resolve(response)
+    }
+
+    const attempt = (retriesLeft: number): void => {
+      fetch(url, fetchInit)
+        .then(handleResponse)
+        .catch((error: unknown) => {
+          if (retriesLeft > 0) {
+            setTimeout(() => {
+              attempt(retriesLeft - 1)
+            }, RETRY_DELAY_MS)
+            return
+          }
+          reject(error instanceof Error ? error : new Error(String(error)))
+        })
+    }
+
+    attempt(1)
   })
 }
 
