@@ -27,7 +27,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
       - name: Set up flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@1.5
+        uses: superfly/flyctl-actions/setup-flyctl@1.6
       - name: Deploy to Fly.io
         run: flyctl deploy --remote-only --build-arg VITE_SENTRY_DSN=${{ secrets.SENTRY_DSN }}
       - name: Enable Corepack
