@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { reactive, ref } from 'vue'
+import { reactive, ref, useTemplateRef } from 'vue'
 import config from '@/config'
 import Field from '@/components/field.vue'
+import Turnstile from '@/components/turnstile.vue'
 import { errorToString } from '@/utils/errors'
 import { useAccountStore } from '@/stores/modules/account'
 
@@ -12,6 +13,9 @@ const accountStore = useAccountStore()
 const form = reactive({
   email: '',
 })
+const turnstileToken = ref('')
+const turnstileRef = useTemplateRef<{ reset: () => void }>('turnstileRef')
+
 const URL = `${config.APIURL}/password-resets`
 const success = ref(false)
 const error = ref<string | null>(null)
@@ -22,10 +26,15 @@ async function submitHandler() {
   success.value = false
 
   try {
-    await accountStore.forgotPassword(form.email)
+    await accountStore.forgotPassword({
+      login: form.email,
+      turnstile_token: turnstileToken.value,
+    })
     success.value = true
   } catch (err) {
     error.value = errorToString(err)
+    turnstileRef.value?.reset()
+    turnstileToken.value = ''
   }
   isProcessing.value = false
 }
@@ -47,12 +56,20 @@ async function submitHandler() {
         data-testid="forgot-password-email"
       />
 
+      <Turnstile
+        ref="turnstileRef"
+        v-model="turnstileToken"
+        :site-key="config.TURNSTILE_SITE_KEY"
+        data-testid="forgot-password-turnstile"
+      />
+
       <fieldset class="actions">
         <input
           type="submit"
           name="commit"
           :value="t('home.forgotPassword.button')"
           :class="{ processing: isProcessing }"
+          :disabled="!turnstileToken"
           data-testid="forgot-password-submit"
         />
 

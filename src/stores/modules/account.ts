@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { AccountState, APIResponse, Errors } from '@/stores/types'
 import {
   pilotFromJSON,
+  type ForgotPasswordJSONUp,
   type PilotJSONDown,
   type PilotJSONUp,
   type SignUpJSONUp,
@@ -82,15 +83,15 @@ export const useAccountStore = defineStore('account', {
     /**
      * Generates a reset-password email.
      *
-     * @param email The pilot email address to send the reset-password link to.
+     * @param payload The pilot email address and Turnstile token.
      * @throws If an HTTP error occurs.
      */
 
-    async forgotPassword(email: string): Promise<void> {
+    async forgotPassword(payload: ForgotPasswordJSONUp): Promise<void> {
       const response = await request({
         method: 'post',
         path: '/password-resets',
-        body: { login: email },
+        body: { ...payload },
       })
       ignoreResponseBody(response)
     },

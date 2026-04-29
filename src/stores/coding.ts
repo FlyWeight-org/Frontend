@@ -222,6 +222,7 @@ export function flightListItemFromJSON(data: unknown): FlightListItem {
 export interface SessionJSONDown {
   login: string
   password: string
+  turnstile_token: string
 }
 
 /** Payload sent to the `signUp` action. */
@@ -229,4 +230,11 @@ export interface SignUpJSONUp {
   login: string
   password: string
   name: string
+  turnstile_token: string
+}
+
+/** Payload sent to the `forgotPassword` action. */
+export interface ForgotPasswordJSONUp {
+  login: string
+  turnstile_token: string
 }

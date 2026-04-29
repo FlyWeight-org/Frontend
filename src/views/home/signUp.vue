@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, reactive, ref, useTemplateRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { isNull } from 'lodash-es'
 import config from '@/config'
-import type { SignUpJSONUp } from '@/stores/coding'
 import Field from '@/components/field.vue'
+import Turnstile from '@/components/turnstile.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { useAccountStore } from '@/stores/modules/account'
 
@@ -13,16 +13,23 @@ const { t } = useI18n()
 const router = useRouter()
 const accountStore = useAccountStore()
 
-const pilot: SignUpJSONUp = reactive({
+const pilot = reactive({
   name: '',
   login: '',
   password: '',
 })
+const turnstileToken = ref('')
+const turnstileRef = useTemplateRef<{ reset: () => void }>('turnstileRef')
+
 const URL = `${config.APIURL}/signup`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
-  () => accountStore.signUp(pilot),
+  () => accountStore.signUp({ ...pilot, turnstile_token: turnstileToken.value }),
   async () => {
     await router.push({ name: 'flightsList' })
+  },
+  () => {
+    turnstileRef.value?.reset()
+    turnstileToken.value = ''
   },
 )
 
@@ -74,12 +81,20 @@ const errorMessage = computed<string | null>(() =>
         data-testid="signup-password"
       />
 
+      <Turnstile
+        ref="turnstileRef"
+        v-model="turnstileToken"
+        :site-key="config.TURNSTILE_SITE_KEY"
+        data-testid="signup-turnstile"
+      />
+
       <fieldset class="actions">
         <input
           type="submit"
           name="commit"
           :value="t('home.signUp.button')"
           :class="{ processing: isProcessing }"
+          :disabled="!turnstileToken"
           data-testid="signup-submit"
         />
       </fieldset>

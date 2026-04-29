@@ -21,6 +21,7 @@ export class SignUpPage {
   }
 
   async submit(): Promise<void> {
+    // click() waits for the element to be enabled (Turnstile gates the submit).
     await this.page.getByTestId('signup-submit').click()
   }
 }
