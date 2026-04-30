@@ -30,6 +30,7 @@ describe('account store', () => {
         login: 'sancho@example.com',
         password: 'hunter2hunter2',
         name: 'Sancho',
+        turnstile_token: 'test-token',
       })
 
       expect(result.ok).toBe(true)
@@ -57,6 +58,7 @@ describe('account store', () => {
         login: 'sancho@example.com',
         password: 'hunter2hunter2',
         name: 'Sancho',
+        turnstile_token: 'test-token',
       })
 
       expect(result.ok).toBe(false)

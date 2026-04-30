@@ -14,6 +14,7 @@ function buildRouter() {
     routes: [
       { path: '/', component: SignUp, name: 'signUp' },
       { path: '/flights', component: { template: '<div />' }, name: 'flightsList' },
+      { path: '/login', component: { template: '<div />' }, name: 'logIn' },
     ],
   })
 }
