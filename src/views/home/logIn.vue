@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive } from 'vue'
+import { computed, onBeforeUnmount, onMounted, reactive, ref, useTemplateRef } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { isNull } from 'lodash-es'
 import { browserSupportsWebAuthnAutofill, WebAuthnAbortService } from '@simplewebauthn/browser'
 import config from '@/config'
-import type { SessionJSONDown } from '@/stores/coding'
 import Field from '@/components/field.vue'
+import Turnstile from '@/components/turnstile.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { useAuthStore } from '@/stores/modules/auth'
 import { usePasskeysStore } from '@/stores/modules/passkeys'
@@ -16,18 +16,23 @@ const router = useRouter()
 const authStore = useAuthStore()
 const passkeysStore = usePasskeysStore()
 
-const session: SessionJSONDown = reactive({
+const session = reactive({
   login: '',
   password: '',
 })
+const turnstileToken = ref('')
+const turnstileRef = useTemplateRef<{ reset: () => void }>('turnstileRef')
+
 const URL = `${config.APIURL}/login`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<unknown>(
-  () => authStore.logIn(session),
+  () => authStore.logIn({ ...session, turnstile_token: turnstileToken.value }),
   async () => {
     await router.push({ name: 'flightsList' })
   },
   () => {
     session.password = ''
+    turnstileRef.value?.reset()
+    turnstileToken.value = ''
   },
 )
 const errorMessage = computed<string | null>(() =>
@@ -81,12 +86,20 @@ onBeforeUnmount(() => {
         data-testid="login-password"
       />
 
+      <Turnstile
+        ref="turnstileRef"
+        v-model="turnstileToken"
+        :site-key="config.TURNSTILE_SITE_KEY"
+        data-testid="login-turnstile"
+      />
+
       <fieldset class="actions">
         <input
           type="submit"
           name="commit"
           :value="t('home.logIn.button')"
           :class="{ processing: isProcessing }"
+          :disabled="!turnstileToken"
           data-testid="login-submit"
         />
       </fieldset>

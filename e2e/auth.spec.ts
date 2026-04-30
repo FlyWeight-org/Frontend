@@ -117,6 +117,83 @@ test.describe('forgot password', () => {
   })
 })
 
+test.describe('turnstile_token in request bodies', () => {
+  // Cloudflare's test site key (1x00000000000000000000AA) always passes, so the
+  // widget produces a token without user interaction. We intercept the auth
+  // requests and assert the token is in the body. Live runs through these flows
+  // require Backend B4 (server-side Turnstile validation) to be merged.
+
+  async function readJSONBody(request: import('@playwright/test').Request) {
+    const data = request.postData()
+    return data ? JSON.parse(data) : null
+  }
+
+  test('signup request includes turnstile_token', async ({
+    page,
+    signUpPage,
+    resetDatabase: _reset,
+  }) => {
+    await signUpPage.visit()
+    await signUpPage.fillName('Sancho Sample')
+    await signUpPage.fillEmail('sancho-turnstile@example.com')
+    await signUpPage.fillPassword('supersecret')
+
+    await page.getByTestId('signup-submit').waitFor({ state: 'attached' })
+    const requestPromise = page.waitForRequest(
+      (req) => req.url().endsWith('/signup') && req.method() === 'POST',
+    )
+    await signUpPage.submit()
+    const request = await requestPromise
+    const body = await readJSONBody(request)
+
+    expect(body).toHaveProperty('turnstile_token')
+    expect(typeof body.turnstile_token).toBe('string')
+    expect(body.turnstile_token.length).toBeGreaterThan(0)
+  })
+
+  test('login request includes turnstile_token', async ({
+    page,
+    loginPage,
+    resetDatabase: _reset,
+  }) => {
+    await loginPage.visit()
+    await loginPage.fillEmail('cypress@example.com')
+    await loginPage.fillPassword('supersecret')
+
+    const requestPromise = page.waitForRequest(
+      (req) => req.url().endsWith('/login') && req.method() === 'POST',
+    )
+    await loginPage.submit()
+    const request = await requestPromise
+    const body = await readJSONBody(request)
+
+    expect(body).toHaveProperty('turnstile_token')
+    expect(typeof body.turnstile_token).toBe('string')
+    expect(body.turnstile_token.length).toBeGreaterThan(0)
+  })
+
+  test('forgot-password request includes turnstile_token', async ({
+    page,
+    loginPage,
+    resetDatabase: _reset,
+  }) => {
+    await loginPage.visit()
+    const forgotPage = await loginPage.clickForgotPassword()
+    await forgotPage.fillEmail('cypress@example.com')
+
+    const requestPromise = page.waitForRequest(
+      (req) => req.url().endsWith('/password-resets') && req.method() === 'POST',
+    )
+    await forgotPage.submit()
+    const request = await requestPromise
+    const body = await readJSONBody(request)
+
+    expect(body).toHaveProperty('turnstile_token')
+    expect(typeof body.turnstile_token).toBe('string')
+    expect(body.turnstile_token.length).toBeGreaterThan(0)
+  })
+})
+
 test.describe('logging out', () => {
   test('logs the user out', async ({
     page,

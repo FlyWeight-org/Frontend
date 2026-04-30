@@ -136,11 +136,13 @@ const en: LocaleMessage<VueMessageType> = {
       success:
         'If {email} is a valid account, then an email has been sent to that address with instructions on how to reset your password.',
       title: 'Forgot your password?',
+      turnstileFailed: 'Please complete the verification challenge.',
     },
     logIn: {
       button: 'Log In',
       error: 'Couldn’t log you in: {error}',
       forgotPassword: 'I forgot my password :(',
+      turnstileFailed: 'Please complete the verification challenge.',
     },
     nav: {
       logIn: 'Log In',
@@ -156,6 +158,7 @@ const en: LocaleMessage<VueMessageType> = {
     signUp: {
       button: 'Sign Up',
       error: 'Couldn’t sign you up: {error}',
+      turnstileFailed: 'Please complete the verification challenge.',
     },
     welcome: {
       description:

@@ -5263,6 +5263,7 @@ __metadata:
     vue-i18n: "npm:^11.3.0"
     vue-router: "npm:^5.0.4"
     vue-tsc: "npm:^3.2.6"
+    vue-turnstile: "npm:^1.0.11"
     zod: "npm:^4.3.6"
   languageName: unknown
   linkType: soft
@@ -9546,6 +9547,15 @@ __metadata:
   bin:
     vue-tsc: bin/vue-tsc.js
   checksum: 10c0/82a38ab8ad5cb6af46d02e18fe821b251e31946ee59b99901d48c8680cbe5c286b4ab43c489c8082ed7c1a08f610a911ab8a46ba97b6f0f63f0031769725aac8
+  languageName: node
+  linkType: hard
+
+"vue-turnstile@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "vue-turnstile@npm:1.0.11"
+  peerDependencies:
+    vue: ^3.2.45
+  checksum: 10c0/3ca7f5551b30cf73dd8a442895de3dd24fb8b065a214dcee178119c91e85e28fa3f2826d7b32dd7cca5eba81509549fe4f0288e0817716c1dc9dd9276eefe0cd
   languageName: node
   linkType: hard
 
