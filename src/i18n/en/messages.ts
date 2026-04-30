@@ -157,8 +157,15 @@ const en: LocaleMessage<VueMessageType> = {
     },
     signUp: {
       button: 'Sign Up',
+      checkEmail: 'Check your email — we sent a link to {email}.',
       error: 'Couldn’t sign you up: {error}',
+      logInLink: 'Back to log in',
       turnstileFailed: 'Please complete the verification challenge.',
+    },
+    verifyAccount: {
+      failure: 'Verification failed: {error}.',
+      pending: 'Verifying your account…',
+      success: 'Account verified — redirecting to login.',
     },
     welcome: {
       description:

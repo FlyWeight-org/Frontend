@@ -13,14 +13,26 @@ test.describe('signing up', () => {
     await expect(page.locator('[data-testid="field-errors"][data-name="password"]')).toBeVisible()
   })
 
-  test('signs up a user', async ({ page, signUpPage, resetDatabase: _reset }) => {
+  test('signs up a user', async ({ page, signUpPage, loginPage, resetDatabase: _reset }) => {
     await signUpPage.visit()
     await signUpPage.fillName('Sancho Sample')
     await signUpPage.fillEmail('sancho@example.com')
     await signUpPage.fillPassword('supersecret')
     await signUpPage.submit()
 
-    await expect(page.getByTestId('no-flights')).toBeVisible()
+    await expect(page.getByTestId('signup-success')).toBeVisible()
+
+    const email = await fetchLastEmail()
+    expect(email).not.toBeNull()
+
+    const url = extractEmailPath(email!, 'http://127.0.0.1:4173')
+    await page.goto(url)
+
+    await expect(page.getByTestId('verify-account-success')).toBeVisible()
+
+    await loginPage.visit()
+    const flightsPage = await loginPage.loginAs('sancho@example.com', 'supersecret')
+    await expect(flightsPage.noFlightsMessage()).toBeVisible()
   })
 })
 

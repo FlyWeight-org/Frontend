@@ -6,6 +6,7 @@ import {
   type PilotJSONDown,
   type PilotJSONUp,
   type SignUpJSONUp,
+  type VerifyAccountJSONUp,
 } from '@/stores/coding'
 import { Err, Ok, Result } from 'ts-results'
 import type { Pilot } from '@/types'
@@ -44,7 +45,9 @@ export const useAccountStore = defineStore('account', {
     },
 
     /**
-     * Creates a new pilot and sets `currentPilot`.
+     * Creates a new pilot. With Rodauth `:verify_account` enabled, the response
+     * carries no tokens or pilot data — the user must click an emailed link
+     * before they can log in.
      *
      * @param signUp The signup attributes (login, password, name).
      * @throws If an HTTP error occurs.
@@ -57,17 +60,15 @@ export const useAccountStore = defineStore('account', {
       auth.reset()
 
       try {
-        const response = await requestJSON<PilotJSONDown>({
+        const response: APIResponse<unknown> = await requestJSON({
           method: 'post',
           path: '/signup',
           body: { ...signUp },
           unauthenticated: true,
           skipResetAuth: true,
         })
-        const result = loadAPIResponseBodyOrReturnErrors(response)
+        const result = ignoreAPIResponseBodyOrReturnErrors(response)
         if (result.ok) {
-          auth.setTokens(response.val.response, result.val)
-          this.setCurrentPilot(pilotFromJSON(result.val))
           flights.reset()
           return Ok.EMPTY
         }
@@ -78,6 +79,28 @@ export const useAccountStore = defineStore('account', {
         flights.reset()
         throw error
       }
+    },
+
+    /**
+     * Verifies a newly-created pilot account using a key from the verification
+     * email.
+     *
+     * @param key The verification key from the email link.
+     * @return A Result containing nothing if successful, or the validation
+     * errors if failed.
+     * @throws If an HTTP error occurs.
+     */
+
+    async verifyAccount(key: string): Promise<Result<void, Errors>> {
+      const body: VerifyAccountJSONUp = { key }
+      const response: APIResponse<unknown> = await requestJSON({
+        method: 'post',
+        path: '/verify-account',
+        body: { ...body },
+        unauthenticated: true,
+        skipResetAuth: true,
+      })
+      return ignoreAPIResponseBodyOrReturnErrors(response)
     },
 
     /**

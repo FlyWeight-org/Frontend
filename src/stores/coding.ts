@@ -238,3 +238,8 @@ export interface ForgotPasswordJSONUp {
   login: string
   turnstile_token: string
 }
+
+/** Payload sent to the `verifyAccount` action. */
+export interface VerifyAccountJSONUp {
+  key: string
+}
