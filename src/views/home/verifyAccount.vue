@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { isArray } from 'lodash-es'
+import { useTimeoutFn } from '@vueuse/core'
 import { errorToString, notifySentry } from '@/utils/errors'
 import { useAccountStore } from '@/stores/modules/account'
 
@@ -28,9 +29,13 @@ onMounted(async () => {
     const result = await accountStore.verifyAccount(verifyAccountKey())
     if (result.ok) {
       state.value = 'success'
-      setTimeout(() => {
-        router.push({ name: 'logIn' }).catch(notifySentry)
-      }, REDIRECT_DELAY_MS)
+      useTimeoutFn(
+        () => {
+          router.push({ name: 'logIn' }).catch(notifySentry)
+        },
+        REDIRECT_DELAY_MS,
+        { immediate: true },
+      )
     } else {
       state.value = 'failure'
       errorText.value = Object.values(result.val).flat().join(', ')

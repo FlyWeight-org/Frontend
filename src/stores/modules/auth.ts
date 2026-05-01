@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { clone, isEmpty, isNull, isNumber, isString } from 'lodash-es'
+import { clone, isNull, isNumber, isString } from 'lodash-es'
+import { useLocalStorage } from '@vueuse/core'
 import { z } from 'zod'
 import type { APIResponse, AuthState, Errors } from '@/stores/types'
 import config from '@/config'
@@ -10,6 +11,9 @@ import { ignoreResponseBody, loadAPIResponseBodyOrReturnErrors } from '@/stores/
 import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
 import { Consumer, createConsumer } from '@rails/actioncable'
+
+const storedJWT = useLocalStorage('JWT', '')
+const storedRefreshToken = useLocalStorage('refreshToken', '')
 
 const jwtPayloadSchema = z.object({
   exp: z.union([z.string(), z.number()]).optional(),
@@ -69,15 +73,13 @@ export const useAuthStore = defineStore('auth', {
     },
 
     initializeFromLocalStorage() {
-      const JWTString = localStorage.getItem('JWT')
-      this.JWT = isEmpty(JWTString) ? null : JWTString
-      const refreshString = localStorage.getItem('refreshToken')
-      this.refreshToken = isEmpty(refreshString) ? null : refreshString
+      this.JWT = storedJWT.value === '' ? null : storedJWT.value
+      this.refreshToken = storedRefreshToken.value === '' ? null : storedRefreshToken.value
     },
 
     saveToLocalStorage() {
-      localStorage.setItem('JWT', this.JWT ?? '')
-      localStorage.setItem('refreshToken', this.refreshToken ?? '')
+      storedJWT.value = this.JWT ?? ''
+      storedRefreshToken.value = this.refreshToken ?? ''
     },
 
     /**
