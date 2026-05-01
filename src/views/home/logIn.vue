@@ -8,8 +8,11 @@ import config from '@/config'
 import Field from '@/components/field.vue'
 import Turnstile from '@/components/turnstile.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
+import { usePresence } from '@/composables/usePresence'
 import { useAuthStore } from '@/stores/modules/auth'
 import { usePasskeysStore } from '@/stores/modules/passkeys'
+
+usePresence({ mode: 'once' })
 
 const { t } = useI18n()
 const router = useRouter()
