@@ -1,5 +1,9 @@
 # FlyWeight: Passenger weights, in the cloud
 
+[![CI](https://github.com/FlyWeight-org/Frontend/actions/workflows/ci.yml/badge.svg)](https://github.com/FlyWeight-org/Frontend/actions/workflows/ci.yml)
+[![Deploy](https://github.com/FlyWeight-org/Frontend/actions/workflows/deploy.yml/badge.svg)](https://github.com/FlyWeight-org/Frontend/actions/workflows/deploy.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 FlyWeight is a website where pilots can list flights they intend to take, and
 where passengers can discreetly add their weights to those flights. Weights are
 only shared with the pilot, not with other passengers, and are no longer
