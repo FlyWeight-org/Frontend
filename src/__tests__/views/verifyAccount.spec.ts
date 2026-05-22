@@ -15,10 +15,7 @@ interface MountOptions {
   verifyResult?: VerifyPromise
 }
 
-async function mountVerifyAccount({
-  query = { key: 'abc' },
-  verifyResult,
-}: MountOptions = {}) {
+async function mountVerifyAccount({ query = { key: 'abc' }, verifyResult }: MountOptions = {}) {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: [
