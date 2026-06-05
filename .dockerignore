@@ -30,9 +30,3 @@ coverage
 *.sw?
 
 *.tsbuildinfo
-
-# Yarn PnP files (generated during install)
-.pnp.*
-.yarn/cache
-.yarn/install-state.gz
-.yarn/unplugged

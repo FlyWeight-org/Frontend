@@ -1,7 +1,7 @@
 # syntax = docker/dockerfile:1
 
 # Adjust NODE_VERSION as desired
-ARG NODE_VERSION=25.6
+ARG NODE_VERSION=26
 FROM node:${NODE_VERSION}-slim as base
 
 LABEL fly_launch_runtime="Vite"
@@ -11,7 +11,8 @@ WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV=production
-RUN npm install -g --force corepack && corepack enable yarn
+# Node 26 images no longer bundle corepack, so install it before enabling.
+RUN npm install -g corepack@latest && corepack enable
 
 
 # Throw-away build stage to reduce size of final image
@@ -22,20 +23,20 @@ RUN apt-get update -qq && \
     apt-get install -y python-is-python3 pkg-config build-essential
 
 # Copy application code and install dependencies
-COPY package.json yarn.lock .yarnrc.yml ./
-RUN yarn install --immutable --mode=skip-build
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy remaining application code
 COPY . .
 
 # Build application
-RUN yarn run build
+RUN pnpm run build
 
 # Generate nginx config with CSP script hashes from built HTML
 RUN node scripts/generate-nginx-conf.mjs
 
 # Remove development dependencies
-RUN yarn workspaces focus --production
+RUN pnpm prune --prod
 
 
 # Download nginx-prometheus-exporter

@@ -16,8 +16,8 @@ giving passengers a basic assurance of privacy.
 
 ### Installation and Running
 
-FlyWeight requires Node 16 and Yarn. Run `yarn install` to install all\
-dependencies. Bundling is handled by Vite. Run `yarn dev` to run a development
+FlyWeight requires Node 26 and pnpm. Run `pnpm install` to install all\
+dependencies. Bundling is handled by Vite. Run `pnpm dev` to run a development
 server.
 
 The website requires the back-end to be running as well. See
@@ -30,7 +30,7 @@ End-to-end testing is available with Cypress. To run end-to-end tests, create a
 
 ```
 backend: cd Backend && rvm 4.0.3@flyweight exec rails server -e cypress -b 127.0.0.1
-frontend: cd Frontend && yarn test:e2e:dev
+frontend: cd Frontend && pnpm test:e2e:dev
 jobs: cd Backend && RAILS_ENV=cypress rvm 4.0.3@flyweight exec bundle exec good_job start
 anycable: cd Backend && RAILS_ENV=cypress rvm 4.0.3@flyweight exec anycable
 ws: cd Backend && rvm 4.0.3@flyweight exec bin/anycable-go --port=8080
