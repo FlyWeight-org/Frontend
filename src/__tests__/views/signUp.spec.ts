@@ -56,6 +56,7 @@ describe('signUp.vue', () => {
       login: 'sancho@example.com',
       password: 'supersecret',
       weight_unit: 'lb',
+      locale: 'en',
       turnstile_token: 'fake-turnstile-token',
     })
   })

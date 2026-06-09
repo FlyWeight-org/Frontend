@@ -19,6 +19,7 @@ import {
   loadAPIResponseBodyOrThrowErrors,
 } from '@/stores/utils'
 import { notifySentry } from '@/utils/errors'
+import { setLocale } from '@/i18n'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useFlightsStore } from '@/stores/modules/flights'
 import { clone } from 'lodash-es'
@@ -42,6 +43,8 @@ export const useAccountStore = defineStore('account', {
         currentPilotError: null,
         currentPilotLoading: false,
       })
+      // Once authenticated, the account's saved language is the source of truth.
+      if (pilot.locale) void setLocale(pilot.locale)
     },
 
     /**

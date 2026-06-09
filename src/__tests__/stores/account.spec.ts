@@ -31,6 +31,7 @@ describe('account store', () => {
         password: 'hunter2hunter2',
         name: 'Sancho',
         weight_unit: 'lb',
+        locale: 'en',
         turnstile_token: 'test-token',
       })
 
@@ -60,6 +61,7 @@ describe('account store', () => {
         password: 'hunter2hunter2',
         name: 'Sancho',
         weight_unit: 'lb',
+        locale: 'en',
         turnstile_token: 'test-token',
       })
 

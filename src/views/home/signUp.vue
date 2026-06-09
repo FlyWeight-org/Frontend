@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, useTemplateRef } from 'vue'
+import { computed, reactive, ref, useTemplateRef, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { isNull } from 'lodash-es'
 import config from '@/config'
@@ -8,21 +8,38 @@ import FieldGroup from '@/components/fieldGroup.vue'
 import Turnstile from '@/components/turnstile.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { useAccountStore } from '@/stores/modules/account'
+import { global, localeOptions, setLocale, type SupportedLocale } from '@/i18n'
 import type { WeightUnit } from '@/utils/weight'
 
 const { t } = useI18n()
 const accountStore = useAccountStore()
 
-const pilot = reactive<{ name: string; login: string; password: string; weight_unit: WeightUnit }>({
+const pilot = reactive<{
+  name: string
+  login: string
+  password: string
+  weight_unit: WeightUnit
+  locale: SupportedLocale
+}>({
   name: '',
   login: '',
   password: '',
   weight_unit: 'lb',
+  locale: global.locale.value as SupportedLocale,
 })
 const weightUnitOptions = [
   { value: 'lb', label: t('account.edit.weightUnit.lb') },
   { value: 'kg', label: t('account.edit.weightUnit.kg') },
 ]
+const languageOptions = localeOptions()
+
+// Preview the chosen language immediately as the user picks it.
+watch(
+  () => pilot.locale,
+  (locale) => {
+    void setLocale(locale)
+  },
+)
 const turnstileToken = ref('')
 const turnstileRef = useTemplateRef<{ reset: () => void }>('turnstileRef')
 
@@ -111,6 +128,17 @@ const errorMessage = computed<string | null>(() =>
             :label="t('account.edit.weightUnit.label')"
             :options="weightUnitOptions"
             data-testid="signup-weight-unit"
+          />
+
+          <field
+            v-model="pilot.locale"
+            type="select"
+            object="pilot"
+            field="locale"
+            :errors="errors"
+            :label="t('account.edit.language.label')"
+            :options="languageOptions"
+            data-testid="signup-language"
           />
         </field-group>
 

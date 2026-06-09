@@ -1,5 +1,6 @@
 import type { DateTime } from 'luxon'
 import type { WeightUnit } from '@/utils/weight'
+import type { SupportedLocale } from '@/i18n/locales'
 
 export interface Passkey {
   id: string
@@ -11,6 +12,7 @@ export interface Pilot {
   email?: string
   name: string
   weightUnit: WeightUnit
+  locale?: SupportedLocale | null
   passkeys?: Passkey[]
 }
 

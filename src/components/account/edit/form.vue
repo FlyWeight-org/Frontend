@@ -9,6 +9,7 @@ import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import requireAuth from '@/composables/requireAuth'
 import type { PilotJSONUp } from '@/stores/coding'
 import { useAccountStore } from '@/stores/modules/account'
+import { global, localeOptions, setLocale, type SupportedLocale } from '@/i18n'
 
 const { t } = useI18n()
 const accountStore = useAccountStore()
@@ -20,11 +21,21 @@ const pilot: PilotJSONUp = reactive({
   email: accountStore.currentPilot?.email ?? '',
   name: accountStore.currentPilot?.name ?? '',
   weight_unit: accountStore.currentPilot?.weightUnit ?? 'lb',
+  locale: accountStore.currentPilot?.locale ?? (global.locale.value as SupportedLocale),
 })
 const weightUnitOptions = [
   { value: 'lb', label: t('account.edit.weightUnit.lb') },
   { value: 'kg', label: t('account.edit.weightUnit.kg') },
 ]
+const languageOptions = localeOptions()
+
+// Preview the chosen language immediately as the user picks it.
+watch(
+  () => pilot.locale,
+  (locale) => {
+    void setLocale(locale)
+  },
+)
 const success = ref(false)
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
   () => {
@@ -44,7 +55,8 @@ const dirty = computed<boolean>(() => {
   return (
     pilot.email !== accountStore.currentPilot.email ||
     pilot.name !== accountStore.currentPilot.name ||
-    pilot.weight_unit !== accountStore.currentPilot.weightUnit
+    pilot.weight_unit !== accountStore.currentPilot.weightUnit ||
+    pilot.locale !== (accountStore.currentPilot.locale ?? pilot.locale)
   )
 })
 
@@ -55,6 +67,7 @@ watch(
     pilot.email = accountStore.currentPilot.email ?? ''
     pilot.name = accountStore.currentPilot.name
     pilot.weight_unit = accountStore.currentPilot.weightUnit
+    if (accountStore.currentPilot.locale) pilot.locale = accountStore.currentPilot.locale
   },
 )
 </script>
@@ -107,6 +120,17 @@ watch(
         :label="t('account.edit.weightUnit.label')"
         :options="weightUnitOptions"
         data-testid="account-weight-unit"
+      />
+
+      <field
+        v-model="pilot.locale"
+        type="select"
+        object="pilot"
+        field="locale"
+        :errors="errors"
+        :label="t('account.edit.language.label')"
+        :options="languageOptions"
+        data-testid="account-language"
       />
     </field-group>
 

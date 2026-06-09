@@ -3,6 +3,7 @@ import * as luxon from 'luxon'
 import { z } from 'zod'
 import type { Flight, FlightListItem, Load, EditableFlight, Passkey, Pilot } from '@/types'
 import type { WeightUnit } from '@/utils/weight'
+import { matchLocale, type SupportedLocale } from '@/i18n/locales'
 
 const passkeySchema = z.object({
   id: z.string(),
@@ -14,6 +15,7 @@ const pilotSchema = z.object({
   email: z.string().optional(),
   name: z.string(),
   weight_unit: z.enum(['lb', 'kg']).optional(),
+  locale: z.string().nullish(),
   passkeys: z.array(passkeySchema).optional(),
 })
 
@@ -53,6 +55,7 @@ export interface PilotJSONUp {
   name: string
   email: string
   weight_unit: WeightUnit
+  locale: SupportedLocale
 }
 
 /** Shape of pilot JSON data received from the back-end. */
@@ -60,6 +63,7 @@ export interface PilotJSONDown {
   name: string
   email: string
   weight_unit: WeightUnit
+  locale: string | null
   passkeys: PasskeyJSONDown[]
   access_token?: string
   refresh_token?: string
@@ -84,6 +88,7 @@ export function pilotFromJSON(data: unknown): Pilot {
     email: JSON.email,
     name: JSON.name,
     weightUnit: JSON.weight_unit ?? 'lb',
+    locale: JSON.locale ? matchLocale(JSON.locale) : null,
     passkeys: JSON.passkeys?.map(passkeyFromJSON) ?? [],
   }
 }
@@ -236,6 +241,7 @@ export interface SignUpJSONUp {
   password: string
   name: string
   weight_unit: WeightUnit
+  locale: SupportedLocale
   turnstile_token: string
 }
 
