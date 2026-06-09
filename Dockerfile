@@ -20,7 +20,7 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential
+    apt-get install -y --no-install-recommends python-is-python3 pkg-config build-essential
 
 # Copy application code and install dependencies
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
@@ -40,7 +40,8 @@ RUN pnpm prune --prod
 
 
 # Download nginx-prometheus-exporter
-FROM alpine:3.19 as exporter-download
+FROM alpine:3.23 as exporter-download
+SHELL ["/bin/ash", "-o", "pipefail", "-c"]
 
 ARG EXPORTER_VERSION=1.5.1
 RUN wget -qO- https://github.com/nginxinc/nginx-prometheus-exporter/releases/download/v${EXPORTER_VERSION}/nginx-prometheus-exporter_${EXPORTER_VERSION}_linux_amd64.tar.gz \
@@ -49,7 +50,7 @@ RUN wget -qO- https://github.com/nginxinc/nginx-prometheus-exporter/releases/dow
 
 
 # Final stage for app image
-FROM nginx:1.28-alpine
+FROM nginx:1.30-alpine
 
 # Copy exporter binary
 COPY --from=exporter-download /tmp/nginx-prometheus-exporter /usr/local/bin/
