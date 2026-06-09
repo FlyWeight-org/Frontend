@@ -49,7 +49,7 @@ export const useAccountStore = defineStore('account', {
      * carries no tokens or pilot data — the user must click an emailed link
      * before they can log in.
      *
-     * @param signUp The signup attributes (login, password, name).
+     * @param signUp The signup attributes (login, password, name, weight unit).
      * @throws If an HTTP error occurs.
      */
 

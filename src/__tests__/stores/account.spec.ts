@@ -30,6 +30,7 @@ describe('account store', () => {
         login: 'sancho@example.com',
         password: 'hunter2hunter2',
         name: 'Sancho',
+        weight_unit: 'lb',
         turnstile_token: 'test-token',
       })
 
@@ -58,6 +59,7 @@ describe('account store', () => {
         login: 'sancho@example.com',
         password: 'hunter2hunter2',
         name: 'Sancho',
+        weight_unit: 'lb',
         turnstile_token: 'test-token',
       })
 

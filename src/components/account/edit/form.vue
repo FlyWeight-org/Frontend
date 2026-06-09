@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n'
 import { computed, reactive, ref, watch } from 'vue'
 import { isNull } from 'lodash-es'
 import Field from '@/components/field.vue'
+import FieldGroup from '@/components/fieldGroup.vue'
 import config from '@/config'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import requireAuth from '@/composables/requireAuth'
@@ -70,40 +71,44 @@ watch(
     data-testid="account-form"
     @submit.prevent="submitHandler"
   >
-    <field
-      v-model="pilot.name"
-      type="text"
-      object="pilot"
-      field="name"
-      requried
-      :errors="errors"
-      :label="t('pilot.name')"
-      autocomplete="name"
-      data-testid="account-name"
-    />
+    <field-group>
+      <field
+        v-model="pilot.name"
+        type="text"
+        object="pilot"
+        field="name"
+        requried
+        :errors="errors"
+        :label="t('pilot.name')"
+        autocomplete="name"
+        data-testid="account-name"
+      />
 
-    <field
-      v-model="pilot.email"
-      type="email"
-      object="pilot"
-      field="email"
-      requried
-      :errors="errors"
-      :label="t('pilot.email')"
-      autocomplete="email"
-      data-testid="account-email"
-    />
+      <field
+        v-model="pilot.email"
+        type="email"
+        object="pilot"
+        field="email"
+        requried
+        :errors="errors"
+        :label="t('pilot.email')"
+        autocomplete="email"
+        data-testid="account-email"
+      />
+    </field-group>
 
-    <field
-      v-model="pilot.weight_unit"
-      type="select"
-      object="pilot"
-      field="weight_unit"
-      :errors="errors"
-      :label="t('account.edit.weightUnit.label')"
-      :options="weightUnitOptions"
-      data-testid="account-weight-unit"
-    />
+    <field-group>
+      <field
+        v-model="pilot.weight_unit"
+        type="select"
+        object="pilot"
+        field="weight_unit"
+        :errors="errors"
+        :label="t('account.edit.weightUnit.label')"
+        :options="weightUnitOptions"
+        data-testid="account-weight-unit"
+      />
+    </field-group>
 
     <fieldset class="actions">
       <input

@@ -235,6 +235,7 @@ export interface SignUpJSONUp {
   login: string
   password: string
   name: string
+  weight_unit: WeightUnit
   turnstile_token: string
 }
 

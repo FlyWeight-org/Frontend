@@ -4,18 +4,25 @@ import { useI18n } from 'vue-i18n'
 import { isNull } from 'lodash-es'
 import config from '@/config'
 import Field from '@/components/field.vue'
+import FieldGroup from '@/components/fieldGroup.vue'
 import Turnstile from '@/components/turnstile.vue'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { useAccountStore } from '@/stores/modules/account'
+import type { WeightUnit } from '@/utils/weight'
 
 const { t } = useI18n()
 const accountStore = useAccountStore()
 
-const pilot = reactive({
+const pilot = reactive<{ name: string; login: string; password: string; weight_unit: WeightUnit }>({
   name: '',
   login: '',
   password: '',
+  weight_unit: 'lb',
 })
+const weightUnitOptions = [
+  { value: 'lb', label: t('account.edit.weightUnit.lb') },
+  { value: 'kg', label: t('account.edit.weightUnit.kg') },
+]
 const turnstileToken = ref('')
 const turnstileRef = useTemplateRef<{ reset: () => void }>('turnstileRef')
 
@@ -56,41 +63,56 @@ const errorMessage = computed<string | null>(() =>
       </p>
 
       <form method="post" :action="URL" @submit.prevent="submitHandler">
-        <field
-          v-model="pilot.name"
-          type="text"
-          object="pilot"
-          field="name"
-          :errors="errors"
-          :label="t('pilot.name')"
-          required
-          autocomplete="name"
-          data-testid="signup-name"
-        />
+        <field-group>
+          <field
+            v-model="pilot.name"
+            type="text"
+            object="pilot"
+            field="name"
+            :errors="errors"
+            :label="t('pilot.name')"
+            required
+            autocomplete="name"
+            data-testid="signup-name"
+          />
 
-        <field
-          v-model="pilot.login"
-          type="email"
-          object="pilot"
-          field="login"
-          :errors="errors"
-          :label="t('pilot.email')"
-          required
-          autocomplete="email"
-          data-testid="signup-email"
-        />
+          <field
+            v-model="pilot.login"
+            type="email"
+            object="pilot"
+            field="login"
+            :errors="errors"
+            :label="t('pilot.email')"
+            required
+            autocomplete="email"
+            data-testid="signup-email"
+          />
 
-        <field
-          v-model="pilot.password"
-          type="password"
-          object="pilot"
-          field="password"
-          :errors="errors"
-          :label="t('pilot.password')"
-          required
-          autocomplete="new-password"
-          data-testid="signup-password"
-        />
+          <field
+            v-model="pilot.password"
+            type="password"
+            object="pilot"
+            field="password"
+            :errors="errors"
+            :label="t('pilot.password')"
+            required
+            autocomplete="new-password"
+            data-testid="signup-password"
+          />
+        </field-group>
+
+        <field-group>
+          <field
+            v-model="pilot.weight_unit"
+            type="select"
+            object="pilot"
+            field="weight_unit"
+            :errors="errors"
+            :label="t('account.edit.weightUnit.label')"
+            :options="weightUnitOptions"
+            data-testid="signup-weight-unit"
+          />
+        </field-group>
 
         <Turnstile
           ref="turnstileRef"
