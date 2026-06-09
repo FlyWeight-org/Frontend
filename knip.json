@@ -4,12 +4,7 @@
   "project": ["src/**/*.{ts,vue}"],
   "ignore": [],
   "ignoreBinaries": [],
-  "ignoreDependencies": [
-    "@flydotio/dockerfile",
-    "@testing-library/vue",
-    "@vue/compiler-dom",
-    "@vue/server-renderer"
-  ],
+  "ignoreDependencies": ["@flydotio/dockerfile", "@testing-library/vue"],
   "ignoreExportsUsedInFile": true,
   "rules": {
     "exports": "warn",
