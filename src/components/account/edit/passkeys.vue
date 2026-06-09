@@ -220,6 +220,7 @@ function formatLastUsed(passkey: Passkey): string {
 
 .passkey-item {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   align-items: center;
   padding: 12px 0;
@@ -228,10 +229,18 @@ function formatLastUsed(passkey: Passkey): string {
   &:last-child {
     border-bottom: none;
   }
+
+  // The rename input takes its own row; its Save/Cancel buttons wrap below it.
+  > input {
+    flex: 1 1 100%;
+  }
 }
 
 .passkey-info {
-  flex: 1;
+  // Keep a sensible minimum so the action buttons wrap onto their own line on
+  // narrow screens (and in longer languages) instead of crushing the label.
+  flex: 1 1 12rem;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -252,13 +261,9 @@ function formatLastUsed(passkey: Passkey): string {
 
 .add-passkey {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  align-items: center;
   margin-top: 16px;
-
-  input {
-    flex: 1;
-  }
 }
 
 button.destructive {
