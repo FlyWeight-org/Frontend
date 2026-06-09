@@ -15,6 +15,7 @@ const apiErrorBodySchema = z.object({
   'field-error': z.tuple([z.string(), z.string()]).optional(),
 })
 
+import { global } from '@/i18n'
 import { useAuthStore } from '@/stores/modules/auth'
 import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
@@ -79,7 +80,12 @@ export async function request({
 
   // Rebuilt per attempt so a replay after refresh carries the new token.
   const buildInit = (): RequestInit => {
-    const headers: Record<string, string> = { Accept: 'application/json' }
+    // `Accept-Language` is a forbidden header for fetch, so the active locale is sent
+    // out-of-band; the backend reads it to localize validation errors and flash messages.
+    const headers: Record<string, string> = {
+      Accept: 'application/json',
+      'X-Locale': global.locale.value,
+    }
     if (!unauthenticated && !isNull(auth.authHeader)) headers.Authorization = auth.authHeader
     if (!(body instanceof FormData) && !isString(body)) {
       headers['Content-Type'] = 'application/json'

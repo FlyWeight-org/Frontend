@@ -17,6 +17,9 @@ const en: LocaleMessage<VueMessageType> = {
         lb: 'Pounds (lb)',
         kg: 'Kilograms (kg)',
       },
+      language: {
+        label: 'Language',
+      },
       passkeys: {
         title: 'Passkeys',
         empty: 'You haven’t registered any passkeys yet.',
@@ -62,6 +65,8 @@ const en: LocaleMessage<VueMessageType> = {
         click: 'Click to select',
         tap: 'Tap to select',
       },
+      select: 'Select',
+      cancel: 'Cancel',
     },
   },
   flight: {

@@ -6,7 +6,7 @@ import { createSentryPiniaPlugin } from '@sentry/vue'
 
 import App from './App.vue'
 import router from './router'
-import i18n from '@/i18n'
+import i18n, { initLocale } from '@/i18n'
 
 import 'normalize.css'
 import './styles/_tokens.scss'
@@ -72,4 +72,10 @@ app.config.errorHandler = (err, _instance, info) => {
   }
 }
 
-app.component('VueDatePicker', VueDatePicker).mount('#app')
+app.component('VueDatePicker', VueDatePicker)
+
+// Resolve the stored/browser locale (and lazily load its message catalog) before the first
+// paint so the UI never flashes the fallback language.
+void initLocale().finally(() => {
+  app.mount('#app')
+})
