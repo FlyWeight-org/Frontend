@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Errors } from '@/stores/types'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { defineErrorRefs, defineIDRefs } from '@/components/field/common'
 import { DateTime } from 'luxon'
 import { isEqual, isUndefined } from 'lodash-es'
@@ -17,7 +17,13 @@ interface Props {
   errors?: Errors
 }
 
-const { t, d } = useI18n()
+const { t, d, locale } = useI18n()
+
+// Localized labels for vue-datepicker's built-in action row (it ships English defaults).
+const actionRow = computed(() => ({
+  selectBtnLabel: t('field.date.select'),
+  cancelBtnLabel: t('field.date.cancel'),
+}))
 
 const props = defineProps<Props>()
 const emit = defineEmits<(event: 'update:modelValue', value: DateTime | undefined) => void>()
@@ -73,9 +79,11 @@ export default {
       :id="id"
       v-model="internalDate"
       :name="name"
+      :locale="locale"
       :format="formatDate"
       :preview-format="formatDatePreview"
       :placeholder="datePlaceholder"
+      :action-row="actionRow"
       :enable-time-picker="false"
       :month-change-on-scroll="false"
       :clearable="false"

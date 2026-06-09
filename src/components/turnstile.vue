@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import VueTurnstile from 'vue-turnstile'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 defineProps<{ siteKey: string }>()
 const token = defineModel<string>({ default: '' })
 const widget = ref<InstanceType<typeof VueTurnstile> | null>(null)
 
+const { locale } = useI18n()
+// Cloudflare Turnstile expects a base language code (e.g. `de`, `fr`, `en`).
+const language = computed(() => locale.value.split('-')[0])
+
 defineExpose({ reset: () => widget.value?.reset() })
 </script>
 
 <template>
-  <VueTurnstile ref="widget" :site-key="siteKey" v-model="token" />
+  <VueTurnstile ref="widget" :site-key="siteKey" v-model="token" :language="language" />
 </template>
