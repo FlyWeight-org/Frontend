@@ -146,12 +146,16 @@ export const useAuthStore = defineStore('auth', {
       if (!this.refreshToken || !this.JWT) return false
 
       // Rodauth's jwt-refresh route requires the current (possibly expired)
-      // JWT in the Authorization header. We send it explicitly since
-      // skipResetAuth would suppress the header.
+      // JWT in the Authorization header, which request() includes
+      // automatically. skipRefresh stops a 401 here from recursing into
+      // another refresh; skipResetAuth leaves the logout decision to the
+      // caller, which resets only when this returns false.
       const response = await requestJSON<{ access_token: string; refresh_token: string }>({
         method: 'post',
         path: '/jwt-refresh',
         body: { refresh_token: this.refreshToken },
+        skipResetAuth: true,
+        skipRefresh: true,
       })
       if (!response.ok || !response.val.body) return false
 

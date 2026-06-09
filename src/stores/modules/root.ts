@@ -28,6 +28,10 @@ interface RequestArgs {
   skipResetAuth?: boolean
   /** Don't include the Authorization header (for fully public endpoints). */
   unauthenticated?: boolean
+  /** Internal: suppress the refresh-and-retry on 401. Set on the refresh
+   *  request itself and on the single post-refresh replay so neither can
+   *  recurse back into another refresh. */
+  skipRefresh?: boolean
 }
 
 // Retried on cold-start failures: Fly's proxy returns 504 without CORS
@@ -37,67 +41,94 @@ interface RequestArgs {
 // wake latency.
 const RETRY_DELAY_MS = 2000
 
-export function request({
+// Coalesces concurrent token refreshes. When several in-flight requests get a
+// 401 at once they all await this single promise, so the refresh token (which
+// Rodauth rotates on use) is spent exactly once per expiry.
+let inFlightRefresh: Promise<boolean> | null = null
+
+// Returned to callers after an unrecoverable 401: see failAuth() below.
+const NEVER_SETTLES = new Promise<Response>(() => undefined)
+
+function refreshAccessTokenOnce(auth: ReturnType<typeof useAuthStore>): Promise<boolean> {
+  inFlightRefresh ??= auth.refreshAccessToken().finally(() => {
+    inFlightRefresh = null
+  })
+  return inFlightRefresh
+}
+
+export async function request({
   method,
   path,
   body,
   skipResetAuth,
   unauthenticated,
+  skipRefresh,
 }: RequestArgs): Promise<Response> {
   const auth = useAuthStore()
   const account = useAccountStore()
   const flights = useFlightsStore()
 
-  return new Promise((resolve, reject) => {
-    let serializedBody: FormData | string
-    if (!(body instanceof FormData) && !isString(body)) {
-      serializedBody = JSON.stringify(body)
-    } else {
-      serializedBody = body
-    }
+  let serializedBody: FormData | string
+  if (!(body instanceof FormData) && !isString(body)) {
+    serializedBody = JSON.stringify(body)
+  } else {
+    serializedBody = body
+  }
 
-    const headers: Record<string, string> = {
-      Accept: 'application/json',
-    }
+  const url = config.APIURL + path
+
+  // Rebuilt per attempt so a replay after refresh carries the new token.
+  const buildInit = (): RequestInit => {
+    const headers: Record<string, string> = { Accept: 'application/json' }
     if (!unauthenticated && !isNull(auth.authHeader)) headers.Authorization = auth.authHeader
     if (!(body instanceof FormData) && !isString(body)) {
       headers['Content-Type'] = 'application/json'
     }
-
-    const fetchInit: RequestInit = {
+    return {
       method: method ?? 'get',
       body: serializedBody,
       headers,
       credentials: 'include',
     }
-    const url = config.APIURL + path
+  }
 
-    const handleResponse = (response: Response): void => {
-      if (response.status === 401 && !skipResetAuth) {
-        auth.reset()
-        account.reset()
-        flights.reset()
-        return
+  const fetchWithColdStartRetry = async (retriesLeft: number): Promise<Response> => {
+    try {
+      return await fetch(url, buildInit())
+    } catch (error: unknown) {
+      if (retriesLeft > 0) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS))
+        return fetchWithColdStartRetry(retriesLeft - 1)
       }
-      resolve(response)
+      throw error instanceof Error ? error : new Error(String(error))
     }
+  }
 
-    const attempt = (retriesLeft: number): void => {
-      fetch(url, fetchInit)
-        .then(handleResponse)
-        .catch((error: unknown) => {
-          if (retriesLeft > 0) {
-            setTimeout(() => {
-              attempt(retriesLeft - 1)
-            }, RETRY_DELAY_MS)
-            return
-          }
-          reject(error instanceof Error ? error : new Error(String(error)))
-        })
-    }
+  const response = await fetchWithColdStartRetry(1)
+  if (response.status !== 401 || skipResetAuth) return response
 
-    attempt(1)
-  })
+  // Expired but refreshable: get a new token and replay with it.
+  if (!skipRefresh && (await refreshAccessTokenOnce(auth))) {
+    const replay = await fetchWithColdStartRetry(1)
+    if (replay.status !== 401) return replay
+  }
+
+  // The session is unrecoverable. Clear it, then — for a request that carried
+  // credentials — retry once anonymously so public endpoints still resolve
+  // (e.g. a shared flight opened after the session lapsed). The reset
+  // reactively logs the user out; buildInit() omits the now-absent token.
+  const wasAuthenticated = !unauthenticated && !isNull(auth.authHeader)
+  auth.reset()
+  account.reset()
+  flights.reset()
+  if (wasAuthenticated) {
+    const anonymous = await fetchWithColdStartRetry(1)
+    if (anonymous.status !== 401) return anonymous
+  }
+
+  // Auth-required endpoint with no usable session: leave the promise unsettled
+  // so no stale handler runs against the torn-down session.
+  return NEVER_SETTLES
 }
 
 export async function requestJSON<T>(args: RequestArgs): Promise<APIResponse<T>> {
