@@ -5,10 +5,12 @@ import type { EditableLoad, Flight } from '@/types'
 import Field from '@/components/field.vue'
 import requireAuth from '@/composables/requireAuth'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
+import useWeight from '@/composables/useWeight'
 import { useFlightStore } from '@/stores/modules/flight'
 
 const { t } = useI18n()
 const flightStore = useFlightStore()
+const { toPounds, unitSymbol } = useWeight()
 
 requireAuth()
 
@@ -26,7 +28,12 @@ const load = reactive<EditableLoad>({
   disabled: false,
 })
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Flight>(
-  () => flightStore.addAuthorizedLoad(load),
+  () =>
+    flightStore.addAuthorizedLoad({
+      ...load,
+      weight: toPounds(load.weight),
+      bagsWeight: toPounds(load.bagsWeight),
+    }),
   () => {
     load.name = ''
     load.weight = 0
@@ -60,7 +67,7 @@ const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Flig
       type="number"
       object="load"
       field="weight"
-      :label="t('passenger.weight')"
+      :label="t('passenger.weightWithUnit', { unit: unitSymbol })"
       :errors="errors"
       required
       min="0"
@@ -72,7 +79,7 @@ const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Flig
       type="number"
       object="load"
       field="bags_weight"
-      :label="t('passenger.bagsWeight')"
+      :label="t('passenger.bagsWeightWithUnit', { unit: unitSymbol })"
       :errors="errors"
       min="0"
       data-testid="passenger-bags-weight"

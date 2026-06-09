@@ -7,5 +7,11 @@ const en: NumberFormat = {
     unit: 'pound',
     unitDisplay: 'short',
   },
+  kilograms: {
+    maximumFractionDigits: 0,
+    style: 'unit',
+    unit: 'kilogram',
+    unitDisplay: 'short',
+  },
 }
 export default en

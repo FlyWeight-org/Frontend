@@ -1,4 +1,5 @@
 import type { DateTime } from 'luxon'
+import type { WeightUnit } from '@/utils/weight'
 
 export interface Passkey {
   id: string
@@ -9,6 +10,7 @@ export interface Passkey {
 export interface Pilot {
   email?: string
   name: string
+  weightUnit: WeightUnit
   passkeys?: Passkey[]
 }
 

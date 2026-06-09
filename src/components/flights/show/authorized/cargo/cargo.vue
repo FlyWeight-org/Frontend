@@ -5,9 +5,11 @@ import { X } from 'lucide-vue-next'
 import type { Load } from '@/types'
 import { errorToString, notifySentry } from '@/utils/errors'
 import { useFlightStore } from '@/stores/modules/flight'
+import useWeight from '@/composables/useWeight'
 
-const { n, t } = useI18n()
+const { t } = useI18n()
 const flightStore = useFlightStore()
+const { display } = useWeight()
 
 const props = defineProps<{
   cargo: Load
@@ -42,7 +44,7 @@ function toggleEnabled(event: Event) {
       <span class="load-name" data-testid="cargo-name">{{ cargo.name }}</span>
     </div>
     <div class="load-weight" data-testid="cargo-weight">
-      {{ n(cargo.bagsWeight, 'pounds') }}
+      {{ display(cargo.bagsWeight) }}
     </div>
     <button
       class="load-delete"

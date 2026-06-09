@@ -18,6 +18,7 @@ describe('form.vue', () => {
       currentPilot: {
         name: 'Sancho Sample',
         email: 'sancho@example.com',
+        weightUnit: 'lb',
         passkeys: [],
       },
       currentPilotLoading: false,
@@ -46,6 +47,30 @@ describe('form.vue', () => {
       await wrapper.vm.$nextTick()
 
       expect(wrapper.get('p.success').text()).toEqual('Your account information has been changed.')
+    })
+
+    it('submits the selected weight unit', async () => {
+      const pinia = createTestingPinia({
+        createSpy: vi.fn,
+        initialState,
+      })
+
+      const wrapper = mount(Form, {
+        global: {
+          plugins: [pinia, i18n],
+        },
+      })
+
+      const accountStore = useAccountStore(pinia)
+      vi.mocked(accountStore.updateAccount).mockReturnValue(Promise.resolve(new Ok(undefined)))
+
+      await wrapper.get('select[name="pilot[weight_unit]"]').setValue('kg')
+      await wrapper.get('form').trigger('submit')
+      await wrapper.vm.$nextTick()
+
+      expect(accountStore.updateAccount).toHaveBeenCalledWith(
+        expect.objectContaining({ weight_unit: 'kg' }),
+      )
     })
 
     it('handles invalid data', async () => {

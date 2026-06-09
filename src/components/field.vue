@@ -3,6 +3,7 @@ import type { Errors } from '@/stores/types'
 import CheckboxField from '@/components/field/checkboxField.vue'
 import DatepickerField from '@/components/field/datepickerField.vue'
 import TextareaField from '@/components/field/textareaField.vue'
+import SelectField from '@/components/field/selectField.vue'
 import InputField from '@/components/field/inputField.vue'
 import { defineErrorRefs } from '@/components/field/common'
 import { computed } from 'vue'
@@ -87,6 +88,23 @@ export default {
       :errors="errors"
       v-bind="$attrs"
     />
+    <ul v-if="hasError" class="error" data-testid="field-errors" :data-name="field">
+      <li v-for="error in fieldErrors" :key="error">
+        {{ error }}
+      </li>
+    </ul>
+  </fieldset>
+
+  <fieldset v-else-if="type === 'select'">
+    <select-field
+      :object="object"
+      :field="field"
+      :model-value="valueAsString"
+      :label="label"
+      :errors="errors"
+      v-bind="$attrs"
+    />
+
     <ul v-if="hasError" class="error" data-testid="field-errors" :data-name="field">
       <li v-for="error in fieldErrors" :key="error">
         {{ error }}

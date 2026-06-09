@@ -18,7 +18,12 @@ const URL = `${config.APIURL}/account`
 const pilot: PilotJSONUp = reactive({
   email: accountStore.currentPilot?.email ?? '',
   name: accountStore.currentPilot?.name ?? '',
+  weight_unit: accountStore.currentPilot?.weightUnit ?? 'lb',
 })
+const weightUnitOptions = [
+  { value: 'lb', label: t('account.edit.weightUnit.lb') },
+  { value: 'kg', label: t('account.edit.weightUnit.kg') },
+]
 const success = ref(false)
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
   () => {
@@ -36,7 +41,9 @@ const { submitHandler, errors, error, isProcessing } = useFormErrorHandling(
 const dirty = computed<boolean>(() => {
   if (isNull(accountStore.currentPilot)) return true
   return (
-    pilot.email !== accountStore.currentPilot.email || pilot.name !== accountStore.currentPilot.name
+    pilot.email !== accountStore.currentPilot.email ||
+    pilot.name !== accountStore.currentPilot.name ||
+    pilot.weight_unit !== accountStore.currentPilot.weightUnit
   )
 })
 
@@ -46,6 +53,7 @@ watch(
     if (isNull(accountStore.currentPilot)) return // requireAuth will handle redirect
     pilot.email = accountStore.currentPilot.email ?? ''
     pilot.name = accountStore.currentPilot.name
+    pilot.weight_unit = accountStore.currentPilot.weightUnit
   },
 )
 </script>
@@ -84,6 +92,17 @@ watch(
       :label="t('pilot.email')"
       autocomplete="email"
       data-testid="account-email"
+    />
+
+    <field
+      v-model="pilot.weight_unit"
+      type="select"
+      object="pilot"
+      field="weight_unit"
+      :errors="errors"
+      :label="t('account.edit.weightUnit.label')"
+      :options="weightUnitOptions"
+      data-testid="account-weight-unit"
     />
 
     <fieldset class="actions">

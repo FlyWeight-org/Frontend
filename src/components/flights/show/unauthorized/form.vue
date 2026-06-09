@@ -1,30 +1,24 @@
 <script setup lang="ts">
 import type { Flight, Load } from '@/types'
 import config from '@/config'
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useFlightStore } from '@/stores/modules/flight'
 import Field from '@/components/field.vue'
 import type { EditableLoad } from '@/types'
 import useFormErrorHandling from '@/composables/useFormErrorHandling'
+import useWeight from '@/composables/useWeight'
 import { useRouter } from 'vue-router'
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const flightStore = useFlightStore()
 const router = useRouter()
-
-const weightUnitSymbol = computed(() => {
-  const parts = new Intl.NumberFormat(locale.value, {
-    style: 'unit',
-    unit: 'pound',
-    unitDisplay: 'short',
-  }).formatToParts(0)
-  return parts.find((part) => part.type === 'unit')?.value ?? 'lb'
-})
 
 const props = defineProps<{
   flight: Flight
 }>()
+
+const { toPounds, unitSymbol } = useWeight(() => props.flight.pilot.weightUnit)
 
 const URL = `${config.APIURL}/flights/${props.flight.UUID}/loads.json`
 const load = reactive<EditableLoad>({
@@ -34,7 +28,12 @@ const load = reactive<EditableLoad>({
   disabled: false,
 })
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<Load>(
-  () => flightStore.addUnauthorizedLoad(load),
+  () =>
+    flightStore.addUnauthorizedLoad({
+      ...load,
+      weight: toPounds(load.weight),
+      bagsWeight: toPounds(load.bagsWeight),
+    }),
   async (load) => {
     await router.push({
       name: 'flightsFinished',
@@ -94,7 +93,7 @@ watch(
     <fieldset
       v-if="step >= 1"
       class="reveal weight-field"
-      :style="{ '--weight-unit': `'${weightUnitSymbol}'` }"
+      :style="{ '--weight-unit': `'${unitSymbol}'` }"
     >
       <field
         v-model="load.weight"
@@ -112,7 +111,7 @@ watch(
     <fieldset
       v-if="step >= 2"
       class="reveal weight-field"
-      :style="{ '--weight-unit': `'${weightUnitSymbol}'` }"
+      :style="{ '--weight-unit': `'${unitSymbol}'` }"
     >
       <field
         v-model="load.bagsWeight"

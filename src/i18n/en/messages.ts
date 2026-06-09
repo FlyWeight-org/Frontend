@@ -12,6 +12,11 @@ const en: LocaleMessage<VueMessageType> = {
       button: 'Update',
       changePassword: 'Change Password',
       success: 'Your account information has been changed.',
+      weightUnit: {
+        label: 'Weight unit',
+        lb: 'Pounds (lb)',
+        kg: 'Kilograms (kg)',
+      },
       passkeys: {
         title: 'Passkeys',
         empty: 'You haven’t registered any passkeys yet.',
@@ -43,6 +48,7 @@ const en: LocaleMessage<VueMessageType> = {
   cargo: {
     name: 'Description',
     bagsWeight: 'Weight',
+    bagsWeightWithUnit: 'Weight ({unit})',
   },
   error: {
     badResponse: 'Invalid HTTP response {status}',
@@ -183,7 +189,9 @@ const en: LocaleMessage<VueMessageType> = {
   passenger: {
     name: 'Passenger name',
     weight: 'Weight',
+    weightWithUnit: 'Weight ({unit})',
     bagsWeight: 'Bags weight',
+    bagsWeightWithUnit: 'Bags weight ({unit})',
   },
   pilot: {
     current_password: 'Current password',

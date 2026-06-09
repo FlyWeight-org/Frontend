@@ -3,8 +3,10 @@ import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import type { Flight } from '@/types'
 import { isPassenger, isCargo } from '@/types'
+import useWeight from '@/composables/useWeight'
 
-const { t, n } = useI18n()
+const { t } = useI18n()
+const { display } = useWeight()
 
 const props = defineProps<{
   flight: Flight
@@ -41,11 +43,11 @@ const totalWeight = computed(() => {
           <div class="stat-label">{{ t('flights.show.authorized.header.passengers') }}</div>
         </div>
         <div class="stat">
-          <div class="stat-value">{{ paxCount > 0 ? n(avgPaxWeight, 'pounds') : '—' }}</div>
+          <div class="stat-value">{{ paxCount > 0 ? display(avgPaxWeight) : '—' }}</div>
           <div class="stat-label">{{ t('flights.show.authorized.loads.averageWeightLabel') }}</div>
         </div>
         <div class="stat">
-          <div class="stat-value">{{ n(totalCargoAndBags, 'pounds') }}</div>
+          <div class="stat-value">{{ display(totalCargoAndBags) }}</div>
           <div class="stat-label">{{ t('flights.show.authorized.loads.cargoAndBagsLabel') }}</div>
         </div>
       </div>
@@ -53,7 +55,7 @@ const totalWeight = computed(() => {
       <div class="totals-row total">
         <span class="totals-label">{{ t('flights.show.authorized.loads.totalWeight') }}</span>
         <span class="totals-value gradient-text" data-testid="total-weight-value">{{
-          n(totalWeight, 'pounds')
+          display(totalWeight)
         }}</span>
       </div>
     </div>

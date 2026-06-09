@@ -2,6 +2,7 @@ import { map, omit } from 'lodash-es'
 import * as luxon from 'luxon'
 import { z } from 'zod'
 import type { Flight, FlightListItem, Load, EditableFlight, Passkey, Pilot } from '@/types'
+import type { WeightUnit } from '@/utils/weight'
 
 const passkeySchema = z.object({
   id: z.string(),
@@ -12,6 +13,7 @@ const passkeySchema = z.object({
 const pilotSchema = z.object({
   email: z.string().optional(),
   name: z.string(),
+  weight_unit: z.enum(['lb', 'kg']).optional(),
   passkeys: z.array(passkeySchema).optional(),
 })
 
@@ -50,12 +52,14 @@ export const flightListItemJSONDownSchema = z.object({
 export interface PilotJSONUp {
   name: string
   email: string
+  weight_unit: WeightUnit
 }
 
 /** Shape of pilot JSON data received from the back-end. */
 export interface PilotJSONDown {
   name: string
   email: string
+  weight_unit: WeightUnit
   passkeys: PasskeyJSONDown[]
   access_token?: string
   refresh_token?: string
@@ -79,6 +83,7 @@ export function pilotFromJSON(data: unknown): Pilot {
   return {
     email: JSON.email,
     name: JSON.name,
+    weightUnit: JSON.weight_unit ?? 'lb',
     passkeys: JSON.passkeys?.map(passkeyFromJSON) ?? [],
   }
 }
