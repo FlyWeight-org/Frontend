@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { Lock } from 'lucide-vue-next'
 import type { Flight } from '@/types'
+import { applyLocale, detectLocale } from '@/i18n'
 import PassengerForm from '@/components/flights/show/unauthorized/form.vue'
 
 const { t, d } = useI18n()
@@ -10,6 +11,14 @@ const { t, d } = useI18n()
 const props = defineProps<{
   flight: Flight
 }>()
+
+// Passengers aren't logged in and have no saved preference, so localize this public form by
+// the browser language, falling back to the pilot's locale (a better guess for their
+// passengers than the app default). Applied without persisting — it's not the passenger's
+// own explicit choice, so it must not stick for their future visits.
+watchEffect(() => {
+  void applyLocale(detectLocale(props.flight.pilot.locale))
+})
 
 const dateString = computed(() => d(props.flight.date.toJSDate(), 'medium'))
 </script>
