@@ -54,8 +54,10 @@ async function onDelete() {
 
     <manifest :flight="flight" />
 
-    <details class="edit-section">
-      <summary>{{ t('flights.show.authorized.header.edit') }}</summary>
+    <details class="edit-section" data-testid="edit-section">
+      <summary data-testid="edit-section-toggle">
+        {{ t('flights.show.authorized.header.edit') }}
+      </summary>
       <edit-form :flight="flight" />
 
       <p

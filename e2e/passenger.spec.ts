@@ -1,5 +1,4 @@
 import { test, expect } from './fixtures'
-import { FlightsListPage } from './pages/FlightsListPage'
 
 test.describe('as a passenger', () => {
   test('displays the unauthorized flight page', async ({
@@ -26,7 +25,12 @@ test.describe('as a passenger', () => {
     )
   })
 
-  test('adds a passenger', async ({ page, passengerFlightPage, resetDatabase: flightUUID }) => {
+  test('adds a passenger', async ({
+    page,
+    loginPage,
+    passengerFlightPage,
+    resetDatabase: flightUUID,
+  }) => {
     await passengerFlightPage.visit(flightUUID)
     await passengerFlightPage.fillName('New Pax')
     await passengerFlightPage.fillWeight('123')
@@ -36,13 +40,8 @@ test.describe('as a passenger', () => {
     await expect(passengerFlightPage.finishedMessage()).toBeVisible()
 
     // Log in mid-test to verify the passenger
-    await page.goto('/')
-    await page.getByTestId('login-email').fill('cypress@example.com')
-    await page.getByTestId('login-password').fill('supersecret')
-    await page.getByTestId('login-submit').click()
-    await page.getByTestId('flight-list').waitFor()
-
-    const flightsPage = new FlightsListPage(page)
+    await loginPage.visit()
+    const flightsPage = await loginPage.loginAs('cypress@example.com', 'supersecret')
     await flightsPage.clickFirstFlight()
 
     const passengerItems = page.getByTestId('passenger-list-item')
@@ -56,7 +55,12 @@ test.describe('as a passenger', () => {
     await expect(page.getByTestId('total-weight-value')).toContainText('331 lb')
   })
 
-  test('updates a passenger', async ({ page, passengerFlightPage, resetDatabase: flightUUID }) => {
+  test('updates a passenger', async ({
+    page,
+    loginPage,
+    passengerFlightPage,
+    resetDatabase: flightUUID,
+  }) => {
     await passengerFlightPage.visit(flightUUID)
     await passengerFlightPage.fillName('Example Passenger')
     await passengerFlightPage.fillWeight('123')
@@ -66,13 +70,8 @@ test.describe('as a passenger', () => {
     await expect(passengerFlightPage.finishedMessage()).toBeVisible()
 
     // Log in mid-test to verify the passenger
-    await page.goto('/')
-    await page.getByTestId('login-email').fill('cypress@example.com')
-    await page.getByTestId('login-password').fill('supersecret')
-    await page.getByTestId('login-submit').click()
-    await page.getByTestId('flight-list').waitFor()
-
-    const flightsPage = new FlightsListPage(page)
+    await loginPage.visit()
+    const flightsPage = await loginPage.loginAs('cypress@example.com', 'supersecret')
     await flightsPage.clickFirstFlight()
 
     const passengerItems = page.getByTestId('passenger-list-item')

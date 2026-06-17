@@ -18,9 +18,9 @@ export class FlightShowPage {
   }
 
   async openEditSection(): Promise<void> {
-    const details = this.page.locator('details.edit-section')
+    const details = this.page.getByTestId('edit-section')
     if ((await details.getAttribute('open')) === null) {
-      await details.locator('summary').click()
+      await this.page.getByTestId('edit-section-toggle').click()
     }
   }
 
