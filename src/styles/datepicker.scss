@@ -2,11 +2,8 @@
 
 @import '@vuepic/vue-datepicker/dist/main.css';
 
-$dp__font_family: 'DM Sans', sans-serif;
-$dp__font_size: 100%;
-
-.dp__theme_light,
-.dp__theme_dark {
+.dp--theme-light,
+.dp--theme-dark {
   --dp-background-color: var(--color-surface-raised);
   --dp-text-color: var(--color-text-primary);
   --dp-hover-color: var(--color-surface-hover);
@@ -27,7 +24,7 @@ $dp__font_size: 100%;
   --dp-danger-color: var(--color-error);
 }
 
-input.dp__input {
+input.dp--input {
   @include fields.field;
 
   width: unset;

@@ -9,8 +9,8 @@ export class FlightShowPage {
 
   async fillDate(): Promise<void> {
     await this.page.getByTestId('flight-date').click()
-    await this.page.locator('.dp__calendar_item:not([aria-disabled])').first().click()
-    await this.page.locator('.dp__action_select').click()
+    await this.page.locator('.dp--calendar-item:not([aria-disabled])').first().click()
+    await this.page.locator('.dp--action-select').click()
   }
 
   async fillDescription(description: string): Promise<void> {

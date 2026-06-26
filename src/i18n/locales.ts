@@ -1,6 +1,31 @@
+import type { Locale } from 'date-fns'
+import { de, enAU, enCA, enGB, enUS, fr } from 'date-fns/locale'
+
 /** The locales the app ships translations (or locale-specific formats) for. */
 export const SUPPORTED_LOCALES = ['en', 'en-GB', 'en-CA', 'en-AU', 'de-DE', 'fr-FR'] as const
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
+
+/** Maps each supported locale to its `date-fns` `Locale`, used by `date-fns`-based components. */
+const DATE_FNS_LOCALES: Record<SupportedLocale, Locale> = {
+  en: enUS,
+  'en-GB': enGB,
+  'en-CA': enCA,
+  'en-AU': enAU,
+  'de-DE': de,
+  'fr-FR': fr,
+}
+
+/**
+ * Resolves a BCP-47 language tag to the matching `date-fns` `Locale`. Third-party components
+ * built on `date-fns` (e.g. the date picker) require a `Locale` object rather than a tag string.
+ *
+ * @param tag A BCP-47 language tag such as `en-US`, `de`, or `fr-CA`.
+ * @returns The `date-fns` locale for the best-matching supported locale, falling back to
+ *   {@link DEFAULT_LOCALE} when nothing matches.
+ */
+export function dateFnsLocale(tag: string): Locale {
+  return DATE_FNS_LOCALES[matchLocale(tag) ?? DEFAULT_LOCALE]
+}
 
 /** The locale used when nothing else matches, and the source for fallback translations. */
 export const DEFAULT_LOCALE: SupportedLocale = 'en'

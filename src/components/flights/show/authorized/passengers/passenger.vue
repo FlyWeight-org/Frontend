@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { ref } from 'vue'
-import { X } from 'lucide-vue-next'
+import { X } from '@lucide/vue'
 import type { Load } from '@/types'
 import { errorToString, notifySentry } from '@/utils/errors'
 import { useFlightStore } from '@/stores/modules/flight'

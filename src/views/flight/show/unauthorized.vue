@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { computed, watchEffect } from 'vue'
-import { Lock } from 'lucide-vue-next'
+import { Lock } from '@lucide/vue'
 import type { Flight } from '@/types'
 import { applyLocale, detectLocale } from '@/i18n'
 import PassengerForm from '@/components/flights/show/unauthorized/form.vue'

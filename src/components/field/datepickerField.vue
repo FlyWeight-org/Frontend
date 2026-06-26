@@ -2,6 +2,7 @@
 import type { Errors } from '@/stores/types'
 import { computed, ref, watch } from 'vue'
 import { defineErrorRefs, defineIDRefs } from '@/components/field/common'
+import { dateFnsLocale } from '@/i18n/locales'
 import { DateTime } from 'luxon'
 import { isEqual, isUndefined } from 'lodash-es'
 import isTouchDevice from 'is-touch-device'
@@ -18,6 +19,9 @@ interface Props {
 }
 
 const { t, d, locale } = useI18n()
+
+// vue-datepicker's `locale` takes a date-fns Locale object, not a BCP-47 tag.
+const datePickerLocale = computed(() => dateFnsLocale(locale.value))
 
 // Localized labels for vue-datepicker's built-in action row (it ships English defaults).
 const actionRow = computed(() => ({
@@ -79,13 +83,12 @@ export default {
       :id="id"
       v-model="internalDate"
       :name="name"
-      :locale="locale"
-      :format="formatDate"
-      :preview-format="formatDatePreview"
+      :locale="datePickerLocale"
+      :formats="{ input: formatDate, preview: formatDatePreview }"
       :placeholder="datePlaceholder"
       :action-row="actionRow"
-      :enable-time-picker="false"
-      :month-change-on-scroll="false"
+      :time-config="{ enableTimePicker: false }"
+      :config="{ monthChangeOnScroll: false }"
       :clearable="false"
       :class="{ invalid: hasError }"
       :aria-invalid="hasError"

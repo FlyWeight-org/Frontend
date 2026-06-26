@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Plus } from 'lucide-vue-next'
+import { Plus } from '@lucide/vue'
 import FlightView from '@/components/flights/list/flight.vue'
 import requireAuth from '@/composables/requireAuth'
 import { useFlightsStore } from '@/stores/modules/flights'
