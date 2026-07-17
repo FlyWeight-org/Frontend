@@ -25,18 +25,23 @@ The website requires the back-end to be running as well. See
 
 #### Testing
 
-End-to-end testing is available with Cypress. To run end-to-end tests, create a
-`Procfile` similar to:
+End-to-end testing is available with Playwright. The suite needs the back-end
+stack running, so create a `Procfile.e2e` in the parent directory similar to:
 
 ```procfile
-backend: cd Backend && rvm 4.0.3@flyweight exec rails server -e cypress -b 127.0.0.1
-frontend: cd Frontend && pnpm test:e2e:dev
-jobs: cd Backend && RAILS_ENV=cypress rvm 4.0.3@flyweight exec bundle exec good_job start
-anycable: cd Backend && RAILS_ENV=cypress rvm 4.0.3@flyweight exec anycable
-ws: cd Backend && rvm 4.0.3@flyweight exec bin/anycable-go --port=8080
+backend: cd Backend && PORT=5000 ANYCABLE_HTTP_RPC=true rvm 4.0.6@flyweight do rails server -e cypress -b 127.0.0.1
+ws: cd Backend && rvm 4.0.6@flyweight do bin/anycable-go --port=8080 --rpc_host=http://127.0.0.1:5000/_anycable
+e2e: cd Frontend && until curl -sfo /dev/null http://127.0.0.1:5000/up; do sleep 1; done && pnpm test:e2e
 ```
 
-Install `overmind` to run the Procfile.
+Rails runs in the `cypress` environment, which is what exposes the
+`__cypress__/reset` and `__cypress__/last_email` helpers the fixtures drive.
+Playwright's own `webServer` builds and previews the SPA on port 4173, so no
+front-end process belongs here.
+
+Install `overmind` and run the suite with `overmind start -f Procfile.e2e`. To
+work through the tests interactively instead, use `pnpm test:e2e:dev` against a
+stack started the same way.
 
 #### Deployment
 
