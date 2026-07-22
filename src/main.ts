@@ -1,3 +1,5 @@
+import '@/zodConfig'
+
 import { createApp } from 'vue'
 import { VueDatePicker } from '@vuepic/vue-datepicker'
 import { createPinia } from 'pinia'
@@ -7,6 +9,13 @@ import { createSentryPiniaPlugin } from '@sentry/vue'
 import App from './App.vue'
 import router from './router'
 import i18n, { initLocale } from '@/i18n'
+
+import '@fontsource/bricolage-grotesque/400.css'
+import '@fontsource/bricolage-grotesque/700.css'
+import '@fontsource/bricolage-grotesque/800.css'
+import '@fontsource/dm-sans/400.css'
+import '@fontsource/dm-sans/500.css'
+import '@fontsource/dm-sans/600.css'
 
 import 'normalize.css'
 import './styles/_tokens.scss'

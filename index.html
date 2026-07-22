@@ -5,18 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <meta
-      http-equiv="Permissions-Policy"
-      content="camera=(), microphone=(), geolocation=(), interest-cohort=()"
-    />
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
 
     <!-- Primary Meta Tags -->
     <title>FlyWeight</title>
@@ -113,5 +101,19 @@
     </noscript>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <!-- Cloudflare Web Analytics. Embedded at build time rather than left to
+         edge auto-injection: the service worker precaches index.html, so
+         returning visitors would be served a copy predating the edge rewrite
+         and go uncounted. Reporting goes to cloudflareinsights.com: the
+         same-origin /cdn-cgi/rum endpoint only exists while auto-install is
+         enabled, and it is off here so the beacon loads exactly once.
+
+         No `integrity`: Cloudflare does not version-pin the beacon, so a
+         pinned hash would break on their next release. -->
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "3e2b69c6e53249859e4c5b1af9e94bc3"}'
+    ></script>
   </body>
 </html>

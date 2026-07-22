@@ -29,11 +29,13 @@ RUN pnpm install --frozen-lockfile
 # Copy remaining application code
 COPY . .
 
+# Sentry is disabled at runtime when this is empty, so the DSN has to reach the
+# build that Vite inlines it into — not just the deploy command.
+ARG VITE_SENTRY_DSN
+ENV VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+
 # Build application
 RUN pnpm run build
-
-# Generate nginx config with CSP script hashes from built HTML
-RUN node scripts/generate-nginx-conf.mjs
 
 # Remove development dependencies
 RUN pnpm prune --prod
@@ -57,7 +59,8 @@ COPY --from=exporter-download /tmp/nginx-prometheus-exporter /usr/local/bin/
 
 # Copy nginx configuration
 COPY .docker/nginx.conf /etc/nginx/nginx.conf
-COPY --from=build /app/.docker/default.conf.generated /etc/nginx/conf.d/default.conf
+COPY --from=build /app/.docker/default.conf /etc/nginx/conf.d/default.conf
+COPY .docker/origin-lock.conf.template /etc/nginx/conf.d/origin-lock.conf.template
 
 # Copy startup script
 COPY .docker/start.sh /start.sh
