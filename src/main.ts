@@ -9,6 +9,7 @@ import { createSentryPiniaPlugin } from '@sentry/vue'
 import App from './App.vue'
 import router from './router'
 import i18n, { initLocale } from '@/i18n'
+import { recoverFromPreloadErrors } from '@/utils/preloadRecovery'
 
 import '@fontsource/bricolage-grotesque/400.css'
 import '@fontsource/bricolage-grotesque/700.css'
@@ -70,6 +71,8 @@ if (sentryDSN) {
 app.use(pinia)
 app.use(router)
 app.use(i18n)
+
+recoverFromPreloadErrors()
 
 // Global Vue error handler — forwards uncaught component errors to Sentry
 // when configured. In dev, Vue's own warnings will surface in the console.
