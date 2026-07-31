@@ -31,7 +31,9 @@ onMounted(async () => {
       state.value = 'success'
       useTimeoutFn(
         () => {
-          router.push({ name: 'logIn' }).catch(notifySentry)
+          router.push({ name: 'logIn' }).catch((err: unknown) => {
+            notifySentry(err, 'verifyAccount.redirectToLogIn')
+          })
         },
         REDIRECT_DELAY_MS,
         { immediate: true },
@@ -41,7 +43,7 @@ onMounted(async () => {
       errorText.value = Object.values(result.val).flat().join(', ')
     }
   } catch (err) {
-    notifySentry(err)
+    notifySentry(err, 'verifyAccount.verify')
     state.value = 'failure'
     errorText.value = errorToString(err)
   }

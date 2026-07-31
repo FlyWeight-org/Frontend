@@ -34,7 +34,7 @@ async function onDelete() {
     await flightStore.deleteFlight(props.flight)
     await router.push({ name: 'flightsList' })
   } catch (error) {
-    notifySentry(error)
+    notifySentry(error, 'authorizedFlight.onDelete')
     deleteError.value = errorToString(error)
   }
   isDeleting.value = false

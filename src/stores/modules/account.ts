@@ -181,7 +181,7 @@ export const useAccountStore = defineStore('account', {
           currentPilotLoading: false,
           currentPilotError: anythingToError(error),
         })
-        notifySentry(error)
+        notifySentry(error, 'accountStore.loadAccount')
       }
     },
 
