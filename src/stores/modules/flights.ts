@@ -77,7 +77,7 @@ export const useFlightsStore = defineStore('flights', {
           flightsLoading: false,
           flightsError: anythingToError(error),
         })
-        notifySentry(error)
+        notifySentry(error, 'flightsStore.loadFlights')
       }
     },
 

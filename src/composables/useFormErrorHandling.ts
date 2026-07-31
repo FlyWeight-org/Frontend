@@ -43,7 +43,7 @@ export default function useFormErrorHandling<SuccessType>(
         if (!isUndefined(onError)) await onError(result.val)
       }
     } catch (err) {
-      notifySentry(err)
+      notifySentry(err, 'useFormErrorHandling.submit')
       error.value = errorToString(err)
       if (!isUndefined(onError)) await onError(error.value)
     }

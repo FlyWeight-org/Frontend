@@ -21,7 +21,7 @@ async function deleteClicked() {
   try {
     await flightStore.removeLoad(props.passenger.slug)
   } catch (err) {
-    notifySentry(err)
+    notifySentry(err, 'passenger.deleteClicked')
     deleteError.value = errorToString(err)
   }
 }

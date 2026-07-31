@@ -85,7 +85,7 @@ export const useFlightStore = defineStore('flight', {
           flightLoading: false,
           flight: null,
         })
-        notifySentry(error)
+        notifySentry(error, 'flightStore.loadFlight')
       }
     },
 
