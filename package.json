@@ -51,7 +51,7 @@
     "@pinia/testing": "^1.0.3",
     "@playwright/test": "^1.61.1",
     "@testing-library/vue": "^8.1.0",
-    "@tsconfig/node22": "^22.0.5",
+    "@tsconfig/node26": "^26.0.1",
     "@types/is-touch-device": "^1.0.3",
     "@types/jsdom": "^28.0.3",
     "@types/lodash-es": "^4.17.12",

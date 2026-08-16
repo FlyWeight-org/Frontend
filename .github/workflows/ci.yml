@@ -1,6 +1,3 @@
-# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
 name: CI
 
 on:
@@ -9,14 +6,19 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   unit:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          submodules: true
       - name: Set up pnpm
         uses: pnpm/action-setup@v6
       - name: Set up Node.js
@@ -26,17 +28,14 @@ jobs:
           node-version-file: .nvmrc
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Type check
-        run: pnpm run type-check
       - name: Run unit tests
-        run: pnpm run test:unit
+        run: pnpm run test:unit -- --run
+
   lint:
     name: Linters
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-        with:
-          submodules: true
       - name: Set up pnpm
         uses: pnpm/action-setup@v6
       - name: Set up Node.js
@@ -46,11 +45,7 @@ jobs:
           node-version-file: .nvmrc
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Run ESLint
-        run: pnpm run lint:eslint
-      - name: Run Stylelint
-        run: pnpm run lint:stylelint
-      - name: Run oxlint
-        run: pnpm run lint:oxlint
-      - name: Run knip
-        run: pnpm run lint:knip
+      - name: Run linters
+        run: pnpm run lint
+      - name: Type check
+        run: pnpm run type-check

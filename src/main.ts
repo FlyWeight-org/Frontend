@@ -4,7 +4,6 @@ import { createApp } from 'vue'
 import { VueDatePicker } from '@vuepic/vue-datepicker'
 import { createPinia } from 'pinia'
 import * as Sentry from '@sentry/vue'
-import { createSentryPiniaPlugin } from '@sentry/vue'
 
 import App from './App.vue'
 import router from './router'
@@ -29,25 +28,21 @@ import './styles/nav.scss'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 const app = createApp(App)
 
-const sentryDSN = String(import.meta.env.VITE_SENTRY_DSN ?? '')
+const sentryDSN = import.meta.env.VITE_SENTRY_DSN || ''
 if (sentryDSN) {
   Sentry.init({
     app,
     dsn: sentryDSN,
-    sendDefaultPii: true,
+    release: import.meta.env.VITE_SENTRY_RELEASE || undefined,
+    environment: import.meta.env.PROD ? 'production' : 'development',
+    sendDefaultPii: false,
     integrations: [
-      Sentry.vueIntegration({
-        tracingOptions: {
-          trackComponents: true,
-        },
-      }),
+      Sentry.vueIntegration({ tracingOptions: { trackComponents: true } }),
       Sentry.browserTracingIntegration({ router }),
-      Sentry.replayIntegration(),
     ],
+    // no replayIntegration, no createSentryPiniaPlugin
     tracesSampleRate: 1.0,
     enableLogs: true,
-    replaysSessionSampleRate: 0.1,
-    replaysOnErrorSampleRate: 1.0,
     beforeSend(event) {
       // Don't report internal server errors from the API to Sentry
       // These are already being tracked on the backend
@@ -65,9 +60,6 @@ if (sentryDSN) {
 }
 
 const pinia = createPinia()
-if (sentryDSN) {
-  pinia.use(createSentryPiniaPlugin())
-}
 app.use(pinia)
 app.use(router)
 app.use(i18n)
@@ -92,3 +84,27 @@ app.component('VueDatePicker', VueDatePicker)
 void initLocale().finally(() => {
   app.mount('#app')
 })
+
+/**
+ * Installs the Workbox service worker that backs offline use.
+ *
+ * A failed registration costs offline caching and nothing else, so the
+ * rejection is logged rather than left to surface as an unhandled error.
+ */
+function registerServiceWorker(): void {
+  if (!('serviceWorker' in navigator)) return
+
+  window.addEventListener('load', () => {
+    const swURL = `${import.meta.env.BASE_URL}sw.js`
+    navigator.serviceWorker
+      .register(swURL, { scope: import.meta.env.BASE_URL })
+      .catch((error: unknown) => {
+        Sentry.logger.warn('Service worker registration failed', {
+          reason: error instanceof Error ? error.message : String(error),
+        })
+      })
+  })
+}
+
+// Only a production build emits `sw.js`.
+if (import.meta.env.PROD) registerServiceWorker()

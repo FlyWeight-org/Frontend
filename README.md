@@ -50,6 +50,11 @@ GitHub Action. The `fly.toml` file contains the architecture for the production
 environment: an app server, a GoodJob worker server, a Redis cluster, and a
 PostgreSQL database cluster.
 
+The front-end image is not self-building: the GitHub Action builds `dist` in the
+runner, uploads its source maps to Sentry, strips them, and ships the result in
+the build context. A `docker build` without a `dist` directory present produces
+an image with no application in it.
+
 The Rails processes run on a separate Fly.io cluster from the AnyCable
 processes. An nginx cluster reverse-proxies requests for `/cable` to the
 AnyCable process, and all other requests to the Rails process.
