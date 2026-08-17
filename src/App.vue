@@ -27,9 +27,12 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
+// The link parks itself one of its own heights above the viewport. A percentage
+// translation tracks the rendered box, so padding, border and font metrics can
+// change without leaving a sliver of the link visible in the corner.
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 0;
   left: 0;
   z-index: 1000;
   padding: 8px 16px;
@@ -38,12 +41,13 @@ onMounted(async () => {
   background: var(--color-bg-mid);
   border: 1px solid var(--color-surface-border);
   border-radius: 0 0 8px;
-  transition: top 0.15s ease;
+  transform: translateY(-100%);
+  transition: transform 0.15s ease;
 
   &:focus {
-    top: 0;
     outline: 2px solid var(--color-accent-purple);
     outline-offset: 2px;
+    transform: translateY(0);
   }
 }
 </style>
