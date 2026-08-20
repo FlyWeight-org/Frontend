@@ -6,14 +6,7 @@ import numberFormats from '@/i18n/numberFormats'
 import dateTimeFormats from '@/i18n/dateTimeFormats'
 import { DEFAULT_LOCALE, detectLocale, storeLocale, type SupportedLocale } from '@/i18n/locales'
 
-export {
-  SUPPORTED_LOCALES,
-  DEFAULT_LOCALE,
-  detectLocale,
-  matchLocale,
-  localeOptions,
-  type SupportedLocale,
-} from '@/i18n/locales'
+export { detectLocale, localeOptions, type SupportedLocale } from '@/i18n/locales'
 
 const i18n = createI18n({
   legacy: false,
