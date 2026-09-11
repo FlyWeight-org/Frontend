@@ -34,5 +34,20 @@ export default defineConfig(({ command }) => ({
   },
   build: {
     sourcemap: 'hidden',
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              // The framework and instrumentation layer turns over only when a dependency is
+              // bumped, so it gets a chunk of its own. Shipping app code then leaves the
+              // immutable-cached copy of these bytes intact for returning visitors.
+              name: 'vendor',
+              test: /[\\/]node_modules[\\/](?:vue|vue-router|pinia|vue-i18n|@vue|@intlify|@sentry|@sentry-internal)[\\/]/,
+            },
+          ],
+        },
+      },
+    },
   },
 }))
