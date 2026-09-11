@@ -14,10 +14,13 @@ const language = computed(() => locale.value.split('-')[0])
 
 // `vue-turnstile` injects Cloudflare's script — and the request chain behind it — as soon as it
 // mounts, regardless of `renderOnMount`. Holding the widget back until the visitor touches the
-// form keeps that chain off the landing page; the submit button is gated on the token anyway, so
-// nobody can submit before the widget has had its chance to load.
-const ready = ref(false)
-useEventListener(document, 'focusin', () => (ready.value = true), { once: true })
+// form keeps that chain off the critical path. The load event is a backstop: the submit button
+// stays disabled until a token arrives, so a visitor whose credentials are autofilled — and who
+// therefore never touches the form — must still get a widget.
+const ready = ref(document.readyState === 'complete')
+const mountWidget = () => (ready.value = true)
+useEventListener(document, ['focusin', 'pointerdown', 'keydown'], mountWidget, { once: true })
+useEventListener(window, 'load', mountWidget, { once: true })
 
 defineExpose({ reset: () => widget.value?.reset() })
 </script>
