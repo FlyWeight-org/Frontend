@@ -53,6 +53,32 @@
     <link rel="icon" href="/favicon.ico" />
     <link rel="manifest" href="/site.webmanifest" />
 
+    <!-- The weights that render above the fold, preloaded so the browser can fetch them alongside
+         the bundle rather than waiting for the CSSOM and first layout to discover them. Latin
+         subset only: the latin-ext and vietnamese subsets are unicode-range gated and stay
+         unrequested for the languages this app ships. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="./node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="./node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-700-normal.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      crossorigin
+      href="./node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-800-normal.woff2"
+    />
+
     <!-- Structured Data -->
     <script type="application/ld+json">
       {

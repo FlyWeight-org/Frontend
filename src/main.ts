@@ -1,7 +1,6 @@
 import '@/zodConfig'
 
 import { createApp } from 'vue'
-import { VueDatePicker } from '@vuepic/vue-datepicker'
 import { createPinia } from 'pinia'
 import * as Sentry from '@sentry/vue'
 
@@ -20,7 +19,6 @@ import '@fontsource/dm-sans/600.css'
 import 'normalize.css'
 import './styles/_tokens.scss'
 import './styles/base.scss'
-import './styles/datepicker.scss'
 import './styles/forms.scss'
 import './styles/layout.scss'
 import './styles/nav.scss'
@@ -76,8 +74,6 @@ app.config.errorHandler = (err, _instance, info) => {
     })
   }
 }
-
-app.component('VueDatePicker', VueDatePicker)
 
 // Resolve the stored/browser locale (and lazily load its message catalog) before the first
 // paint so the UI never flashes the fallback language.

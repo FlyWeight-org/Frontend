@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Errors } from '@/stores/types'
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { defineErrorRefs, defineIDRefs } from '@/components/field/common'
 import { dateFnsLocale } from '@/i18n/locales'
 import { DateTime } from 'luxon'
@@ -17,6 +17,14 @@ interface Props {
 
   errors?: Errors
 }
+
+// Loaded on demand, together with its stylesheet, so neither the date picker nor its CSS
+// reaches the boot path: date fields only ever render on the authenticated flight forms.
+const VueDatePicker = defineAsyncComponent(() =>
+  Promise.all([import('@vuepic/vue-datepicker'), import('@/styles/datepicker.scss')]).then(
+    ([datepicker]) => datepicker.VueDatePicker,
+  ),
+)
 
 const { t, d, locale } = useI18n()
 
