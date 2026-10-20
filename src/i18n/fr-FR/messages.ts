@@ -2,6 +2,61 @@ import type { VueMessageType } from 'vue-i18n'
 import type { LocaleMessage } from '@intlify/core-base'
 
 const frFR: LocaleMessage<VueMessageType> = {
+  assistants: {
+    banner: {
+      badge: 'Nouveau',
+      message: 'Gérez vos vols depuis Claude, ChatGPT ou Codex.',
+      action: 'Connecter un assistant',
+    },
+    title: 'Utiliser FlyWeight avec un assistant IA',
+    intro:
+      'Connectez un assistant à votre compte pilote, puis demandez-lui de lister vos vols, d’en créer un, ou d’ajouter et de modifier des passagers et du fret.',
+    serverURL: 'URL du serveur FlyWeight',
+    copy: 'Copier',
+    copied: 'URL du serveur copiée.',
+    copyCommand: 'Copier la commande',
+    copiedCommand: 'Commande copiée',
+    claude: {
+      title: 'Claude',
+      kind: 'Applications web, de bureau et mobiles',
+      step1:
+        'Dans Claude, ouvrez [Customize] → [Connectors], puis choisissez [Add] → [Add custom connector].',
+      step2:
+        'Saisissez `FlyWeight` comme nom, collez l’URL du serveur et choisissez [Continue]. Laissez tels quels les paramètres de l’écran suivant.',
+      step3: 'Choisissez [Add], connectez-vous à FlyWeight et choisissez [Autoriser l’accès].',
+    },
+    chatgpt: {
+      title: 'ChatGPT',
+      kind: 'Applications web et de bureau',
+      step1:
+        'Dans ChatGPT, ouvrez [Customize] → [Plugins], puis choisissez [Add] → [Add custom MCP server].',
+      step2:
+        'Saisissez `FlyWeight` comme nom et collez l’URL du serveur. Conservez OAuth avec l’enregistrement automatique.',
+      step3:
+        'Choisissez [Create as a plugin], puis [Connect]. Connectez-vous à FlyWeight et choisissez [Autoriser l’accès].',
+    },
+    claudeCode: {
+      title: 'Claude Code',
+      kind: 'Terminal',
+      step1: 'Ajoutez FlyWeight depuis votre terminal :',
+      step2:
+        'Dans Claude Code, tapez `/mcp`, sélectionnez [flyweight] et choisissez [Authenticate].',
+      step3:
+        'Connectez-vous à FlyWeight dans la fenêtre du navigateur qui s’ouvre et choisissez [Autoriser l’accès].',
+    },
+    codex: {
+      title: 'Codex',
+      kind: 'Terminal',
+      step1: 'Ajoutez FlyWeight depuis votre terminal :',
+      step2: 'Connectez-vous. Codex ouvre FlyWeight dans votre navigateur :',
+      step3: 'Connectez-vous à FlyWeight et choisissez [Autoriser l’accès].',
+    },
+    revoke:
+      'Pour déconnecter un assistant, ouvrez [Mon compte] → [Assistants connectés] et choisissez [Révoquer l’accès].',
+    privacy:
+      'Les assistants connectés peuvent lire le poids des passagers. Ne connectez que des assistants de confiance. Les connexions personnalisées peuvent dépendre de votre abonnement ou des paramètres de votre espace de travail.',
+    home: 'Retour à l’accueil',
+  },
   connections: {
     title: 'Assistants connectés',
     connectTitle: 'Connecter un assistant',

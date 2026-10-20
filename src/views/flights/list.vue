@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Plus } from '@lucide/vue'
+import AssistantBanner from '@/components/flights/assistantBanner.vue'
 import FlightView from '@/components/flights/list/flight.vue'
 import requireAuth from '@/composables/requireAuth'
 import { useFlightsStore } from '@/stores/modules/flights'
@@ -15,6 +16,7 @@ onMounted(() => flightsStore.loadFlights())
 
 <template>
   <main id="main-content">
+    <AssistantBanner />
     <div v-if="flightsStore.flightsLoading" class="empty">
       {{ t('messages.loading') }}
     </div>

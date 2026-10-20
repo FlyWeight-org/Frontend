@@ -5,6 +5,11 @@ const router = createRouter({
   routes: [
     { path: '/connect', name: 'connect', component: () => import('../views/connect.vue') },
     {
+      path: '/assistants',
+      name: 'assistants',
+      component: () => import('../views/assistants.vue'),
+    },
+    {
       path: '/flights',
       name: 'flights',
       component: () => import('../views/flights/index.vue'),

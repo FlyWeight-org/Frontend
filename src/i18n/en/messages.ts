@@ -2,6 +2,59 @@ import type { VueMessageType } from 'vue-i18n'
 import type { LocaleMessage } from '@intlify/core-base'
 
 const en: LocaleMessage<VueMessageType> = {
+  assistants: {
+    banner: {
+      badge: 'New',
+      message: 'Manage your flights from Claude, ChatGPT, or Codex.',
+      action: 'Connect an assistant',
+    },
+    title: 'Use FlyWeight from an AI assistant',
+    intro:
+      'Connect an assistant to your pilot account, then ask it to list your flights, create one, or add and update passenger and cargo loads.',
+    serverURL: 'FlyWeight server URL',
+    copy: 'Copy',
+    copied: 'Copied the server URL.',
+    copyCommand: 'Copy command',
+    copiedCommand: 'Copied command',
+    claude: {
+      title: 'Claude',
+      kind: 'Web, desktop, and mobile apps',
+      step1:
+        'In Claude, open [Customize] → [Connectors], then choose [Add] → [Add custom connector].',
+      step2:
+        'Enter `FlyWeight` as the name, paste the server URL, and choose [Continue]. Leave the settings on the next screen as they are.',
+      step3: 'Choose [Add], sign in to FlyWeight, and choose [Allow access].',
+    },
+    chatgpt: {
+      title: 'ChatGPT',
+      kind: 'Web and desktop apps',
+      step1:
+        'In ChatGPT, open [Customize] → [Plugins], then choose [Add] → [Add custom MCP server].',
+      step2:
+        'Enter `FlyWeight` as the name and paste the server URL. Keep OAuth with automatic registration.',
+      step3:
+        'Choose [Create as a plugin], then [Connect]. Sign in to FlyWeight and choose [Allow access].',
+    },
+    claudeCode: {
+      title: 'Claude Code',
+      kind: 'Terminal',
+      step1: 'Add FlyWeight from your terminal:',
+      step2: 'In Claude Code, type `/mcp`, select [flyweight], and choose [Authenticate].',
+      step3: 'Sign in to FlyWeight in the browser window that opens, and choose [Allow access].',
+    },
+    codex: {
+      title: 'Codex',
+      kind: 'Terminal',
+      step1: 'Add FlyWeight from your terminal:',
+      step2: 'Sign in. Codex opens FlyWeight in your browser:',
+      step3: 'Sign in to FlyWeight and choose [Allow access].',
+    },
+    revoke:
+      'To disconnect an assistant, open [My Account] → [Connected assistants] and choose [Revoke access].',
+    privacy:
+      'Connected assistants can read passenger weights. Only connect assistants you trust. Custom connections may depend on your assistant plan or workspace settings.',
+    home: 'Back to home',
+  },
   connections: {
     title: 'Connected assistants',
     connectTitle: 'Connect an assistant',
