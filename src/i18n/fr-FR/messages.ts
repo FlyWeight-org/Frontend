@@ -2,6 +2,36 @@ import type { VueMessageType } from 'vue-i18n'
 import type { LocaleMessage } from '@intlify/core-base'
 
 const frFR: LocaleMessage<VueMessageType> = {
+  connections: {
+    title: 'Assistants connectés',
+    connectTitle: 'Connecter un assistant',
+    requestTitle:
+      'Une application se présentant comme « {name} » souhaite accéder à votre compte FlyWeight',
+    callbackHost: 'L’accès sera transmis à {host}.',
+    signIn: 'Connectez-vous pour examiner la demande de cet assistant.',
+    identity: 'Connexion en tant que {name} ({email}).',
+    switchAccount: 'Ce n’est pas vous ? Utiliser un autre compte',
+    request: 'Cet assistant demande l’autorisation de :',
+    read: 'Consulter les vols et les masses des passagers et du fret.',
+    write: 'Créer, modifier et supprimer des vols et des chargements de passagers ou de fret.',
+    privacy:
+      'Les masses des passagers seront partagées avec cet assistant. N’autorisez que les assistants auxquels vous faites confiance. Vous pouvez révoquer l’accès dans les paramètres du compte.',
+    destination: 'Après votre décision, vous reviendrez à : {url}',
+    allow: 'Autoriser l’accès',
+    deny: 'Refuser',
+    loading: 'Chargement des détails de la connexion…',
+    error: 'Impossible de terminer cette demande. Relancez la connexion depuis votre assistant.',
+    empty: 'Aucun assistant n’est connecté.',
+    since: 'Connecté le {date}',
+    revoke: 'Révoquer l’accès',
+    revokeName: 'Révoquer l’accès de {name}',
+    confirmRevoke:
+      'Révoquer l’accès de {name} ? L’application devra se reconnecter pour utiliser FlyWeight.',
+    revoked: 'Accès de {name} révoqué.',
+    connectionHost: 'L’accès est transmis à {host}',
+    loadError: 'Impossible de charger les assistants connectés. Rechargez la page pour réessayer.',
+    revokeError: 'Impossible de révoquer l’accès. Réessayez.',
+  },
   title: 'FlyWeight',
   a11y: {
     skipToContent: 'Aller au contenu principal',

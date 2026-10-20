@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    { path: '/connect', name: 'connect', component: () => import('../views/connect.vue') },
     {
       path: '/flights',
       name: 'flights',

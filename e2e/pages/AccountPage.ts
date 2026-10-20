@@ -20,4 +20,8 @@ export class AccountPage {
   successMessage() {
     return this.page.getByTestId('account-success')
   }
+
+  revokeAssistantButton(name: string) {
+    return this.page.getByRole('button', { name: `Revoke access for ${name}`, exact: true })
+  }
 }

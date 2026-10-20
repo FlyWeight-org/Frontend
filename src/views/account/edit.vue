@@ -3,6 +3,8 @@ import { useI18n } from 'vue-i18n'
 import AccountForm from '@/components/account/edit/form.vue'
 import AccountPasskeys from '@/components/account/edit/passkeys.vue'
 
+import AccountConnections from '@/components/account/edit/connections.vue'
+
 const { t } = useI18n()
 </script>
 
@@ -15,6 +17,7 @@ const { t } = useI18n()
     <div class="card form-card">
       <account-passkeys />
     </div>
+    <AccountConnections />
   </main>
 </template>
 

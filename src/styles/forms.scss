@@ -173,6 +173,10 @@ form.inline {
   }
 }
 
+button.destructive {
+  background: linear-gradient(135deg, #ef4444, #be123c);
+}
+
 button.link,
 input[type='submit'].link {
   padding: 0;

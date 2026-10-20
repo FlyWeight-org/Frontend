@@ -266,10 +266,6 @@ function formatLastUsed(passkey: Passkey): string {
   margin-top: 16px;
 }
 
-button.destructive {
-  background: linear-gradient(135deg, #ef4444, #be123c);
-}
-
 button.secondary {
   color: var(--color-text-secondary);
 }

@@ -14,6 +14,7 @@ import { usePasskeysStore } from '@/stores/modules/passkeys'
 
 usePresence({ mode: 'once' })
 
+const props = defineProps<{ stayOnPage?: boolean }>()
 const { t } = useI18n()
 const router = useRouter()
 const authStore = useAuthStore()
@@ -30,7 +31,7 @@ const URL = `${config.APIURL}/login`
 const { submitHandler, errors, error, isProcessing } = useFormErrorHandling<unknown>(
   () => authStore.logIn({ ...session, turnstile_token: turnstileToken.value }),
   async () => {
-    await router.push({ name: 'flightsList' })
+    if (!props.stayOnPage) await router.push({ name: 'flightsList' })
   },
   () => {
     session.password = ''
@@ -46,7 +47,7 @@ onMounted(async () => {
   if (!(await browserSupportsWebAuthnAutofill())) return
   try {
     const result = await passkeysStore.autofillLogIn()
-    if (result.ok) await router.push({ name: 'flightsList' })
+    if (result.ok && !props.stayOnPage) await router.push({ name: 'flightsList' })
   } catch {
     // Autofill rejects when the user dismisses it, navigates away, or
     // submits the password form. None of these are errors worth surfacing.

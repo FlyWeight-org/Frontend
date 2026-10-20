@@ -11,8 +11,9 @@ import { NavBar } from './components/NavBar'
 import { PassengerManifest } from './components/PassengerManifest'
 import { CargoManifest } from './components/CargoManifest'
 import { TotalWeight } from './components/TotalWeight'
+import { prepareAssistantAuthorization } from './helpers/assistants'
 
-const API_HOST = 'http://127.0.0.1:5000'
+export const API_HOST = 'http://127.0.0.1:5000'
 
 type Fixtures = {
   loginPage: LoginPage
@@ -28,6 +29,7 @@ type Fixtures = {
   cargoManifest: CargoManifest
   totalWeight: TotalWeight
   resetDatabase: string
+  assistantConsentPath: string
   loggedInPage: void
 }
 
@@ -37,6 +39,10 @@ export const test = base.extend<Fixtures>({
     const response = await fetch(`${API_HOST}/__cypress__/reset`)
     const uuid = await response.text()
     await use(uuid)
+  },
+
+  assistantConsentPath: async ({ page, request, resetDatabase: _reset }, use) => {
+    await use(await prepareAssistantAuthorization(page, request))
   },
 
   loginPage: async ({ page }, use) => {

@@ -2,6 +2,34 @@ import type { VueMessageType } from 'vue-i18n'
 import type { LocaleMessage } from '@intlify/core-base'
 
 const en: LocaleMessage<VueMessageType> = {
+  connections: {
+    title: 'Connected assistants',
+    connectTitle: 'Connect an assistant',
+    requestTitle: 'An app calling itself “{name}” wants to access your FlyWeight account',
+    callbackHost: 'Access will be sent to {host}.',
+    signIn: "Sign in to review this assistant's request.",
+    identity: 'Connecting as {name} ({email}).',
+    switchAccount: 'Not you? Use a different account',
+    request: 'This assistant is requesting permission to:',
+    read: 'Read flights and passenger/cargo weights.',
+    write: 'Create, edit, and delete flights and passenger/cargo loads.',
+    privacy:
+      'Passenger weights will be shared with this assistant. Only approve assistants you trust. You can revoke access in account settings.',
+    destination: 'After your decision, return to: {url}',
+    allow: 'Allow access',
+    deny: 'Deny',
+    loading: 'Loading connection details…',
+    error: 'Unable to complete this request. Try connecting again from your assistant.',
+    empty: 'No assistants are connected.',
+    since: 'Connected {date}',
+    revoke: 'Revoke access',
+    revokeName: 'Revoke access for {name}',
+    confirmRevoke: 'Revoke access for {name}? It will need to connect again to use FlyWeight.',
+    revoked: 'Access revoked for {name}.',
+    connectionHost: 'Access is sent to {host}',
+    loadError: 'Unable to load connected assistants. Reload the page to try again.',
+    revokeError: 'Unable to revoke access. Try again.',
+  },
   title: 'FlyWeight',
   a11y: {
     skipToContent: 'Skip to main content',

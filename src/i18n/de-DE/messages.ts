@@ -2,6 +2,37 @@ import type { VueMessageType } from 'vue-i18n'
 import type { LocaleMessage } from '@intlify/core-base'
 
 const deDE: LocaleMessage<VueMessageType> = {
+  connections: {
+    title: 'Verbundene Assistenten',
+    connectTitle: 'Assistenten verbinden',
+    requestTitle: 'Eine App, die sich „{name}“ nennt, möchte auf dein FlyWeight-Konto zugreifen',
+    callbackHost: 'Der Zugriff wird an {host} übermittelt.',
+    signIn: 'Melde dich an, um die Anfrage dieses Assistenten zu prüfen.',
+    identity: 'Verbindung als {name} ({email}).',
+    switchAccount: 'Nicht du? Anderes Konto verwenden',
+    request: 'Dieser Assistent bittet um die Berechtigung, Folgendes zu tun:',
+    read: 'Flüge sowie Passagier- und Frachtgewichte lesen.',
+    write: 'Flüge sowie Passagier- und Frachtladungen erstellen, bearbeiten und löschen.',
+    privacy:
+      'Passagiergewichte werden mit diesem Assistenten geteilt. Erlaube nur Assistenten den Zugriff, denen du vertraust. Du kannst den Zugriff in den Kontoeinstellungen widerrufen.',
+    destination: 'Nach deiner Entscheidung kehrst du hierhin zurück: {url}',
+    allow: 'Zugriff erlauben',
+    deny: 'Ablehnen',
+    loading: 'Verbindungsdetails werden geladen…',
+    error:
+      'Diese Anfrage konnte nicht abgeschlossen werden. Starte die Verbindung erneut in deinem Assistenten.',
+    empty: 'Es sind keine Assistenten verbunden.',
+    since: 'Verbunden am {date}',
+    revoke: 'Zugriff widerrufen',
+    revokeName: 'Zugriff widerrufen für {name}',
+    confirmRevoke:
+      'Zugriff für {name} widerrufen? Die App muss sich erneut verbinden, um FlyWeight zu nutzen.',
+    revoked: 'Zugriff für {name} widerrufen.',
+    connectionHost: 'Der Zugriff wird an {host} übermittelt',
+    loadError:
+      'Verbundene Assistenten konnten nicht geladen werden. Lade die Seite neu, um es erneut zu versuchen.',
+    revokeError: 'Der Zugriff konnte nicht widerrufen werden. Versuche es erneut.',
+  },
   title: 'FlyWeight',
   a11y: {
     skipToContent: 'Zum Hauptinhalt springen',
