@@ -12,7 +12,6 @@ const authStore = useAuthStore()
 useTheme()
 
 onMounted(async () => {
-  authStore.initializeFromLocalStorage()
   authStore.$subscribe(() => {
     authStore.saveToLocalStorage()
   })

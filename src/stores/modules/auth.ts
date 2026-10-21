@@ -83,6 +83,18 @@ export const useAuthStore = defineStore('auth', {
     },
 
     /**
+     * Loads the stored session, renewing an expired access token when a
+     * refresh token remains, so the first route sees whether the pilot is
+     * logged in. A network failure keeps the stored tokens for a later request
+     * to refresh.
+     */
+    async restoreSession() {
+      this.initializeFromLocalStorage()
+      if (this.loggedIn || !this.refreshToken) return
+      if (await this.refreshAccessToken().catch(() => false)) this.saveToLocalStorage()
+    },
+
+    /**
      * Logs in a pilot account.
      *
      * @param session The login credentials.

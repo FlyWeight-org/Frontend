@@ -8,6 +8,7 @@ import App from './App.vue'
 import router from './router'
 import i18n, { initLocale } from '@/i18n'
 import { recoverFromPreloadErrors } from '@/utils/preloadRecovery'
+import { useAuthStore } from '@/stores/modules/auth'
 
 import '@fontsource/bricolage-grotesque/400.css'
 import '@fontsource/bricolage-grotesque/700.css'
@@ -75,9 +76,10 @@ app.config.errorHandler = (err, _instance, info) => {
   }
 }
 
-// Resolve the stored/browser locale (and lazily load its message catalog) before the first
-// paint so the UI never flashes the fallback language.
-void initLocale().finally(() => {
+// Resolve the stored/browser locale (and lazily load its message catalog) and restore the
+// stored session before the first paint, so the UI never flashes the fallback language and
+// the first route knows whether the pilot is logged in.
+void Promise.allSettled([initLocale(), useAuthStore(pinia).restoreSession()]).then(() => {
   app.mount('#app')
 })
 
