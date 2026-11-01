@@ -34,14 +34,26 @@ if (sentryDSN) {
     dsn: sentryDSN,
     release: import.meta.env.VITE_SENTRY_RELEASE || undefined,
     environment: import.meta.env.PROD ? 'production' : 'development',
-    sendDefaultPii: false,
+    dataCollection: {
+      userInfo: false,
+      cookies: false,
+      httpHeaders: {
+        request: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+        response: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+      },
+      httpBodies: [],
+      urlQueryParams: { deny: ['forwarded', '-ip', 'remote-', 'via', '-user'] },
+      genAI: { inputs: false, outputs: false },
+      databaseQueryData: false,
+      graphQL: { document: false, variables: false },
+    },
     integrations: [
       Sentry.vueIntegration({ tracingOptions: { trackComponents: true } }),
       Sentry.browserTracingIntegration({ router }),
     ],
     // no replayIntegration, no createSentryPiniaPlugin
     tracesSampleRate: 1.0,
-    enableLogs: true,
+
     beforeSend(event) {
       // Don't report internal server errors from the API to Sentry
       // These are already being tracked on the backend

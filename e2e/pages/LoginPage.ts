@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 import { FlightsListPage } from './FlightsListPage'
 import { ForgotPasswordPage } from './ForgotPasswordPage'
 
@@ -18,7 +18,11 @@ export class LoginPage {
     await this.page.getByTestId('login-password').fill(password)
   }
 
+  /** Wait for a Turnstile token before submitting the login form. */
   async submit(): Promise<void> {
+    await expect(
+      this.page.getByTestId('login-turnstile').locator('input[name="cf-turnstile-response"]'),
+    ).not.toHaveValue('')
     await this.page.getByTestId('login-submit').click()
   }
 
