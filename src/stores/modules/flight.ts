@@ -2,12 +2,12 @@ import type { Errors, FlightState } from '@/stores/types'
 import { defineStore } from 'pinia'
 import { clone, cloneDeep, concat, isNil, isNull, isUndefined, some } from 'lodash-es'
 import { request, requestJSON } from '@/stores/modules/root'
-import type { FlightJSONDown, LoadJSONDown } from '@/stores/coding'
+import type { FlightJSONDown, LoadJSONDown, LoadMessageJSONDown } from '@/stores/coding'
 import {
   editableFlightToJSON,
   flightFromJSON,
   loadFromJSON,
-  loadJSONDownSchema,
+  loadMessageJSONDownSchema,
   loadToJSON,
 } from '@/stores/coding'
 import {
@@ -261,7 +261,7 @@ export const useFlightStore = defineStore('flight', {
             received: (loadJSON: string) => {
               this.loadsSubscriptionMessage(
                 UUID,
-                loadJSONDownSchema.parse(JSON.parse(loadJSON)) as LoadJSONDown,
+                loadMessageJSONDownSchema.parse(JSON.parse(loadJSON)) as LoadMessageJSONDown,
               )
             },
           },
@@ -269,7 +269,7 @@ export const useFlightStore = defineStore('flight', {
       )
     },
 
-    loadsSubscriptionMessage(flightID: string, loadJSON: LoadJSONDown) {
+    loadsSubscriptionMessage(flightID: string, loadJSON: LoadMessageJSONDown) {
       if (isNull(this.flight)) return
       if (this.flight.UUID !== flightID) return
       if (isNil(this.flight.loads)) return

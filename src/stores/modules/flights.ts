@@ -2,12 +2,16 @@ import type { Errors, FlightsState } from '@/stores/types'
 import { defineStore } from 'pinia'
 import { clone, concat, isEmpty, isNull, some } from 'lodash-es'
 import { requestJSON } from '@/stores/modules/root'
-import type { FlightJSONDown, FlightListItemJSONDown } from '@/stores/coding'
+import type {
+  FlightJSONDown,
+  FlightListItemJSONDown,
+  FlightListItemMessageJSONDown,
+} from '@/stores/coding'
 import {
   editableFlightToJSON,
   flightFromJSON,
   flightListItemFromJSON,
-  flightListItemJSONDownSchema,
+  flightListItemMessageJSONDownSchema,
 } from '@/stores/coding'
 import {
   anythingToError,
@@ -116,7 +120,7 @@ export const useFlightsStore = defineStore('flights', {
           {
             received: (flightJSON: string) => {
               this.flightsSubscriptionMessage(
-                flightListItemJSONDownSchema.parse(JSON.parse(flightJSON)),
+                flightListItemMessageJSONDownSchema.parse(JSON.parse(flightJSON)),
               )
             },
           },
@@ -124,7 +128,7 @@ export const useFlightsStore = defineStore('flights', {
       )
     },
 
-    flightsSubscriptionMessage(flightJSON: FlightListItemJSONDown) {
+    flightsSubscriptionMessage(flightJSON: FlightListItemMessageJSONDown) {
       if (isNull(this.flights)) return
 
       let flights

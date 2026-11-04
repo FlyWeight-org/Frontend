@@ -38,17 +38,29 @@ const flightJSONDownSchema = z.object({
   'destroyed?': z.boolean().optional(),
 })
 
-export const loadJSONDownSchema = loadJSONDownBaseSchema.extend({
+const loadJSONDownSchema = loadJSONDownBaseSchema.extend({
   flight: flightJSONDownSchema.optional(),
 })
 
-export const flightListItemJSONDownSchema = z.object({
+/** A LoadsChannel broadcast: a created/updated load, or the slug of a destroyed one. */
+export const loadMessageJSONDownSchema = z.union([
+  z.object({ slug: z.string(), 'destroyed?': z.literal(true) }),
+  loadJSONDownSchema,
+])
+
+const flightListItemJSONDownSchema = z.object({
   uuid: z.string(),
   date: z.string(),
   description: z.string(),
   passenger_count: z.number(),
   'destroyed?': z.boolean().optional(),
 })
+
+/** A FlightsChannel broadcast: a created/updated flight, or the UUID of a destroyed one. */
+export const flightListItemMessageJSONDownSchema = z.union([
+  z.object({ uuid: z.string(), 'destroyed?': z.literal(true) }),
+  flightListItemJSONDownSchema,
+])
 
 /** Shape of pilot JSON data sent from the frontend to the back-end. */
 export interface PilotJSONUp {
@@ -115,6 +127,9 @@ export type LoadJSONDown = Omit<Load, 'bagsWeight'> & {
   flight?: FlightJSONDown
   'destroyed?'?: boolean
 }
+
+/** A LoadsChannel broadcast: a load's JSON, or only the slug of a destroyed load. */
+export type LoadMessageJSONDown = LoadJSONDown | { slug: string; 'destroyed?': true }
 
 /**
  * Converts received Load JSON data into a Load interface object.
@@ -209,6 +224,10 @@ export type FlightListItemJSONDown = Omit<FlightListItem, 'passengerCount' | 'da
   passenger_count: number
   'destroyed?'?: boolean
 }
+
+/** A FlightsChannel broadcast: a flight list item, or only the UUID of a destroyed flight. */
+export type FlightListItemMessageJSONDown =
+  FlightListItemJSONDown | { uuid: string; 'destroyed?': true }
 
 /**
  * Converts a received pilot JSON representation to a Flight list item
