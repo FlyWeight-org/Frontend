@@ -29,8 +29,7 @@ End-to-end testing is available with Playwright. The suite needs the back-end
 stack running, so create a `Procfile.e2e` in the parent directory similar to:
 
 ```procfile
-backend: cd Backend && PORT=5000 ANYCABLE_HTTP_RPC=true rvm 4.0.7@flyweight do rails server -e cypress -b 127.0.0.1
-ws: cd Backend && rvm 4.0.7@flyweight do bin/anycable-go --port=8080 --rpc_host=http://127.0.0.1:5000/_anycable
+backend: cd Backend && PORT=5000 rvm 4.0.9@flyweight do rails server -e cypress -b 127.0.0.1
 e2e: cd Frontend && until curl -sfo /dev/null http://127.0.0.1:5000/up; do sleep 1; done && pnpm test:e2e
 ```
 
@@ -55,9 +54,8 @@ runner, uploads its source maps to Sentry, strips them, and ships the result in
 the build context. A `docker build` without a `dist` directory present produces
 an image with no application in it.
 
-The Rails processes run on a separate Fly.io cluster from the AnyCable
-processes. An nginx cluster reverse-proxies requests for `/cable` to the
-AnyCable process, and all other requests to the Rails process.
+The Rails process serves both HTTP requests and Action Cable WebSockets
+(`/cable`).
 
 ## Architecture
 
