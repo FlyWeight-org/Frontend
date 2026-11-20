@@ -11,6 +11,7 @@ import useFormErrorHandling from '@/composables/useFormErrorHandling'
 import { usePresence } from '@/composables/usePresence'
 import { useAuthStore } from '@/stores/modules/auth'
 import { usePasskeysStore } from '@/stores/modules/passkeys'
+import type { Errors } from '@/stores/types'
 
 usePresence({ mode: 'once' })
 
@@ -43,18 +44,40 @@ const errorMessage = computed<string | null>(() =>
   isNull(error) ? null : t('home.logIn.error', { error: error.value }),
 )
 
-onMounted(async () => {
-  if (!(await browserSupportsWebAuthnAutofill())) return
+const passkeyError = ref<string | null>(null)
+let unmounted = false
+
+const errorsSentence = (errors: Errors): string => Object.values(errors).flat().join(', ')
+
+// Offers passkeys through autofill until one logs in. A passkey the server
+// rejects (such as one picked after its challenge expired) re-arms autofill
+// with fresh options; each attempt waits on the user picking a passkey.
+async function armPasskeyAutofill(): Promise<void> {
   try {
     const result = await passkeysStore.autofillLogIn()
-    if (result.ok && !props.stayOnPage) await router.push({ name: 'flightsList' })
+    if (result.ok) {
+      if (!props.stayOnPage) await router.push({ name: 'flightsList' })
+    } else {
+      rearmPasskeyAutofill(result.val)
+    }
   } catch {
     // Autofill rejects when the user dismisses it, navigates away, or
-    // submits the password form. None of these are errors worth surfacing.
+    // submits the password form, and when no options can be fetched. None
+    // of these are errors worth surfacing.
   }
+}
+
+function rearmPasskeyAutofill(rejection: Errors): void {
+  passkeyError.value = errorsSentence(rejection)
+  if (!unmounted) void armPasskeyAutofill()
+}
+
+onMounted(async () => {
+  if (await browserSupportsWebAuthnAutofill()) await armPasskeyAutofill()
 })
 
 onBeforeUnmount(() => {
+  unmounted = true
   WebAuthnAbortService.cancelCeremony()
 })
 </script>
@@ -63,6 +86,10 @@ onBeforeUnmount(() => {
   <div class="card auth-card">
     <p v-if="error" class="error" data-testid="login-error">
       {{ errorMessage }}
+    </p>
+
+    <p v-if="passkeyError" class="error" data-testid="login-passkey-error">
+      {{ passkeyError }}
     </p>
 
     <form method="post" :action="URL" @submit.prevent="submitHandler">

@@ -24,4 +24,18 @@ export class AccountPage {
   revokeAssistantButton(name: string) {
     return this.page.getByRole('button', { name: `Revoke access for ${name}`, exact: true })
   }
+
+  async addPasskey(label: string, password: string): Promise<void> {
+    await this.page.getByTestId('passkey-new-label').fill(label)
+    await this.page.getByTestId('passkey-new-password').fill(password)
+    await this.page.getByTestId('passkey-add').click()
+  }
+
+  passkeysSuccessMessage() {
+    return this.page.getByTestId('passkeys-success')
+  }
+
+  passkeyLabel() {
+    return this.page.getByTestId('passkey-label')
+  }
 }

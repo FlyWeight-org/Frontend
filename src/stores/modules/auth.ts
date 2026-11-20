@@ -6,7 +6,7 @@ import type { APIResponse, AuthState, Errors } from '@/stores/types'
 import config from '@/config'
 import { pilotFromJSON, type PilotJSONDown, type SessionJSONDown } from '@/stores/coding'
 import { Err, Ok, Result } from 'ts-results'
-import { request, requestJSON } from '@/stores/modules/root'
+import { authorizationToken, request, requestJSON } from '@/stores/modules/root'
 import { ignoreResponseBody, loadAPIResponseBodyOrReturnErrors } from '@/stores/utils'
 import { useAccountStore } from '@/stores/modules/account'
 import { useFlightsStore } from '@/stores/modules/flights'
@@ -139,13 +139,9 @@ export const useAuthStore = defineStore('auth', {
      */
 
     setTokens(response: Response, body: PilotJSONDown): void {
-      const authorization = response.headers.get('Authorization')
       const patch: Partial<AuthState> = { loggingIn: false }
-      if (authorization && /^Bearer /.exec(authorization)) {
-        patch.JWT = authorization.slice(7)
-      } else if (body.access_token) {
-        patch.JWT = body.access_token
-      }
+      const JWT = authorizationToken(response) ?? body.access_token
+      if (JWT) patch.JWT = JWT
       if (body.refresh_token) patch.refreshToken = body.refresh_token
       this.$patch(patch)
     },

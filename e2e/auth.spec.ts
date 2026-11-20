@@ -25,7 +25,7 @@ test.describe('signing up', () => {
     const email = await fetchLastEmail()
     expect(email).not.toBeNull()
 
-    const url = extractEmailPath(email!, 'http://127.0.0.1:4173')
+    const url = extractEmailPath(email!, 'http://localhost:4173')
     await page.goto(url)
 
     await expect(page.getByTestId('verify-account-success')).toBeVisible()
@@ -86,7 +86,7 @@ test.describe('forgot password', () => {
       const email = await fetchLastEmail()
       expect(email).not.toBeNull()
 
-      const url = extractEmailPath(email!, 'http://127.0.0.1:4173')
+      const url = extractEmailPath(email!, 'http://localhost:4173')
       const resetPage = new ResetPasswordPage(page)
       await resetPage.visit(url)
 
@@ -110,7 +110,7 @@ test.describe('forgot password', () => {
       const email = await fetchLastEmail()
       expect(email).not.toBeNull()
 
-      const url = extractEmailPath(email!, 'http://127.0.0.1:4173')
+      const url = extractEmailPath(email!, 'http://localhost:4173')
       const resetPage = new ResetPasswordPage(page)
       await resetPage.visit(url)
 
