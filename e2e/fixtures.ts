@@ -12,6 +12,7 @@ import { PassengerManifest } from './components/PassengerManifest'
 import { CargoManifest } from './components/CargoManifest'
 import { TotalWeight } from './components/TotalWeight'
 import { prepareAssistantAuthorization } from './helpers/assistants'
+import { stubCloudflare } from './helpers/cloudflare'
 
 export const API_HOST = 'http://127.0.0.1:5000'
 
@@ -34,6 +35,11 @@ type Fixtures = {
 }
 
 export const test = base.extend<Fixtures>({
+  context: async ({ context }, use) => {
+    await stubCloudflare(context)
+    await use(context)
+  },
+
   // eslint-disable-next-line no-empty-pattern
   resetDatabase: async ({}, use) => {
     const response = await fetch(`${API_HOST}/__cypress__/reset`)
