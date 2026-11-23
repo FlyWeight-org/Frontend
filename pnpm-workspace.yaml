@@ -10,3 +10,7 @@ onlyBuiltDependencies:
   - esbuild
   - vue-demi
   - workerd
+packageExtensions:
+  ts-results@3:
+    dependencies:
+      tslib: ^2
