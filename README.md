@@ -44,15 +44,14 @@ stack started the same way.
 
 #### Deployment
 
-The application is deployed on Fly.io automatically after CI completes, with a
-GitHub Action. The `fly.toml` file contains the architecture for the production
-environment: an app server, a GoodJob worker server, a Redis cluster, and a
-PostgreSQL database cluster.
+The front end is deployed to Cloudflare Workers static assets automatically
+after CI completes, with a GitHub Action. `wrangler.jsonc` serves `dist` from
+`flyweight.org` with no Worker script, and `public/_headers` sets the cache and
+security headers.
 
-The front-end image is not self-building: the GitHub Action builds `dist` in the
-runner, uploads its source maps to Sentry, strips them, and ships the result in
-the build context. A `docker build` without a `dist` directory present produces
-an image with no application in it.
+The GitHub Action builds `dist` in the runner, uploads its source maps to
+Sentry, strips them, and runs `pnpm exec wrangler deploy`. It needs the
+`CLOUDFLARE_API_TOKEN` secret.
 
 The Rails process serves both HTTP requests and Action Cable WebSockets
 (`/cable`).
